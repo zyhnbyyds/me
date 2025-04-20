@@ -16,24 +16,21 @@ interface Props {
 
 defineProps<Props>()
 
-const active = defineModel('active', {
-  type: String,
-  default: 'home',
-})
+const active = defineModel<string>('active')
 </script>
 
 <template>
   <ul class="font-twiter">
-    <li v-for="item in list" :key="item.key" class="w-a" @click="active = item.key">
+    <li v-for="item in list" :key="item.key" class="w-a">
       <NuxtLink
-        :to="item.path" class="w-a inline-flex cursor-pointer items-center rounded-full p-3 text-5 transition-all"
-        :class="item.key === active ? 'font-bold' : ''"
-        hover="bg-[rgba(15,20,25,0.1)]"
+        :to="item.path"
+        class="mb-3 w-a inline-flex cursor-pointer items-center p-2 text-5 bg-hover-common" :class="item.key === active ? 'font-bold' : ''"
+        @click="active = item.key"
       >
-        <div class="h-6 w-6 flex-center">
-          <Icon :name="item.key === active ? item.aIcon : item.icon" style="font-size: 25px;" />
+        <div class="h-8 w-8 flex-center">
+          <Icon :name="item.key === active ? item.aIcon : item.icon" text-8 />
         </div>
-        <span class="ml-5 mr-4 w-a">
+        <span class="ml-5 mr-4 w-a <lg:hidden">
           {{ item.title }}
         </span>
       </NuxtLink>

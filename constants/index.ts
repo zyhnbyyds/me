@@ -1,5 +1,5 @@
-import type { TabsItem } from '@nuxt/ui'
 import type { MenuBarItem } from '~/components/MenuBar.vue'
+import type { TabItem } from '~/components/Tab.vue'
 
 export const appName = 'NuxtBase'
 export const appDescription = 'NuxtBase'
@@ -47,13 +47,13 @@ export const menuList: MenuBarItem[] = [
 
 export const appIcon = '/favicon.ico'
 
-export const homeTabList: TabsItem[] = [
+export const homeTabList: TabItem[] = [
   {
     label: '推荐',
     value: 'recommend',
   },
   {
-    label: '关注',
+    label: '最新',
     value: 'follow',
   },
 ]

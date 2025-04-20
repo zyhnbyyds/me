@@ -12,8 +12,10 @@ export default defineConfig({
     ['hw-full', 'h-full w-full'],
     ['hw-screen', 'h-screen w-screen'],
     ['flex-center', 'flex items-center justify-center'],
-    ['bg-hover-common', 'transition-all hover:bg-[rgba(15,20,25,0.1)] rounded-full'],
+    ['bg-hover-common', 'transition-all hover:bg-[rgba(15,20,25,0.1)] rounded-full hover:dark:bg-[rgba(231,234,235,0.1)]'],
     ['text-common', 'text-[rgb(15, 20, 25)]'],
+    ['flex-col-center', 'flex items-center'],
+    ['flex-row-center', 'flex justify-center'],
   ],
   presets: [
     presetWind3(),

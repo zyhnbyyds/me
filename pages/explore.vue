@@ -1,7 +1,8 @@
 <script lang='ts' setup></script>
 
 <template>
-  <div>explore</div>
+  <!-- TODO -->
+  <div>TODO: explore</div>
 </template>
 
 <style scoped></style>
