@@ -5,54 +5,50 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
+    '@nuxt/ui',
     '@nuxtjs/color-mode',
     '@vite-pwa/nuxt',
+    '@nuxt/content',
+    '@nuxt/icon',
     '@nuxt/devtools',
-    'nuxt-mongoose',
   ],
-  ssr: false,
-  routeRules: {
-    '/*': {
-      cors: true,
-    },
+
+  icon: {
+    cssLayer: 'base',
+    mode: 'css',
   },
 
-  experimental: {
-    payloadExtraction: false,
-    renderJsonPayloads: true,
-    typedPages: true,
+  ssr: false,
+
+  colorMode: {
+    classPrefix: '',
+    classSuffix: '',
   },
 
   css: [
     '@unocss/reset/tailwind.css',
+    '~/styles/md.css',
+    '~/styles/main.css',
   ],
 
-  colorMode: {
-    classSuffix: '',
-  },
-
-  nitro: {
-    esbuild: {
-      options: {
-        target: 'esnext',
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          theme: {
+            default: 'github-light',
+            dark: 'github-dark',
+          },
+        },
       },
     },
-    prerender: {
-      crawlLinks: false,
-      routes: ['/'],
-      ignore: ['/hi'],
-    },
-  },
-
-  mongoose: {
-    uri: 'mongodb://localhost:27017/test',
   },
 
   pwa,
 
   devtools: {
-    enabled: false,
+    enabled: true,
   },
 
-  compatibilityDate: '2025-02-26',
+  compatibilityDate: '2025-04-19',
 })

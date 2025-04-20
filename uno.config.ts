@@ -1,32 +1,24 @@
 import {
   defineConfig,
   presetAttributify,
-  presetIcons,
   presetTypography,
-  presetUno,
-  presetWebFonts,
+  presetWind3,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
 
 export default defineConfig({
   shortcuts: [
-    ['btn', 'px-4 py-1 rounded inline-block bg-teal-600 text-white cursor-pointer hover:bg-teal-700 disabled:cursor-default disabled:bg-gray-600 disabled:opacity-50'],
+    ['hw-full', 'h-full w-full'],
+    ['hw-screen', 'h-screen w-screen'],
+    ['flex-center', 'flex items-center justify-center'],
+    ['bg-hover-common', 'transition-all hover:bg-[rgba(15,20,25,0.1)] rounded-full'],
+    ['text-common', 'text-[rgb(15, 20, 25)]'],
   ],
   presets: [
-    presetUno(),
+    presetWind3(),
     presetAttributify(),
-    presetIcons({
-      scale: 1.2,
-    }),
     presetTypography(),
-    presetWebFonts({
-      fonts: {
-        sans: 'DM Sans',
-        serif: 'DM Serif Display',
-        mono: 'DM Mono',
-      },
-    }),
   ],
   transformers: [
     transformerDirectives(),
