@@ -25,7 +25,7 @@ export const menuList: MenuBarItem[] = [
   {
     title: '探索',
     icon: 'material-symbols:search-rounded',
-    aIcon: 'material-symbols:search-rounded',
+    aIcon: 'material-symbols:search-check-2',
     path: '/explore',
     key: 'explore',
   },
@@ -38,8 +38,8 @@ export const menuList: MenuBarItem[] = [
   },
   {
     title: '个人资料',
-    icon: 'material-symbols:person',
-    aIcon: 'material-symbols:person-rounded',
+    icon: 'material-symbols:person-outline',
+    aIcon: 'material-symbols:person',
     path: '/profile',
     key: 'profile',
   },

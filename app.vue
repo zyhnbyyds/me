@@ -4,7 +4,7 @@
 <template>
   <UApp>
     <div class="bg-white dark:bg-dark-900">
-      <NuxtLayout :key="$route.path">
+      <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </div>

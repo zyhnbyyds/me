@@ -14,7 +14,7 @@ defineProps<Props>()
 
 <template>
   <ul>
-    <li v-for="blobItem in (list ?? [])" :key="blobItem.id" class="border-0.5px border-gray-300 dark:border-dark-500" cursor-pointer>
+    <li v-for="blobItem in (list ?? [])" :key="blobItem.id" class="border-b-0.5px border-gray-300 dark:border-dark-500" cursor-pointer>
       <NuxtLink :to="blobItem.path">
         <BlogItem :blob-item="blobItem" />
       </NuxtLink>

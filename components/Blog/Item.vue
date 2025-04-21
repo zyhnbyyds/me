@@ -21,30 +21,28 @@ function getImageUrl(name?: string) {
 </script>
 
 <template>
-  <div>
-    <!-- TODO: 添加数据 -->
-    <div class="flex flex-col gap-2">
-      <div class="flex gap-2 p-4">
-        <img
-          src="/public/me.png"
-          alt="Avatar"
-          class="h-8 w-8 rounded-full"
-        >
-        <div>
-          <p class="flex items-center gap-2 text-sm font-semibold">
-            <span>{{ 'YuhangZhang' }}</span>
-            <span class="text-12px text-gray">{{ '@yuhang_zhang' }} · {{ '3分钟前' }}</span>
-          </p>
-          <p class="mt-2 text-sm">
-            {{ blobItem?.title }}
-          </p>
+  <!-- TODO: 添加数据 -->
+  <div class="flex flex-col gap-2 rounded-0 hover:bg-op-3 bg-hover-common">
+    <div class="flex gap-2 p-4">
+      <img
+        src="/public/me.png"
+        alt="Avatar"
+        class="h-8 w-8 rounded-full"
+      >
+      <div>
+        <p class="flex items-center gap-2 text-sm font-semibold">
+          <span>{{ 'YuhangZhang' }}</span>
+          <span class="text-12px text-gray">{{ '@yuhang_zhang' }} · {{ '3分钟前' }}</span>
+        </p>
+        <p class="mt-2 text-sm">
+          {{ blobItem?.title }}
+        </p>
 
-          <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(meta?.image)">
+        <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(meta?.image)">
 
-          <BlogItemFooter
-            :meta="meta"
-          />
-        </div>
+        <BlogItemFooter
+          :meta="meta"
+        />
       </div>
     </div>
   </div>

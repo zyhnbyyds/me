@@ -1,5 +1,3 @@
-import { pwa } from './config/pwa'
-
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
@@ -18,7 +16,22 @@ export default defineNuxtConfig({
     mode: 'css',
   },
 
-  ssr: false,
+  router: {
+    options: {
+      scrollBehaviorType: 'smooth',
+    },
+  },
+
+  nitro: {
+    esbuild: {
+      options: {
+        target: 'esnext',
+      },
+    },
+    prerender: {
+      crawlLinks: false,
+    },
+  },
 
   colorMode: {
     classPrefix: '',
@@ -43,8 +56,6 @@ export default defineNuxtConfig({
       },
     },
   },
-
-  pwa,
 
   devtools: {
     enabled: true,
