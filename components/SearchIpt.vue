@@ -1,10 +1,14 @@
 <script lang='ts' setup>
+import type { ContentExclude } from '~/pages/explore.vue'
+
 export interface SearchIptProps {
   placeholder: string
+  list: ContentExclude[]
 }
 
 const props = withDefaults(defineProps<SearchIptProps>(), {
   placeholder: '搜索',
+  laeblFiled: 'title',
 })
 const iptRef = useTemplateRef<HTMLElement>('iptRef')
 const focused = ref(false)
@@ -13,12 +17,14 @@ onClickOutside(iptRef, () => {
   focused.value = false
 })
 
-const value = defineModel<string>('value', {
-  default: '',
-})
+const value = defineModel<string>({ default: '' })
 
-function clickIptItem(e: number) {
-  value.value = `点击了第${e}个`
+function clickIptItem(e: ContentExclude) {
+  const item = props.list.find(i => i.id === e.id)
+  if (item) {
+    focused.value = false
+    value.value = item.title
+  }
 }
 </script>
 
@@ -44,17 +50,17 @@ function clickIptItem(e: number) {
       >
         <div
           class="max-h-150 min-h-40 overflow-auto transition-height"
-          :style="{ height: `${value.length * 60}px` }"
+          :style="{ height: `${list.length * 60}px` }"
         >
           <div
-            v-for="item, i in value.length"
-            v-show="value.length !== 0" :key="i"
+            v-for="item in list"
+            v-show="list.length !== 0" :key="item.id"
             h-60px
-            w-full cursor-pointer rounded-0 px-4 text-4 font-bold lh-60px hover:bg-op4 bg-hover-common @click="clickIptItem(i)"
+            w-full cursor-pointer rounded-0 px-4 text-4 font-bold lh-60px hover:bg-op4 bg-hover-common @click="clickIptItem(item)"
           >
-            帝集-{{ item }}
+            {{ item.title }}
           </div>
-          <div v-show="value.length === 0" pb-20 pt-10 text-center class="text-[rgb(83,100,113)]">
+          <div v-show="list.length === 0" pb-20 pt-10 text-center class="text-[rgb(83,100,113)]">
             尝试搜索人物、列表或关键词
           </div>
         </div>

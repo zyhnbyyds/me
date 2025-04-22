@@ -23,7 +23,7 @@ const { data: count } = await useAsyncData(() => {
 
     <div class="h-50" relative bg-blue-1>
       <img hw-full src="/public/profile_bg.png" object-cover alt="背景" >
-      <div class="absolute left-5 h-150px w-150px overflow-hidden rounded-full bg-white p1.2 -bottom-75px">
+      <div class="absolute  left-5 h-150px w-150px overflow-hidden rounded-full bg-white p1.2 -bottom-75px">
         <img src="/public/me.png" hw-full rounded-full alt="海绵宝宝">
       </div>
     </div>

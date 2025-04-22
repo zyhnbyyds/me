@@ -5,9 +5,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/ui',
     '@nuxtjs/color-mode',
-    '@vite-pwa/nuxt',
     '@nuxt/content',
-    '@nuxt/icon',
     '@nuxt/devtools',
   ],
 
@@ -21,6 +19,8 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
+
+  ssr: false,
 
   nitro: {
     esbuild: {
