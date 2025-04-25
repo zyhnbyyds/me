@@ -11,7 +11,7 @@ const activeMenu = ref(menuList[0].key)
         <img h-40px w-40px src="/public/favicon.ico" rounded-full alt="" srcset="">
       </div>
 
-      <div class="h-[calc(100%-118px)] pt-4px">
+      <div class="h-[calc(100%-123px)] pt-4px">
         <MenuBar v-model:active="activeMenu" :list="menuList" />
       </div>
 
@@ -19,7 +19,7 @@ const activeMenu = ref(menuList[0].key)
         <AvatarInfo />
       </div>
     </header>
-    <div class="border-common relative h-full flex-1 overflow-auto border-r-0.5px">
+    <div class="relative h-full flex-1 overflow-auto border-r-0.5px border-common">
       <slot />
     </div>
   </div>

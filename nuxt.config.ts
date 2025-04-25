@@ -30,6 +30,14 @@ export default defineNuxtConfig({
     },
     prerender: {
       crawlLinks: false,
+      routes: [
+        '/',
+      ],
+    },
+    routeRules: {
+      '/blob/**': {
+        static: true,
+      },
     },
   },
 

@@ -43,6 +43,9 @@ devDependencies:
   '@unocss/nuxt':
     specifier: 66.1.0-beta.12
     version: 66.1.0-beta.12(postcss@8.5.3)(vite@6.3.2)(vue@3.5.13)(webpack@5.99.6)
+  '@unocss/preset-web-fonts':
+    specifier: 66.1.0-beta.12
+    version: 66.1.0-beta.12
   '@vueuse/nuxt':
     specifier: ^13.1.0
     version: 13.1.0(nuxt@3.16.2)(vue@3.5.13)

@@ -28,6 +28,7 @@
     "@pinia/nuxt": "^0.11.0",
     "@unocss/eslint-config": "66.1.0-beta.12",
     "@unocss/nuxt": "66.1.0-beta.12",
+    "@unocss/preset-web-fonts": "66.1.0-beta.12",
     "@vueuse/nuxt": "^13.1.0",
     "consola": "^3.4.2",
     "eslint": "^9.25.0",

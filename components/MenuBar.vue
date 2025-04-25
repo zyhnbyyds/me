@@ -33,7 +33,8 @@ function handleMenuChange(key: string, path: string) {
         :class="item.key === active ? 'font-bold' : ''"
       >
         <div class="h-8 w-8 flex-center">
-          <Icon :name="item.key === active ? item.aIcon : item.icon" text-8 font-bold />
+          <Icon v-show="item.key === active" :name="item.aIcon" text-8 font-bold />
+          <Icon v-show="item.key !== active" :name="item.icon" text-8 font-bold />
         </div>
         <span class="ml-5 mr-4 inline-block w-a overflow-hidden text-ellipsis text-nowrap <lg:hidden">
           {{ item.title }}
