@@ -1,9 +1,7 @@
 <script lang='ts' setup></script>
 
 <template>
-  <div>
-    TODO: notifications
-  </div>
+  <slot />
 </template>
 
 <style scoped></style>

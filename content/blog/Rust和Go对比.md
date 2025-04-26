@@ -1,10 +1,9 @@
 ---
 title: "Rust vs Go：系统级与云原生编程语言深度对比"
 description: "Go（Golang）是Google开发的编译型语言（2009年发布），主打"
-date: "2023-10-01 T00:00:00+08:00"
+date: "2023-10-01 23:12:30"
 image: "deepseek_mermaid_20250420_cd6bcb.png"
 postUser: "作者哈哈哈"
-tags: ["blog"]
 liked: true
 likes: 100
 comments: 100

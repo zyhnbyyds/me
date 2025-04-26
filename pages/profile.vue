@@ -21,15 +21,12 @@ const { data: count } = await useAsyncData(() => {
       </div>
     </header>
 
-    <div class="h-50" relative bg-blue-1>
-      <img hw-full src="/public/profile_bg.png" object-cover alt="背景" >
-      <div class="absolute  left-5 h-150px w-150px overflow-hidden rounded-full bg-white p1.2 -bottom-75px">
-        <img src="/public/me.png" hw-full rounded-full alt="海绵宝宝">
-      </div>
+    <div relative p-5>
+      <img src="/public/me.png" h-30 w-30 rounded-full alt="海绵宝宝">
     </div>
-    
+
     <!-- TODO: 添加自己的个人介绍 -->
-    <div class="pt-20 animate-fade-in-left animate-duration-500 lh-12 px-7 indent-lg underline underline-light-5 underline-wavy underline-offset-10">
+    <div class="animate-fade-in-left animate-duration-500 px-7 indent-lg lh-12 underline underline-light-5 underline-offset-10 underline-wavy">
       嗨～你好呀！我叫林语，一个热爱代码也热爱生活的小猫咪～
       现在是一名全栈开发工程师，擅长 Vue3、TypeScript、NestJS 和 Java 哦～
       白天写代码，晚上研究开源项目，周末偶尔会泡一杯奶茶窝在沙发上敲点有趣的小玩意儿。
@@ -41,7 +38,7 @@ const { data: count } = await useAsyncData(() => {
       期待与你的相遇，嘻嘻～
     </div>
 
-    <div flex animate-bounce-in-left justify-end mt-10>
+    <div mt-10 flex animate-bounce-in-left justify-end>
       <img src="/public/sign.png">
     </div>
   </div>

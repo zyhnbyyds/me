@@ -7,6 +7,8 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/content',
     '@nuxt/devtools',
+    '@nuxt/icon',
+    '@nuxt/fonts',
   ],
 
   icon: {
@@ -18,6 +20,10 @@ export default defineNuxtConfig({
     options: {
       scrollBehaviorType: 'smooth',
     },
+  },
+
+  fonts: {
+    provider: 'local',
   },
 
   ssr: false,
