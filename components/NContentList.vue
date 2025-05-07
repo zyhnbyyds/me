@@ -10,14 +10,21 @@ defineOptions({
 })
 
 defineProps<Props>()
+
+const { push } = useRouter()
+
+async function goToBolgInfo(blobItem: ContentCollectionItem) {
+  push(blobItem.path)
+  await $fetch('/api/blog/like', { method: 'post', body: blobItem })
+}
 </script>
 
 <template>
   <ul>
-    <li v-for="blobItem in (list ?? [])" :key="blobItem.id" class="border-b-0.5px border-gray-300 dark:border-dark-500" cursor-pointer>
-      <NuxtLink :to="blobItem.path">
+    <li v-for="blobItem in (list ?? [])" :key="blobItem.id" class="border-b-0.5px border-common" cursor-pointer>
+      <div @click="goToBolgInfo(blobItem)">
         <BlogItem :blob-item="blobItem" />
-      </NuxtLink>
+      </div>
     </li>
   </ul>
 </template>

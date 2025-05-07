@@ -11,8 +11,6 @@ looked: true
 views: 100
 ---
 
-# Rust vs Go：系统级与云原生编程语言深度对比
-
 ## 概述
 
 ### Rust语言简介

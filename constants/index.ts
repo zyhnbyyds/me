@@ -29,13 +29,13 @@ export const menuList: MenuBarItem[] = [
     path: '/explore',
     key: 'explore',
   },
-  {
-    title: '通知',
-    icon: 'material-symbols:notifications-outline-rounded',
-    path: '/notifications',
-    aIcon: 'material-symbols:notifications-rounded',
-    key: 'notifications',
-  },
+  // {
+  //   title: '通知',
+  //   icon: 'material-symbols:notifications-outline-rounded',
+  //   path: '/notifications',
+  //   aIcon: 'material-symbols:notifications-rounded',
+  //   key: 'notifications',
+  // },
   {
     title: '个人资料',
     icon: 'material-symbols:person-outline',
@@ -54,6 +54,6 @@ export const homeTabList: TabItem[] = [
   },
   {
     label: '最新',
-    value: 'follow',
+    value: 'newest',
   },
 ]

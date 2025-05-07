@@ -29,6 +29,13 @@ export default defineNuxtConfig({
   ssr: false,
 
   nitro: {
+    storage: {
+      blog: {
+        driver: 'fs',
+        base: '.data/db',
+      },
+    },
+
     esbuild: {
       options: {
         target: 'esnext',
@@ -67,6 +74,13 @@ export default defineNuxtConfig({
             dark: 'github-dark',
           },
         },
+      },
+    },
+    renderer: {
+      anchorLinks: {
+        h1: false,
+        h2: false,
+        h3: false,
       },
     },
   },

@@ -11,8 +11,6 @@ looked: true
 views: 90
 ---
 
-# Node.js 能否支持百万级并发？深度解析与实践指南
-
 ![Node.js 并发架构示意图](https://example.com/nodejs-concurrency.png)
 
 ## 概述

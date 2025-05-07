@@ -17,7 +17,7 @@ export default defineConfig({
     ['flex-col-center', 'flex items-center'],
     ['flex-row-center', 'flex justify-center'],
     ['blur-common', 'backdrop-blur-md bg-[rgba(255,255,255,0.9)] dark:bg-[rgba(0,0,0,0.8)]'],
-    ['border-common', 'border-gray-300 dark:border-dark-500'],
+    ['border-common', 'border-light-700 dark:border-dark-500'],
   ],
   presets: [
     presetWind3(),

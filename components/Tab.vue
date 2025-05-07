@@ -17,7 +17,7 @@ const active = defineModel<string>()
   <div class="flex">
     <div
       v-for="item in list" :key="item.value"
-      class="tab-item relative h-50px flex-1 cursor-pointer border-b-0.5px border-gray-300 rounded-0 text-center text-15px lh-50px dark:border-dark-500 bg-hover-common"
+      class="tab-item relative h-50px flex-1 cursor-pointer border-b-0.5px rounded-0 text-center text-15px lh-50px transition-colors border-common bg-hover-common"
       :class="active === item.value
         ? 'font-bold tab-item-active' : ''"
 
