@@ -47,7 +47,7 @@ else if (activeTab.value === 'newest') {
   y.value = app.value.newest
 }
 
-watchEffect(() => {
+onBeforeRouteLeave(() => {
   if (activeTab.value === 'recommend') {
     app.value.recommend = y.value
   }
@@ -60,7 +60,7 @@ watchEffect(() => {
 <template>
   <Tab v-model="activeTab" sticky top-0 w-full blur-common :list="homeTabList" />
   <ClientOnly>
-    <NContentList :list="blobs" />
+    <BlogList :list="blobs" />
   </ClientOnly>
 </template>
 

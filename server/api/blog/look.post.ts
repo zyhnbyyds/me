@@ -4,12 +4,12 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<ContentCollectionItem>(event)
   const { id } = body
   const storage = useStorage('me')
-  const likes = await storage.getItem<number>(`likes:${id}`)
-  if (likes) {
-    await storage.setItem(`likes:${id}`, likes + 1)
+  const looks = await storage.getItem<number>(`looks:${id}`)
+  if (looks) {
+    await storage.setItem(`looks:${id}`, looks + 1)
   }
   else {
-    await storage.setItem(`likes:${id}`, 1)
+    await storage.setItem(`looks:${id}`, 1)
   }
 
   return true

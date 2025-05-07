@@ -5,6 +5,9 @@ export interface BlogMeta {
   publishedAt: string
   updatedAt?: string
   tags?: string[]
+}
+
+export interface BlogOps {
   looked: boolean
   views: number
   liked: boolean

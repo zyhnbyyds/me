@@ -15,7 +15,7 @@ const { push } = useRouter()
 
 async function goToBolgInfo(blobItem: ContentCollectionItem) {
   push(blobItem.path)
-  await $fetch('/api/blog/like', { method: 'post', body: blobItem })
+  await $fetch('/api/blog/look', { method: 'post', body: blobItem })
 }
 </script>
 

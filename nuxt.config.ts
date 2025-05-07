@@ -30,9 +30,10 @@ export default defineNuxtConfig({
 
   nitro: {
     storage: {
-      blog: {
-        driver: 'fs',
-        base: '.data/db',
+      me: {
+        driver: 'redis',
+        port: 6379,
+        host: 'localhost',
       },
     },
 
@@ -67,6 +68,7 @@ export default defineNuxtConfig({
 
   content: {
     build: {
+      transformers: ['~/transformers/contentId'],
       markdown: {
         highlight: {
           theme: {
@@ -75,6 +77,10 @@ export default defineNuxtConfig({
           },
         },
       },
+    },
+    database: {
+      type: 'postgres',
+      url: 'postgresql://postgres:zhang123456@localhost:6666/postgres',
     },
     renderer: {
       anchorLinks: {
