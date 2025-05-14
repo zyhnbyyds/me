@@ -23,7 +23,7 @@ const { focused } = useFocusWithin(commentRef)
       class="transition-all duration-300"
       w-full resize-none px-3 py-2 text-3.5 outline-none
     />
-    <footer class="flex justify-between px-3 py-2">
+    <footer class="flex justify-between px-3 pb-2 pt-1">
       <div class="flex items-center">
         <button ref="emojiBtnRef" class="relative mr-3 h-5 w-5 rounded-md">
           <Transition name="fade" mode="in-out">
