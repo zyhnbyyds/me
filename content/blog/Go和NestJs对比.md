@@ -4,11 +4,6 @@ description: "描述展示"
 date: "2023-10-01 19:00:00"
 image: "JGizhEkm.jpg"
 postUser: "作者哈哈哈"
-liked: true
-likes: 100
-comments: 100
-looked: true
-views: 100
 ---
 
 ## 概述

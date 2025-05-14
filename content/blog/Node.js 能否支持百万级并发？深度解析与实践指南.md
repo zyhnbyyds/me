@@ -4,11 +4,6 @@ description: "描述展示"
 date: "2023-10-01 22:00:00"
 image: "code.png"
 postUser: "作者哈哈哈"
-liked: false
-likes: 1002
-comments: 20
-looked: true
-views: 90
 ---
 
 ![Node.js 并发架构示意图](https://example.com/nodejs-concurrency.png)

@@ -28,6 +28,9 @@ devDependencies:
   '@iconify-json/material-symbols':
     specifier: ^1.2.20
     version: 1.2.20
+  '@iconify-json/streamline-emojis':
+    specifier: ^1.2.1
+    version: 1.2.1
   '@iconify-json/twemoji':
     specifier: ^1.2.2
     version: 1.2.2
@@ -85,6 +88,9 @@ devDependencies:
   typescript:
     specifier: ^5.8.3
     version: 5.8.3
+  unocss:
+    specifier: ^66.1.1
+    version: 66.1.1(@unocss/webpack@66.1.1)(postcss@8.5.3)(vite@6.3.5)(vue@3.5.13)
   vitest:
     specifier: ^3.1.3
     version: 3.1.3
@@ -1004,6 +1010,12 @@ packages:
 
   /@iconify-json/ri@1.2.5:
     resolution: {integrity: sha512-kWGimOXMZrlYusjBKKXYOWcKhbOHusFsmrmRGmjS7rH0BpML5A9/fy8KHZqFOwZfC4M6amObQYbh8BqO5cMC3w==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/streamline-emojis@1.2.1:
+    resolution: {integrity: sha512-s782C9Imd9LlY/UyBqOSppaLmMU5ywnyUJZp1/hN4p0nEaWCp9F3D8bjUfna8KV1Qw0sbNQaoWtcxMvOZcwNiw==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

@@ -66,7 +66,7 @@ const positionStyle = computed(() => {
 
       <USeparator mb-4 type="dashed" label="留下你的评论~" />
 
-      <TextArea />
+      <BlogComment />
       <footer h-15 />
     </div>
   </div>

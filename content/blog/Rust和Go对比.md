@@ -4,11 +4,6 @@ description: "Go（Golang）是Google开发的编译型语言（2009年发布）
 date: "2023-10-01 23:12:30"
 image: "deepseek_mermaid_20250420_cd6bcb.png"
 postUser: "作者哈哈哈"
-liked: true
-likes: 100
-comments: 100
-looked: true
-views: 100
 ---
 
 ## 概述
