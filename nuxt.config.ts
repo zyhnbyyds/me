@@ -13,7 +13,7 @@ export default defineNuxtConfig({
 
   icon: {
     cssLayer: 'base',
-    mode: 'css',
+    mode: 'svg',
   },
 
   router: {
@@ -32,8 +32,9 @@ export default defineNuxtConfig({
     storage: {
       me: {
         driver: 'redis',
-        port: 6379,
-        host: 'localhost',
+        port: import.meta.env.REDIS_PORT,
+        host: import.meta.env.REDIS_HOST,
+        password: import.meta.env.REDIS_PASSWORD,
       },
     },
 
@@ -61,9 +62,8 @@ export default defineNuxtConfig({
   },
 
   css: [
-    '@unocss/reset/tailwind.css',
-    '~/styles/md.css',
-    '~/styles/main.css',
+    '~/assets/css/md.css',
+    '~/assets/css/main.css',
   ],
 
   content: {
@@ -77,10 +77,6 @@ export default defineNuxtConfig({
           },
         },
       },
-    },
-    database: {
-      type: 'postgres',
-      url: 'postgresql://postgres:zhang123456@localhost:6666/postgres',
     },
     renderer: {
       anchorLinks: {

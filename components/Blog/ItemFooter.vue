@@ -5,25 +5,28 @@ const props = defineProps<{
   id: string
 }>()
 
-const blogOps = await $fetch<BlogOps>('/api/blog/ops', {
+const { data: blogOps } = useAsyncData(`blogOps-${props.id}`, () => $fetch<BlogOps>('/api/blog/ops', {
   params: {
     id: props.id,
   },
-})
+}))
 
 function handleClickLike() {
-  if (blogOps?.liked) {
-    blogOps.likes--
+  if (!blogOps.value) {
+    return
+  }
+  if (blogOps.value?.liked) {
+    blogOps.value.likes--
   }
   else {
-    blogOps.likes++
+    blogOps.value.likes++
   }
-  blogOps.liked = !blogOps.liked
+  blogOps.value.liked = !blogOps.value.liked
   $fetch('/api/blog/like', {
     method: 'post',
     body: {
       id: props.id,
-      liked: blogOps.liked,
+      isLiked: blogOps.value.liked,
     },
   })
 }
@@ -36,8 +39,8 @@ function handleClickLike() {
       <Icon name="mdi:tooltip-minus-outline" text-4 />
       <span>{{ blogOps?.comments }}</span>
     </span>
-    <span class="flex-col-center gap-1 text-gray">
-      <Icon text-4 :name=" blogOps?.liked ? 'mdi:cards-heart' : 'mdi:cards-heart-outline'" :class="blogOps?.liked ? 'text-red' : ''" @click.stop="handleClickLike" />
+    <span class="flex-col-center gap-1 text-gray" @click.stop="handleClickLike">
+      <Icon text-4 :name="blogOps?.liked ? 'mdi:cards-heart' : 'mdi:cards-heart-outline'" :class="blogOps?.liked ? 'text-red' : ''" />
       <span>{{ blogOps?.likes }}</span>
     </span>
     <span class="flex-col-center gap-1 text-12px text-gray">

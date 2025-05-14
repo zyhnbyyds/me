@@ -9,7 +9,7 @@ export interface BlogMeta {
 
 export interface BlogOps {
   looked: boolean
-  views: number
+  looks: number
   liked: boolean
   likes: number
   comments: number

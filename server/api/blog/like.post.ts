@@ -1,12 +1,20 @@
 import type { ContentCollectionItem } from '@nuxt/content'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<ContentCollectionItem>(event)
-  const { id } = body
+  const body = await readBody<ContentCollectionItem & { isLiked: boolean }>(event)
+  const { id, isLiked } = body
   const storage = useStorage('me')
   const likes = await storage.getItem<number>(`likes:${id}`)
+
+  await storage.setItem(`liked:${id}`, isLiked)
+
   if (likes) {
-    await storage.setItem(`likes:${id}`, likes + 1)
+    if (isLiked) {
+      await storage.setItem(`likes:${id}`, likes + 1)
+    }
+    else {
+      await storage.setItem(`likes:${id}`, likes - 1)
+    }
   }
   else {
     await storage.setItem(`likes:${id}`, 1)

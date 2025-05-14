@@ -63,6 +63,11 @@ const positionStyle = computed(() => {
       <!-- 标题高度 -->
       <p :style="{ height: `${height}px` }" />
       <ContentRenderer v-if="page" :value="page" />
+
+      <USeparator mb-4 type="dashed" label="留下你的评论~" />
+
+      <TextArea />
+      <footer h-15 />
     </div>
   </div>
 </template>
