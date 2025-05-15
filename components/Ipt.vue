@@ -1,0 +1,81 @@
+<script lang='ts' setup>
+const emits = defineEmits<{
+  (e: 'blur', val: Event): void
+  (e: 'focus', val: Event): void
+}>()
+const iptVal = defineModel<string>({ default: '' })
+const editableRef = ref<HTMLElement | null>(null)
+const { focused } = useFocus(editableRef)
+
+onMounted(() => {
+  if (editableRef.value)
+    editableRef.value.innerHTML = iptVal.value
+})
+
+function update(e: Event) {
+  if (e.target) {
+    iptVal.value = (e.target as HTMLElement).innerHTML
+  }
+}
+
+defineExpose({
+  insertImage,
+  focus: () => {
+    focused.value = true
+  },
+  blur: () => {
+    focused.value = false
+  },
+  focused,
+})
+
+function insertImage(url: string) {
+  const img = document.createElement('img')
+  img.src = url
+  img.className = 'emoji-sm'
+
+  const selection = window.getSelection()
+  if (!selection || !selection.rangeCount || !editableRef.value)
+    return
+
+  const range = selection.getRangeAt(0)
+  range.deleteContents() // 插入前删掉选区内容
+
+  range.insertNode(img)
+
+  // 🧠 插入完后，光标移动到图片后面
+  const newRange = document.createRange()
+  newRange.setStartAfter(img)
+  newRange.setEndAfter(img)
+
+  selection.removeAllRanges()
+  selection.addRange(newRange)
+
+  // ✨ 更新绑定的内容
+  iptVal.value = editableRef.value.innerHTML
+}
+
+function hadndleBlur(event: FocusEvent) {
+  emits('blur', event)
+}
+</script>
+
+<template>
+  <div
+    ref="editableRef"
+    class="chat-ipt w-full break-all px-3 py-2 text-3.5 outline-none"
+    contenteditable="true"
+    @blur="hadndleBlur"
+    @focus="emits('focus', $event)"
+    @input="update"
+  >
+    请输入
+  </div>
+</template>
+
+<style scoped>
+::v-deep .chat-ipt .emoji-sm {
+  height: 20px !important;
+  width: 20px !important;
+}
+</style>

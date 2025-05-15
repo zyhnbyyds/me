@@ -1,0 +1,7 @@
+.emoji-sm {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
+  margin-right: 2px;
+  cursor: default;
+}

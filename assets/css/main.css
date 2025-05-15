@@ -1,4 +1,5 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@import url('./transition.css');
+@import './transition.css';
+@import './common.css'

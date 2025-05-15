@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxt/icon',
     '@nuxt/fonts',
+    'nuxt-auth-utils',
   ],
 
   icon: {
@@ -42,12 +43,6 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext',
       },
-    },
-    prerender: {
-      crawlLinks: false,
-      routes: [
-        '/',
-      ],
     },
     routeRules: {
       '/blob/**': {
@@ -89,6 +84,16 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true,
+  },
+
+  runtimeConfig: {
+    oauth: {
+      github: {
+        clientId: import.meta.env.GITHUB_CLIENT_ID,
+        clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
+        redirectURL: 'http://localhost:3002/auth/github',
+      },
+    },
   },
 
   compatibilityDate: '2025-04-19',

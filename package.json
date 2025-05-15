@@ -40,6 +40,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "nuxt": "^3.17.3",
+    "nuxt-auth-utils": "^0.5.20",
     "nuxt-mongoose": "^1.0.6",
     "pinia": "^3.0.2",
     "typescript": "^5.8.3",

@@ -3,10 +3,13 @@ import type { BlogMeta } from '~/types/blog'
 
 const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
+const commentIpt = ref('')
+const commentRef = ref<HTMLTextAreaElement | null>(null)
 
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection('content').path(route.path).first()
 })
+const { loggedIn, user, clear, openInPopup } = useUserSession()
 
 const meta = computed(() => {
   return page.value?.meta as unknown as BlogMeta
@@ -55,7 +58,10 @@ const positionStyle = computed(() => {
         </p>
       </div>
 
-      <h1 ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4 font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''">
+      <h1
+        ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
+        font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
+      >
         {{ page?.title }}
       </h1>
     </header>
@@ -66,8 +72,34 @@ const positionStyle = computed(() => {
 
       <USeparator mb-4 type="dashed" label="留下你的评论~" />
 
-      <BlogComment />
-      <footer h-15 />
+      <!-- 登录 -->
+      <div mb-2 flex items-center justify-end text-3 font-bold>
+        <div v-if="!loggedIn">
+          <button flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3 @click="openInPopup('/auth/github')">
+            <Icon name="skill-icons:github-dark" mr-1 />
+            登录
+          </button>
+        </div>
+
+        <div v-else flex-col-center>
+          <Icon name="carbon:logout" mr-2 text-4 class="rotate-90 cursor-pointer" @click="clear" />
+          <UAvatar size="sm" :src="user?.avatar_url" />
+          <div ml-2>
+            {{ user?.name }}
+          </div>
+        </div>
+      </div>
+
+      <BlogComment ref="commentRef" v-model="commentIpt" />
+
+      <footer h-80 />
     </div>
   </div>
 </template>
+
+<style scoped>
+.chat-ipt > img {
+  height: 20px !important;
+  width: 20px !important;
+}
+</style>
