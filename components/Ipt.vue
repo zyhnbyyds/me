@@ -12,6 +12,11 @@ onMounted(() => {
     editableRef.value.innerHTML = iptVal.value
 })
 
+watch(() => iptVal.value, (val) => {
+  if (!val && editableRef.value)
+    editableRef.value.innerHTML = ''
+})
+
 function update(e: Event) {
   if (e.target) {
     iptVal.value = (e.target as HTMLElement).innerHTML

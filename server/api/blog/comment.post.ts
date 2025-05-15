@@ -1,17 +1,18 @@
 import { ulid } from 'ulid'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ id: string, comment: string }>(event)
-  const { id, comment } = body
+  const body = await readBody<{ id: string, comment: string, fromUserId: string, toUserId: string }>(event)
+  const { id, comment, fromUserId, toUserId } = body
   const storage = useStorage('me')
-  const comments = await storage.getItem<string[]>(`comments:${id}`)
 
-  if (comments) {
-    comments.push(comment)
-    await storage.setItem(`comments:${id}:${ulid()}`, comments)
+  await storage.setItem(`comments:${id}:${fromUserId}:to:${toUserId}:${ulid()}:${Date.now()}`, comment)
+
+  const commentCount = await storage.getItem<number>(`comments:count:${id}`)
+  if (!commentCount) {
+    await storage.setItem(`comments:count:${id}`, 1)
   }
   else {
-    await storage.setItem(`comments:${id}:${ulid()}`, [comment])
+    await storage.setItem(`comments:count:${id}`, commentCount + 1)
   }
 
   return true

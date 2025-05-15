@@ -44,6 +44,16 @@ const positionStyle = computed(() => {
     fontSize: '14px',
   }
 })
+
+async function hdClickSend(val: EmojiInfo[]) {
+  if (!page.value || !loggedIn.value || !user.value)
+    return
+
+  const body = { id: page.value.id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
+  console.log(body)
+
+  await $fetch('/api/blog/comment', { method: 'post', body })
+}
 </script>
 
 <template>
@@ -90,7 +100,7 @@ const positionStyle = computed(() => {
         </div>
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" />
+      <BlogComment ref="commentRef" v-model="commentIpt" @send="(val) => hdClickSend(val)" />
 
       <footer h-80 />
     </div>

@@ -4,7 +4,7 @@ import Ipt from '../Ipt.vue'
 type IptType = InstanceType<typeof Ipt>
 
 const emits = defineEmits<{
-  (e: 'send'): void
+  (e: 'send', val: EmojiInfo[]): void
 }>()
 
 const textarea = defineModel<string>({ default: '' })
@@ -39,10 +39,10 @@ function hdSendComment() {
   if (!textarea.value) {
     return
   }
-
-  console.log(parseEmojiContent(textarea.value))
-
-  emits('send')
+  emits('send', parseEmojiContent(textarea.value))
+  textarea.value = ''
+  focused.value = false
+  textareaRef.value?.blur()
 }
 </script>
 
@@ -93,7 +93,7 @@ function hdSendComment() {
         <span mr-4 text-3>
           <span>{{ textarea.length }}</span> / 300
         </span>
-        <button class="cursor-pointer rounded-1.3 bg-blue px-2.5 py-1 text-3.5 text-white" @click="hdSendComment">
+        <button class="cursor-pointer rounded-1.3 bg-blue px-2.5 py-1 text-3.5 text-white" @click.stop="hdSendComment">
           发送
         </button>
       </div>

@@ -1,3 +1,8 @@
+export interface EmojiInfo {
+  type: 'emoji' | 'text'
+  value: string
+}
+
 /**
  * 解析包含 emoji 的 HTML 内容
  * 该函数旨在将给定的 HTML 字符串转换为一个包含文本和 emoji 信息的数组
@@ -6,7 +11,7 @@
  * @param html 代表用户输入内容的 HTML 字符串
  * @returns 返回一个对象数组，每个对象包含类型（'emoji' 或 'text'）和对应的值
  */
-export function parseEmojiContent(html: string) {
+export function parseEmojiContent(html: string): EmojiInfo[] {
   const container = document.createElement('div')
   container.innerHTML = html
 
