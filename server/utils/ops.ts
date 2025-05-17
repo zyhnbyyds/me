@@ -5,7 +5,7 @@ export async function getOps(id: string) {
     storage.getItem<number>(`looks:${id}`),
     storage.getItem<boolean>(`liked:${id}`),
     storage.getItem<number>(`likes:${id}`),
-    storage.getItem<number>(`comments:${id}`),
+    storage.getItem<number>(`comments:count:${id}`),
   ])
 
   const res = {

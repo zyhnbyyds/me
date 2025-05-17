@@ -64,6 +64,9 @@ devDependencies:
   consola:
     specifier: ^3.4.2
     version: 3.4.2
+  dayjs:
+    specifier: ^1.11.13
+    version: 1.11.13
   eslint:
     specifier: ^9.26.0
     version: 9.26.0
@@ -5660,6 +5663,10 @@ packages:
   /data-uri-to-buffer@4.0.1:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
+    dev: true
+
+  /dayjs@1.11.13:
+    resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==}
     dev: true
 
   /db0@0.3.2(better-sqlite3@11.10.0):

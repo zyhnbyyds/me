@@ -1,3 +1,5 @@
+import type { User } from '#auth-utils'
+
 export interface BlogMeta {
   title: string
   description: string
@@ -13,4 +15,18 @@ export interface BlogOps {
   liked: boolean
   likes: number
   comments: number
+}
+
+export interface CommentItem {
+  type: string
+  fileDirName: string
+  categary: string
+  fileName: string
+  fromUserId: string
+  toUserId: string
+  commentId: string
+  timestamp: string
+  content: EmojiInfo[]
+  fromUser: User
+  toUser: User | null
 }

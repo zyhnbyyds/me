@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { BlogMeta } from '~/types/blog'
+import type { BlogMeta, CommentItem } from '~/types/blog'
 
 const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
@@ -9,6 +9,15 @@ const commentRef = ref<HTMLTextAreaElement | null>(null)
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection('content').path(route.path).first()
 })
+const { data: comments } = await useAsyncData<CommentItem[]>('/api/blog/comment', () => {
+  if (!page.value)
+    return new Promise(() => {})
+  return $fetch('/api/blog/comment', {
+    method: 'get',
+    query: { id: page.value.id },
+  })
+})
+
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
 const meta = computed(() => {
@@ -50,8 +59,6 @@ async function hdClickSend(val: EmojiInfo[]) {
     return
 
   const body = { id: page.value.id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
-  console.log(body)
-
   await $fetch('/api/blog/comment', { method: 'post', body })
 }
 </script>
@@ -79,11 +86,12 @@ async function hdClickSend(val: EmojiInfo[]) {
       <!-- 标题高度 -->
       <p :style="{ height: `${height}px` }" />
       <ContentRenderer v-if="page" :value="page" />
+    </div>
 
-      <USeparator mb-4 type="dashed" label="留下你的评论~" />
+    <USeparator mb-2 px-2 type="dashed" label="留下你的评论~" />
 
-      <!-- 登录 -->
-      <div mb-2 flex items-center justify-end text-3 font-bold>
+    <div mx-5>
+      <div mb-2 flex items-center justify-end px-5 text-3 font-bold>
         <div v-if="!loggedIn">
           <button flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3 @click="openInPopup('/auth/github')">
             <Icon name="skill-icons:github-dark" mr-1 />
@@ -102,8 +110,11 @@ async function hdClickSend(val: EmojiInfo[]) {
 
       <BlogComment ref="commentRef" v-model="commentIpt" @send="(val) => hdClickSend(val)" />
 
-      <footer h-80 />
+      <USeparator my-5 px-2 type="dashed" label="评论列表" />
+      <BlogCommentList :comments="comments ?? []" />
     </div>
+
+    <footer h-80 />
   </div>
 </template>
 

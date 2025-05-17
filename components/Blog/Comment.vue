@@ -36,7 +36,7 @@ function hdOpenEmojiPicker() {
 }
 
 function hdSendComment() {
-  if (!textarea.value) {
+  if (!textarea.value || !useUserSession().loggedIn.value) {
     return
   }
   emits('send', parseEmojiContent(textarea.value))
