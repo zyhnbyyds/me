@@ -56,8 +56,8 @@ devDependencies:
     specifier: 66.1.1
     version: 66.1.1(postcss@8.5.3)(vite@6.3.5)(vue@3.5.13)(webpack@5.99.8)
   '@unocss/preset-web-fonts':
-    specifier: 66.1.1
-    version: 66.1.1
+    specifier: 66.1.2
+    version: 66.1.2
   '@vueuse/nuxt':
     specifier: ^13.2.0
     version: 13.2.0(nuxt@3.17.3)(vue@3.5.13)
@@ -3296,6 +3296,10 @@ packages:
     resolution: {integrity: sha512-EOewEnipyB7Y6ne0YQmxdCG1hbMjYJ7oPMeHKfQuCZz60DPzkYwV6zVMa35ySMs1xljb/vFTHVFcJA8du3i8XA==}
     dev: true
 
+  /@unocss/core@66.1.2:
+    resolution: {integrity: sha512-mN9h1hHEuhDcdbI4z74o7UnxlBZYVsJpYcdC1YLWBKROcLYTkuyZ7hgBzpo1FBNox2Bt3JnrSinVDmc44Bxjow==}
+    dev: true
+
   /@unocss/eslint-config@66.1.1(eslint@9.26.0)(typescript@5.8.3):
     resolution: {integrity: sha512-9FggydayNp7qh09Fxl5C9KdrzyxbTefFrZurCg7P2xwSLlRKq+Bzqml4aGO5UzBVvrSBlgSCt5pNkyMXo6RA/Q==}
     engines: {node: '>=14'}
@@ -3540,6 +3544,13 @@ packages:
     resolution: {integrity: sha512-vVjidprhFWsZ0ClRIfGhH3evsdtDgXPSoyv8MlN8dP5RqkpH817h5PqmInxHkYeC5Mg/HsUy5HA0NryBQix0vQ==}
     dependencies:
       '@unocss/core': 66.1.1
+      ofetch: 1.4.1
+    dev: true
+
+  /@unocss/preset-web-fonts@66.1.2:
+    resolution: {integrity: sha512-2ru+6jaac72oUx0kOBgNzbbkVe6oWKjqGmx24uK94fAcrP9eQyd+r7xiFpqXegrQ8+kONI66+HxAClvF2JHqdw==}
+    dependencies:
+      '@unocss/core': 66.1.2
       ofetch: 1.4.1
     dev: true
 
