@@ -3,6 +3,10 @@ import Ipt from '../Ipt.vue'
 
 type IptType = InstanceType<typeof Ipt>
 
+const props = defineProps<{
+  loading: boolean
+}>()
+
 const emits = defineEmits<{
   (e: 'send', val: EmojiInfo[]): void
 }>()
@@ -17,10 +21,26 @@ const pickerVisible = ref(false)
 
 const focused = ref(false)
 
+const iptLength = computed(() => {
+  return textareaRef.value?.len ?? 0
+})
+
 onClickOutside(commentRef, () => {
   focused.value = false
   pickerVisible.value = false
 })
+
+onKeyStroke(
+  'Enter',
+  (e) => {
+    e.preventDefault()
+    if (iptLength.value !== 0) {
+      hdSendComment()
+    }
+  },
+  { target: commentRef },
+)
+
 function hdSelectEmoji(url: string) {
   textareaRef.value?.insertImage(url)
 }
@@ -36,7 +56,7 @@ function hdOpenEmojiPicker() {
 }
 
 function hdSendComment() {
-  if (!textarea.value || !useUserSession().loggedIn.value) {
+  if (!textarea.value || !useUserSession().loggedIn.value || props.loading) {
     return
   }
   emits('send', parseEmojiContent(textarea.value))
@@ -91,11 +111,11 @@ function hdSendComment() {
 
       <div class="flex items-center text-4 text-dark-3">
         <span mr-4 text-3>
-          <span>{{ textarea.length }}</span> / 300
+          <span>{{ iptLength }}</span> / 300
         </span>
-        <button class="cursor-pointer rounded-1.3 bg-blue px-2.5 py-1 text-3.5 text-white" @click.stop="hdSendComment">
+        <UButton :loading="loading" size="sm" @click.stop="hdSendComment">
           发送
-        </button>
+        </UButton>
       </div>
     </footer>
   </div>

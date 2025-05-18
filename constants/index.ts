@@ -43,6 +43,13 @@ export const menuList: MenuBarItem[] = [
     path: '/profile',
     key: 'profile',
   },
+  {
+    title: '相册',
+    icon: 'material-symbols:animated-images-outline-rounded',
+    aIcon: 'material-symbols:animated-images',
+    path: 'gallery',
+    key: 'gallery',
+  },
 ]
 
 export const appIcon = '/favicon.ico'

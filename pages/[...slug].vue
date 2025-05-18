@@ -1,17 +1,20 @@
 <script lang="ts" setup>
 import type { BlogMeta, CommentItem } from '~/types/blog'
+import { ulid } from 'ulid'
+import { transformContentIdToDataField } from '~/utils/content'
 
 const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
 const commentIpt = ref('')
 const commentRef = ref<HTMLTextAreaElement | null>(null)
+const [loading, load] = useToggle(false)
 
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection('content').path(route.path).first()
 })
 const { data: comments } = await useAsyncData<CommentItem[]>('/api/blog/comment', () => {
   if (!page.value)
-    return new Promise(() => {})
+    return new Promise(() => { })
   return $fetch('/api/blog/comment', {
     method: 'get',
     query: { id: page.value.id },
@@ -59,11 +62,35 @@ async function hdClickSend(val: EmojiInfo[]) {
     return
 
   const body = { id: page.value.id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
+  load(true)
   await $fetch('/api/blog/comment', { method: 'post', body })
+  if (comments.value) {
+    const transformedIdData = transformContentIdToDataField(page.value.id)
+    comments.value.unshift({
+      ...transformedIdData,
+      type: 'comment',
+      fromUserId: String(user.value.id),
+      toUserId: '0',
+      commentId: ulid(),
+      timestamp: Date.now().toString(),
+      content: val,
+      fromUser: user.value,
+      toUser: null,
+    })
+  }
+  load(false)
 }
 </script>
 
 <template>
+  <!--
+    TODO: 完善相册
+    1. 添加图片预览
+    2. 瀑布流
+    3. 视频播放
+    4. 无缝展示
+    5. 远程存储
+    -->
   <div w-full>
     <header sticky top-0 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
       <div flex-col-center gap-4>
@@ -91,9 +118,12 @@ async function hdClickSend(val: EmojiInfo[]) {
     <USeparator mb-2 px-2 type="dashed" label="留下你的评论~" />
 
     <div mx-5>
-      <div mb-2 flex items-center justify-end px-5 text-3 font-bold>
+      <div mb-2 flex items-center justify-end text-3 font-bold>
         <div v-if="!loggedIn">
-          <button flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3 @click="openInPopup('/auth/github')">
+          <button
+            flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
+            @click="openInPopup('/auth/github')"
+          >
             <Icon name="skill-icons:github-dark" mr-1 />
             登录
           </button>
@@ -108,9 +138,9 @@ async function hdClickSend(val: EmojiInfo[]) {
         </div>
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" @send="(val) => hdClickSend(val)" />
+      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="(val) => hdClickSend(val)" />
 
-      <USeparator my-5 px-2 type="dashed" label="评论列表" />
+      <USeparator v-if="comments && comments.length > 0" my-5 px-2 type="dashed" label="评论列表" />
       <BlogCommentList :comments="comments ?? []" />
     </div>
 

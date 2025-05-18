@@ -6,6 +6,7 @@ const emits = defineEmits<{
 const iptVal = defineModel<string>({ default: '' })
 const editableRef = ref<HTMLElement | null>(null)
 const { focused } = useFocus(editableRef)
+const len = ref<number>(0)
 
 onMounted(() => {
   if (editableRef.value)
@@ -13,13 +14,34 @@ onMounted(() => {
 })
 
 watch(() => iptVal.value, (val) => {
-  if (!val && editableRef.value)
+  caculateLength()
+  if (!val && editableRef.value) {
     editableRef.value.innerHTML = ''
+  }
 })
 
-function update(e: Event) {
+async function update(e: Event) {
   if (e.target) {
+    // 将输入框内容同步到 iptVal
     iptVal.value = (e.target as HTMLElement).innerHTML
+  }
+}
+
+async function caculateLength() {
+  await nextTick() // 等待 DOM 更新完成
+
+  if (editableRef.value) {
+    len.value = 0 // 重置长度计数器
+
+    // 遍历子节点计算长度
+    editableRef.value.childNodes.forEach((node) => {
+      if (node.nodeName === 'IMG') {
+        len.value += 1 // 每个图片算作一个单位
+      }
+      else if (node.nodeName === '#text') {
+        len.value += (node.textContent || '').length // 文本节点按字符长度累加
+      }
+    })
   }
 }
 
@@ -32,6 +54,7 @@ defineExpose({
     focused.value = false
   },
   focused,
+  len,
 })
 
 function insertImage(url: string) {
