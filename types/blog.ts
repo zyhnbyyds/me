@@ -19,9 +19,7 @@ export interface BlogOps {
 
 export interface CommentItem {
   type: string
-  fileDirName: string
-  categary: string
-  fileName: string
+  fileId: string
   fromUserId: string
   toUserId: string
   commentId: string

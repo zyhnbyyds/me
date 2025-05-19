@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { BlogMeta, CommentItem } from '~/types/blog'
 import { ulid } from 'ulid'
-import { transformContentIdToDataField } from '~/utils/content'
 
 const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
@@ -10,14 +9,14 @@ const commentRef = ref<HTMLTextAreaElement | null>(null)
 const [loading, load] = useToggle(false)
 
 const { data: page } = await useAsyncData(route.path, () => {
-  return queryCollection('content').path(route.path).first()
+  return queryCollection('blog').path(route.path).first()
 })
 const { data: comments } = await useAsyncData<CommentItem[]>('/api/blog/comment', () => {
   if (!page.value)
     return new Promise(() => { })
   return $fetch('/api/blog/comment', {
     method: 'get',
-    query: { id: page.value.id },
+    query: { id: page.value.path.replaceAll('/', '_') },
   })
 })
 
@@ -61,13 +60,14 @@ async function hdClickSend(val: EmojiInfo[]) {
   if (!page.value || !loggedIn.value || !user.value)
     return
 
-  const body = { id: page.value.id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
+  const id = page.value.path.replaceAll('/', '_')
+
+  const body = { id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
   load(true)
   await $fetch('/api/blog/comment', { method: 'post', body })
   if (comments.value) {
-    const transformedIdData = transformContentIdToDataField(page.value.id)
     comments.value.unshift({
-      ...transformedIdData,
+      fileId: id,
       type: 'comment',
       fromUserId: String(user.value.id),
       toUserId: '0',
@@ -83,14 +83,6 @@ async function hdClickSend(val: EmojiInfo[]) {
 </script>
 
 <template>
-  <!--
-    TODO: 完善相册
-    1. 添加图片预览
-    2. 瀑布流
-    3. 视频播放
-    4. 无缝展示
-    5. 远程存储
-    -->
   <div w-full>
     <header sticky top-0 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
       <div flex-col-center gap-4>
@@ -140,7 +132,8 @@ async function hdClickSend(val: EmojiInfo[]) {
 
       <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="(val) => hdClickSend(val)" />
 
-      <USeparator v-if="comments && comments.length > 0" my-5 px-2 type="dashed" label="评论列表" />
+      <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+
       <BlogCommentList :comments="comments ?? []" />
     </div>
 

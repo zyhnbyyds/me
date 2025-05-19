@@ -9,11 +9,11 @@
  * @returns 返回一个对象，包含文件目录名、类别和文件名
  */
 export function transformContentIdToDataField(id: string) {
-  const [fileDirName, categary, fileName] = id.split(':')
+  const [fileDirName, category, fileName] = id.split(':')
 
   return {
     fileDirName,
-    categary,
+    category,
     fileName,
   }
 }

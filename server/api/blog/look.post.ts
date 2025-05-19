@@ -1,8 +1,9 @@
-import type { ContentCollectionItem } from '@nuxt/content'
+import type { BlogCollectionItem } from '@nuxt/content'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<ContentCollectionItem>(event)
-  const { id } = body
+  const body = await readBody<BlogCollectionItem>(event)
+  const { path } = body
+  const id = path.replaceAll('/', '_')
   const storage = useStorage('me')
   const looks = await storage.getItem<number>(`looks:${id}`)
   if (looks) {

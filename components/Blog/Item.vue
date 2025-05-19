@@ -1,9 +1,9 @@
 <script lang='ts' setup>
-import type { ContentCollectionItem } from '@nuxt/content'
+import type { BlogCollectionItem } from '@nuxt/content'
 import type { BlogMeta } from '~/types/blog'
 
 interface Props {
-  blobItem: ContentCollectionItem
+  blobItem: BlogCollectionItem
 }
 
 const props = defineProps<Props>()
@@ -41,7 +41,7 @@ function getImageUrl(name?: string) {
         <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(meta?.image)">
 
         <BlogItemFooter
-          :id="blobItem.id"
+          :id="blobItem.path.replaceAll('/', '_')"
         />
       </div>
     </div>

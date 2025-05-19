@@ -9,8 +9,8 @@ const app = useState('blobScroll', () => ({
 const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
 
 // 一次性加载所有content
-const { data: blobs } = await useAsyncData('content', () => {
-  return queryCollection('content').limit(limit.value).all()
+const { data: blobs } = await useAsyncData('blog', () => {
+  return queryCollection('blog').limit(limit.value).all()
 })
 
 useSeoMeta({
@@ -21,18 +21,14 @@ useSeoMeta({
   ogTitle: '张宇行的博客',
 })
 
-definePageMeta({
-  path: '/',
-})
-
 const activeTab = ref(homeTabList[0].value)
 
 const handleFnMap: Record<string, () => void> = {
   recommend: () => {
-    queryCollection('content').limit(limit.value).all()
+    queryCollection('blog').limit(limit.value).all()
   },
   published: () => {
-    queryCollection('content').limit(limit.value).all()
+    queryCollection('blog').limit(limit.value).all()
   },
 }
 

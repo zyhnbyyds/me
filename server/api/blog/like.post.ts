@@ -1,7 +1,7 @@
-import type { ContentCollectionItem } from '@nuxt/content'
+import type { BlogCollectionItem } from '@nuxt/content'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<ContentCollectionItem & { isLiked: boolean }>(event)
+  const body = await readBody<BlogCollectionItem & { isLiked: boolean }>(event)
   const { id, isLiked } = body
   const storage = useStorage('me')
   const likes = await storage.getItem<number>(`likes:${id}`)

@@ -1,13 +1,11 @@
 import type { CommentItem } from '~/types/blog'
 
 export function transformStoreKeyToDataField(key: string): Omit<CommentItem, 'content' | 'toUser' | 'fromUser'> {
-  const [type, fileDirName, categary, fileName, fromUserId, _to, toUserId, commentId, timestamp] = key.split(':')
+  const [type, fileId, fromUserId, _to, toUserId, commentId, timestamp] = key.split(':')
 
   return {
     type,
-    fileDirName,
-    categary,
-    fileName,
+    fileId,
     fromUserId,
     toUserId,
     commentId,

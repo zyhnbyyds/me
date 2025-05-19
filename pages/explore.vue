@@ -1,13 +1,13 @@
 <script lang='ts' setup>
-import type { ContentCollectionItem } from '@nuxt/content'
+import type { BlogCollectionItem } from '@nuxt/content'
 
-export type ContentExclude = Pick<ContentCollectionItem, 'id' | 'path' | 'title' | 'description' | 'meta' | 'navigation'>
+export type ContentExclude = Pick<BlogCollectionItem, 'id' | 'path' | 'title' | 'description' | 'meta' | 'navigation'>
 const searchIpt = ref('')
 
 const searchList = ref<ContentExclude[]>([])
 
 async function searchFn() {
-  searchList.value = await queryCollection('content').orWhere(
+  searchList.value = await queryCollection('blog').orWhere(
     q => q.where('title', 'LIKE', `%${searchIpt.value}%`)
       .where('description', 'LIKE', `%${searchIpt.value}%`),
   ).select('meta', 'path', 'description', 'title', 'id', 'navigation').limit(10).all()

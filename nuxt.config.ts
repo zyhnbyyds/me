@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       },
     },
     routeRules: {
-      '/blob/**': {
+      '/blog/**': {
         static: true,
       },
     },
@@ -63,7 +63,7 @@ export default defineNuxtConfig({
 
   content: {
     build: {
-      transformers: ['~/transformers/contentId'],
+      transformers: ['~/transformers/contentId.ts'],
       markdown: {
         highlight: {
           theme: {

@@ -33,7 +33,7 @@ function formatDate(timestamp: string) {
             </span>
           </div>
           <div flex break-all text-4 text-dark-8>
-            <div v-for="(item, i) in comment.content" :key="i">
+            <div v-for="(item, idx) in comment.content" :key="`${idx}item`">
               <img v-if="item.type === 'emoji'" :src="`/emojis/${item.value}`" class="emoji-sm">
               <span v-else>{{ item.value }}</span>
             </div>

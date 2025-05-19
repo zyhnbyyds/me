@@ -1,6 +1,6 @@
 <script lang='ts' setup>
 const { data: count } = await useAsyncData(() => {
-  return queryCollection('content').count()
+  return queryCollection('blog').count()
 })
 </script>
 

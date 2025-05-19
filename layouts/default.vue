@@ -5,11 +5,16 @@ const activeMenu = ref(menuList[0].key)
 const scrollRef = ref<HTMLElement | null>(null)
 
 const { y, x } = useScroll(scrollRef)
+// const route = useRoute()
 
 provide('scroll', {
   y,
   x,
 })
+
+// watchEffect(() => {
+//   activeMenu.value = route.path.split('/')[1]
+// })
 </script>
 
 <template>
