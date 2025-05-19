@@ -28,7 +28,7 @@ export interface CommentItem {
   fromUser: User
   toUser?: User | null
   toCommentId?: string | null
-
+  depth: number
   replyList?: ReplyCommentItem[]
 }
 

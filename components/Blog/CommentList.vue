@@ -1,23 +1,22 @@
 <script setup lang="ts">
+import type { BlogCollectionItem } from '@nuxt/content'
 import type Comment from './Comment.vue'
 import type { ReplyCommentItem } from '~/types/blog'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { ulid } from 'ulid'
 import 'dayjs/locale/zh-cn'
 
-defineProps<{
-  comments: ReplyCommentItem[]
-}>()
-
-const emits = defineEmits<{
-  (e: 'reply', comment: ReplyCommentItem): void
-  (e: 'send', text: EmojiInfo[], comment: ReplyCommentItem): void
+const props = defineProps<{
+  blog: BlogCollectionItem | null
 }>()
 
 const replyContent = ref('')
+const comments = defineModel<ReplyCommentItem[]>('comments', { default: [] })
+const loading = defineModel('loading', { default: false })
 const commentsIptRefList = ref<InstanceType<typeof Comment>[]>()
 
-const [loading] = useToggle(false)
+const { loggedIn, user } = useUserSession()
 
 function formatDate(timestamp: string) {
   dayjs.extend(relativeTime)
@@ -25,9 +24,20 @@ function formatDate(timestamp: string) {
   return dayjs(new Date(Number(timestamp))).fromNow().replaceAll(' ', '')
 }
 
-function hdClickReply(comment: ReplyCommentItem, isReply = false) {
+function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }, _isReply = false) {
   replyContent.value = ''
-  emits('reply', comment)
+  comments.value = comments.value.map((item) => {
+    if (item.commentId === replay.commentId) {
+      if (replay.isClickReply) {
+        item.isClickReply = false
+      }
+      else {
+        item.isClickReply = true
+      }
+    }
+    return item
+  })
+
   nextTick(() => {
     if (commentsIptRefList.value && toValue(commentsIptRefList.value)[0]) {
       toValue(commentsIptRefList.value)[0].focus()
@@ -35,10 +45,49 @@ function hdClickReply(comment: ReplyCommentItem, isReply = false) {
   })
 }
 
-function handleSend(text: EmojiInfo[], comment: ReplyCommentItem) {
-  if (replyContent.value) {
-    emits('send', text, comment)
+async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
+  if (!props.blog || !loggedIn.value || !user.value || !replyContent.value)
+    return
+  comment.isClickReply = false
+  const id = props.blog.path.replaceAll('/', '_')
+  const body = { id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
+  loading.value = true
+  await $fetch('/api/blog/comment', { method: 'post', body })
+  if (comment.depth === 1) {
+    comment.isClickReply = false
+    comment.replyList ? comment.replyList = [...comment.replyList] : comment.replyList = []
+    comment.replyList.push({
+      fileId: id,
+      type: 'comment',
+      fromUserId: String(user.value.id),
+      toUserId: comment?.fromUserId ?? '0',
+      commentId: ulid(),
+      timestamp: Date.now().toString(),
+      content: val,
+      fromUser: user.value,
+      toUser: comment.fromUser,
+      toCommentId: comment?.commentId ?? null,
+      isClickReply: false,
+      depth: comment.depth + 1,
+    })
   }
+  else if (comment.depth >= 2) {
+    comments.value.push({
+      fileId: id,
+      type: 'comment',
+      fromUserId: String(user.value.id),
+      toUserId: '0',
+      commentId: ulid(),
+      timestamp: Date.now().toString(),
+      content: val,
+      fromUser: user.value,
+      toUser: comment.fromUser,
+      isClickReply: false,
+      depth: comment.depth + 1,
+    })
+  }
+
+  loading.value = false
 }
 </script>
 
@@ -49,9 +98,9 @@ function handleSend(text: EmojiInfo[], comment: ReplyCommentItem) {
         <UAvatar :src="comment.fromUser.avatar_url" />
         <div ml-2 w-full>
           <div>
-            <span mr-1 font-bold>{{ comment.fromUser.name }}</span>
+            <span mr-1 font-bold>{{ comment.fromUser.name }} {{ comment.depth === 1 ? '' : `回复 ${comment.toUser && comment.toUser.name} ` }}</span>
             <span class="text-[#536471] text-op-80">
-              <span>@{{ comment.fromUser.login }}</span>
+              <span v-if="comment.depth === 1">@{{ comment.fromUser.login }}</span>
               <span> · </span>
               <span text-3>{{ formatDate(comment.timestamp) }}</span>
             </span>
@@ -78,10 +127,10 @@ function handleSend(text: EmojiInfo[], comment: ReplyCommentItem) {
               <span text-3>回复</span>
             </span>
           </footer>
-          <BlogComment v-if="comment.isClickReply" ref="commentsIptRefList" v-model="replyContent" flex-1 :loading="loading" @send="handleSend($event, comment)" />
+          <BlogComment v-if="comment.isClickReply" ref="commentsIptRefList" v-model="replyContent" flex-1 :loading="loading" @send="hdClickSend($event, comment)" />
 
           <div v-if="comment.replyList && comment.replyList.length > 0" mt-2>
-            <CommentList :comments="comment.replyList ?? []" @reply="(comment) => hdClickReply(comment, true)" @send="handleSend" />
+            <BlogCommentList v-model:comments="comment.replyList" :blog="blog" @send="hdClickSend" />
           </div>
         </div>
       </div>

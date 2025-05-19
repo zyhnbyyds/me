@@ -23,6 +23,7 @@ export default defineEventHandler(async (event) => {
         content: comment,
         fromUser,
         toUser,
+        depth: 1,
       }
     }),
   )

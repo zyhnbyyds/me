@@ -6,6 +6,7 @@ const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
 const commentIpt = ref('')
 const commentRef = ref<HTMLTextAreaElement | null>(null)
+
 const [loading, load] = useToggle(false)
 
 const { data: page } = await useAsyncData(route.path, () => {
@@ -56,60 +57,28 @@ const positionStyle = computed(() => {
   }
 })
 
-async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem | null) {
+async function hdClickSend(val: EmojiInfo[]) {
   if (!page.value || !loggedIn.value || !user.value)
     return
 
   const id = page.value.path.replaceAll('/', '_')
-
   const body = { id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
   load(true)
   await $fetch('/api/blog/comment', { method: 'post', body })
-  if (comment) {
-    comment.replyList ? comment.replyList = [...comment.replyList] : comment.replyList = []
-    comment.replyList.push({
-      fileId: id,
-      type: 'comment',
-      fromUserId: String(user.value.id),
-      toUserId: comment?.fromUserId ?? '0',
-      commentId: ulid(),
-      timestamp: Date.now().toString(),
-      content: val,
-      fromUser: user.value,
-      toUser: null,
-      toCommentId: comment?.commentId ?? null,
-      isClickReply: false,
-    })
-  }
-  else {
-    comments.value.unshift({
-      fileId: id,
-      type: 'comment',
-      fromUserId: String(user.value.id),
-      toUserId: '0',
-      commentId: ulid(),
-      timestamp: Date.now().toString(),
-      content: val,
-      fromUser: user.value,
-      isClickReply: false,
-    })
-  }
+  comments.value.unshift({
+    fileId: id,
+    type: 'comment',
+    fromUserId: String(user.value.id),
+    toUserId: '0',
+    commentId: ulid(),
+    timestamp: Date.now().toString(),
+    content: val,
+    fromUser: user.value,
+    isClickReply: false,
+    depth: 1,
+  })
 
   load(false)
-}
-
-function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }) {
-  comments.value = comments.value.map((item) => {
-    if (item.commentId === replay.commentId) {
-      if (replay.isClickReply) {
-        item.isClickReply = false
-      }
-      else {
-        item.isClickReply = true
-      }
-    }
-    return item
-  })
 }
 </script>
 
@@ -161,11 +130,11 @@ function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }) {
         </div>
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="(val) => hdClickSend(val, null)" />
+      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="hdClickSend" />
 
       <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
 
-      <BlogCommentList :comments="comments ?? []" @send="hdClickSend" @reply="hdClickReply" />
+      <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
     </div>
 
     <footer h-80 />
