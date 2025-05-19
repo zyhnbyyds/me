@@ -26,5 +26,12 @@ export interface CommentItem {
   timestamp: string
   content: EmojiInfo[]
   fromUser: User
-  toUser: User | null
+  toUser?: User | null
+  toCommentId?: string | null
+
+  replyList?: ReplyCommentItem[]
+}
+
+export interface ReplyCommentItem extends CommentItem {
+  isClickReply: boolean
 }

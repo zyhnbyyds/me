@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { BlogMeta, CommentItem } from '~/types/blog'
+import type { BlogMeta, ReplyCommentItem } from '~/types/blog'
 import { ulid } from 'ulid'
 
 const route = useRoute()
@@ -11,14 +11,14 @@ const [loading, load] = useToggle(false)
 const { data: page } = await useAsyncData(route.path, () => {
   return queryCollection('blog').path(route.path).first()
 })
-const { data: comments } = await useAsyncData<CommentItem[]>('/api/blog/comment', () => {
+const { data: comments } = await useAsyncData<ReplyCommentItem[]>('/api/blog/comment', () => {
   if (!page.value)
     return new Promise(() => { })
   return $fetch('/api/blog/comment', {
     method: 'get',
     query: { id: page.value.path.replaceAll('/', '_') },
   })
-})
+}, { default: () => [] })
 
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
@@ -56,7 +56,7 @@ const positionStyle = computed(() => {
   }
 })
 
-async function hdClickSend(val: EmojiInfo[]) {
+async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem | null) {
   if (!page.value || !loggedIn.value || !user.value)
     return
 
@@ -65,7 +65,23 @@ async function hdClickSend(val: EmojiInfo[]) {
   const body = { id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
   load(true)
   await $fetch('/api/blog/comment', { method: 'post', body })
-  if (comments.value) {
+  if (comment) {
+    comment.replyList ? comment.replyList = [...comment.replyList] : comment.replyList = []
+    comment.replyList.push({
+      fileId: id,
+      type: 'comment',
+      fromUserId: String(user.value.id),
+      toUserId: comment?.fromUserId ?? '0',
+      commentId: ulid(),
+      timestamp: Date.now().toString(),
+      content: val,
+      fromUser: user.value,
+      toUser: null,
+      toCommentId: comment?.commentId ?? null,
+      isClickReply: false,
+    })
+  }
+  else {
     comments.value.unshift({
       fileId: id,
       type: 'comment',
@@ -75,16 +91,31 @@ async function hdClickSend(val: EmojiInfo[]) {
       timestamp: Date.now().toString(),
       content: val,
       fromUser: user.value,
-      toUser: null,
+      isClickReply: false,
     })
   }
+
   load(false)
+}
+
+function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }) {
+  comments.value = comments.value.map((item) => {
+    if (item.commentId === replay.commentId) {
+      if (replay.isClickReply) {
+        item.isClickReply = false
+      }
+      else {
+        item.isClickReply = true
+      }
+    }
+    return item
+  })
 }
 </script>
 
 <template>
   <div w-full>
-    <header sticky top-0 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
+    <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
       <div flex-col-center gap-4>
         <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
           <Icon name="material-symbols:arrow-back" />
@@ -130,11 +161,11 @@ async function hdClickSend(val: EmojiInfo[]) {
         </div>
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="(val) => hdClickSend(val)" />
+      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="(val) => hdClickSend(val, null)" />
 
       <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
 
-      <BlogCommentList :comments="comments ?? []" />
+      <BlogCommentList :comments="comments ?? []" @send="hdClickSend" @reply="hdClickReply" />
     </div>
 
     <footer h-80 />

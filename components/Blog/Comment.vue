@@ -9,6 +9,8 @@ const props = defineProps<{
 
 const emits = defineEmits<{
   (e: 'send', val: EmojiInfo[]): void
+  (e: 'blur'): void
+  (e: 'focus'): void
 }>()
 
 const textarea = defineModel<string>({ default: '' })
@@ -40,6 +42,25 @@ onKeyStroke(
   },
   { target: commentRef },
 )
+
+watch(() => focused.value, (val) => {
+  if (!val) {
+    emits('blur')
+  } else {
+    emits('focus')
+  }
+})
+
+defineExpose({
+  focus: () => {
+    focused.value = true
+    textareaRef.value?.focus()
+  },
+  blur: () => {
+    focused.value = false
+    pickerVisible.value = false
+  },
+})
 
 function hdSelectEmoji(url: string) {
   textareaRef.value?.insertImage(url)
@@ -80,13 +101,11 @@ function hdSendComment() {
       ref="textareaRef"
       v-model="textarea"
       placeholder="说点什么再走~"
-      autocorrect="on"
-      contenteditable="true"
       :class="[focused ? 'h-30' : 'h-15']"
-      class="transition-all duration-300"
+      class="max-h-50 transition-all duration-300"
       w-full
       resize-none
-      px-3 py-2 text-3.5 outline-none @focus="focused = true"
+      @focus="focused = true"
     />
 
     <footer class="flex justify-between px-3 pb-2 pt-1">
