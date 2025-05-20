@@ -156,6 +156,6 @@ function insertTextAtCursor(text: string) {
   content: attr(placeholder);
   user-select: none;
   color: #8a919f;
-  font-size: 14px;
+  font-size: 13px;
 }
 </style>

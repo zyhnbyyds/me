@@ -5,6 +5,7 @@ type IptType = InstanceType<typeof Ipt>
 
 const props = defineProps<{
   loading: boolean
+  placeholder?: string
 }>()
 
 const emits = defineEmits<{
@@ -46,7 +47,8 @@ onKeyStroke(
 watch(() => focused.value, (val) => {
   if (!val) {
     emits('blur')
-  } else {
+  }
+  else {
     emits('focus')
   }
 })
@@ -100,8 +102,8 @@ function hdSendComment() {
     <Ipt
       ref="textareaRef"
       v-model="textarea"
-      placeholder="说点什么再走~"
-      :class="[focused ? 'h-30' : 'h-15']"
+      :placeholder="placeholder ?? '发表评论'"
+      :class="[focused ? 'h-30' : 'h-15 text-[#536471]']"
       class="max-h-50 transition-all duration-300"
       w-full
       resize-none

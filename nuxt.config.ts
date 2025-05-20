@@ -1,3 +1,4 @@
+/* eslint-disable node/prefer-global/process */
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
@@ -33,9 +34,9 @@ export default defineNuxtConfig({
     storage: {
       me: {
         driver: 'redis',
-        port: import.meta.env.REDIS_PORT,
-        host: import.meta.env.REDIS_HOST,
-        password: import.meta.env.REDIS_PASSWORD,
+        port: process.env.REDIS_PORT,
+        host: process.env.REDIS_HOST,
+        password: process.env.REDIS_PASSWORD,
       },
     },
 

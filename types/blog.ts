@@ -20,18 +20,23 @@ export interface BlogOps {
 export interface CommentItem {
   type: string
   fileId: string
-  fromUserId: string
-  toUserId: string
+  fromUserId: number
+  toUserId: number
   commentId: string
-  timestamp: string
+  timestamp: number
   content: EmojiInfo[]
   fromUser: User
   toUser?: User | null
   toCommentId?: string | null
   depth: number
-  replyList?: ReplyCommentItem[]
+  replyList: ReplyCommentItem[]
 }
 
 export interface ReplyCommentItem extends CommentItem {
   isClickReply: boolean
+}
+
+export type PostCommentBody = Pick<CommentItem, 'fromUserId' | 'toUserId' | 'commentId' | 'depth'> & {
+  id: string
+  comment: EmojiInfo[]
 }

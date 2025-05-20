@@ -62,20 +62,21 @@ async function hdClickSend(val: EmojiInfo[]) {
     return
 
   const id = page.value.path.replaceAll('/', '_')
-  const body = { id, comment: JSON.stringify(val), fromUserId: user.value.id, toUserId: 0 }
+  const body = { id, comment: val, fromUserId: user.value.id, toUserId: 0, depth: 1 }
   load(true)
   await $fetch('/api/blog/comment', { method: 'post', body })
   comments.value.unshift({
     fileId: id,
     type: 'comment',
-    fromUserId: String(user.value.id),
-    toUserId: '0',
+    fromUserId: user.value.id,
+    toUserId: 0,
     commentId: ulid(),
-    timestamp: Date.now().toString(),
+    timestamp: Date.now(),
     content: val,
     fromUser: user.value,
     isClickReply: false,
     depth: 1,
+    replyList: [],
   })
 
   load(false)
@@ -130,7 +131,7 @@ async function hdClickSend(val: EmojiInfo[]) {
         </div>
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" :loading="loading" @send="hdClickSend" />
+      <BlogComment ref="commentRef" v-model="commentIpt" placeholder="..." :loading="loading" @send="hdClickSend" />
 
       <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
 
