@@ -1,6 +1,7 @@
 import type { User } from '#auth-utils'
+import type { CommentItemDataField } from '~/server/utils/comment'
 import type { CommentItem } from '~/types/blog'
-import { transformStoreKeyToDataField } from '~/server/utils/comment'
+import { buildFlattenedTwoLevelTree, transformStoreKeyToDataField } from '~/server/utils/comment'
 
 export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event)
@@ -13,47 +14,38 @@ export default defineEventHandler(async (event) => {
 
   const commentStoreKeysData = commentStoreKeys.map(transformStoreKeyToDataField)
 
-  const firstKey = commentStoreKeysData.filter(key => (key.depth === 1 && key.toUserId === 0))
-  const secondKey = commentStoreKeysData.filter(key => (key.depth >= 2 && key.toUserId !== 0))
+  const commentTree = buildFlattenedTwoLevelTree(commentStoreKeysData, '0')
 
-  firstKey.forEach(async (data) => {
-    secondKey.forEach((itm) => {
-      const replyList = secondKey.filter(item => item.toCommentId === data.commentId)
-      if (data.commentId === itm.toCommentId) {
-        // data.replyList.push(itm)
-      }
-      else {
-        // data.replyList.push(itm)
-      }
-    })
-  })
+  async function extraCommentDataAddFn(keyWithDataList: CommentItemDataField[]): Promise<CommentItem[]> {
+    const res = await Promise.all(
+      keyWithDataList.map(async (itm) => {
+        const comment = await storage.getItem<EmojiInfo[]>(itm.key)
+        const transformedData = transformStoreKeyToDataField(itm.key)
+        const fromUser = await storage.getItem<User>(`user:${transformedData.fromUserId}`)
 
-  const comments = await Promise.all(
-    commentStoreKeys.map(async (key) => {
-      const comment = await storage.getItem<string>(key)
-      const transformedData = transformStoreKeyToDataField(key)
-      const fromUser = await storage.getItem<User>(`user:${transformedData.fromUserId}`)
+        let toUser: User | null = null
+        if (transformedData.toUserId !== 0) {
+          toUser = await storage.getItem<User>(`user:${transformedData.toUserId}`)
+        }
 
-      let toUser: User | null = null
-      if (transformedData.toUserId !== 0) {
-        toUser = await storage.getItem<User>(`user:${transformedData.toUserId}`)
-      }
+        let replyList: CommentItem[] = []
+        if (itm.replyList.length > 0) {
+          replyList = await extraCommentDataAddFn(itm.replyList)
+        }
 
-      return {
-        ...transformedData,
-        content: comment,
-        fromUser,
-        toUser,
-        depth: 1,
-      }
-    }),
-  )
+        return {
+          ...transformedData,
+          content: comment || [],
+          fromUser: fromUser ?? { name: '未知用户', id: 0, avatar_url: '' } as User,
+          toUser,
+          replyList,
+        } satisfies CommentItem
+      }),
+    )
+    return res
+  }
+
+  const comments = await extraCommentDataAddFn(commentTree)
 
   return comments
 })
-
-// function hdNestedComments(keyData: Omit<CommentItem, 'content' | 'toUser' | 'fromUser'>[], parentData:Omit<CommentItem, 'content' | 'toUser' | 'fromUser'>) {
-//   const filterChild = keyData.filter(item => item.toCommentId === parentData.commentId)
-
-//   return filterChild
-// }

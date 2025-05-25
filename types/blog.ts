@@ -27,13 +27,14 @@ export interface CommentItem {
   content: EmojiInfo[]
   fromUser: User
   toUser?: User | null
-  toCommentId?: string | null
+  parentId: string
   depth: number
-  replyList: ReplyCommentItem[]
+  replyList: CommentItem[]
 }
 
 export interface ReplyCommentItem extends CommentItem {
   isClickReply: boolean
+  replyList: ReplyCommentItem[]
 }
 
 export type PostCommentBody = Pick<CommentItem, 'fromUserId' | 'toUserId' | 'commentId' | 'depth'> & {

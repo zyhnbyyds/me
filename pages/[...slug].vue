@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { BlogMeta, ReplyCommentItem } from '~/types/blog'
-import { ulid } from 'ulid'
 
 const route = useRoute()
 const titleRef = ref<HTMLElement | null>(null)
@@ -64,20 +63,23 @@ async function hdClickSend(val: EmojiInfo[]) {
   const id = page.value.path.replaceAll('/', '_')
   const body = { id, comment: val, fromUserId: user.value.id, toUserId: 0, depth: 1 }
   load(true)
-  await $fetch('/api/blog/comment', { method: 'post', body })
-  comments.value.unshift({
-    fileId: id,
-    type: 'comment',
-    fromUserId: user.value.id,
-    toUserId: 0,
-    commentId: ulid(),
-    timestamp: Date.now(),
-    content: val,
-    fromUser: user.value,
-    isClickReply: false,
-    depth: 1,
-    replyList: [],
-  })
+  const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', { method: 'post', body })
+  if (flag) {
+    comments.value.unshift({
+      fileId: id,
+      type: 'comment',
+      fromUserId: user.value.id,
+      toUserId: 0,
+      commentId,
+      timestamp: Date.now(),
+      content: val,
+      fromUser: user.value,
+      isClickReply: false,
+      depth: 1,
+      replyList: [],
+      parentId: '0',
+    })
+  }
 
   load(false)
 }

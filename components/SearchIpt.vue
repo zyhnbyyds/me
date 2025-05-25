@@ -2,13 +2,13 @@
 import type { ContentExclude } from '~/pages/explore.vue'
 
 export interface SearchIptProps {
-  placeholder: string
+  placeholder?: string
   list: ContentExclude[]
 }
 
 const props = withDefaults(defineProps<SearchIptProps>(), {
   placeholder: '搜索',
-  laeblFiled: 'title',
+  labelFiled: 'title',
 })
 const iptRef = useTemplateRef<HTMLElement>('iptRef')
 const focused = ref(false)

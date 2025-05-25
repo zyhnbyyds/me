@@ -54,7 +54,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     return
   comment.isClickReply = false
   const id = props.blog.path.replaceAll('/', '_')
-  const body: PostCommentBody = { id, comment: val, fromUserId: user.value.id, toUserId: 0, depth: comment.depth + 1, commentId: comment.commentId }
+  const body: PostCommentBody = { id, comment: val, fromUserId: user.value.id, toUserId: comment.fromUserId, depth: comment.depth + 1, commentId: comment.commentId }
   loading.value = true
   await $fetch('/api/blog/comment', { method: 'post', body })
 
@@ -62,13 +62,13 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     fileId: id,
     type: 'comment',
     fromUserId: user.value.id,
-    toUserId: comment?.fromUserId ?? 0,
+    toUserId: comment.fromUserId,
     commentId: ulid(),
     timestamp: Date.now(),
     content: val,
     fromUser: user.value,
     toUser: comment.fromUser,
-    toCommentId: comment?.commentId ?? null,
+    parentId: comment?.commentId ?? '0',
     isClickReply: false,
     depth: comment.depth + 1,
     replyList: [],
@@ -89,7 +89,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 <template>
   <div>
     <div v-for="(comment, i) in comments" :key="i" class="group">
-      <div relative flex rounded-2 p-2 pb-0 text-3.5 transition-all hover:bg-light2>
+      <div relative flex rounded-2 p-2 pb-0 text-3.5 transition-all hover:bg-light2 hover:dark:bg-dark-7>
         <UAvatar :src="comment.fromUser.avatar_url" />
         <div ml-2 w-full>
           <div>
@@ -109,7 +109,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
               </span>
             </span>
           </div>
-          <div mt-2 break-all text-3.5 text-dark-6>
+          <div mt-2 break-all text-3.5 text-dark-6 dark:text-light6>
             <span v-for="(item, idx) in comment.content" :key="`${idx}item`">
               <img v-if="item.type === 'emoji'" :src="`/emojis/${item.value}`" class="emoji-sm">
               <span v-else>{{ item.value }}</span>
@@ -117,7 +117,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
           </div>
 
           <footer flex items-start py-2>
-            <span mr-2 flex-col-center :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471]'" inline-flex flex-nowrap cursor-pointer select-none rounded-md px-1.2 py-0.7 transition-all hover:bg-light-5 @click="hdClickReply(comment, true)">
+            <span mr-2 flex-col-center :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471] dark:text-light5'" inline-flex flex-nowrap cursor-pointer select-none rounded-md px-1.2 py-0.7 transition-all hover:bg-light-5 hover:dark:bg-dark-8 @click="hdClickReply(comment, true)">
               <Icon mr1 name="carbon:add-comment" text-4 text-op-80 />
               <span text-3>回复</span>
             </span>
