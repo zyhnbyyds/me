@@ -17,7 +17,7 @@ useSeoMeta({
   title: '张宇行的博客',
   description: '张宇行的博客，在这里分享生活、代码、学习、工作等方面的内容',
   ogImage: '/me.png',
-  ogType: 'website',
+  ogType: 'profile',
   ogTitle: '张宇行的博客',
 })
 
@@ -57,6 +57,12 @@ onBeforeRouteLeave(() => {
   <Tab v-model="activeTab" sticky top-0 w-full blur-common :list="homeTabList" />
   <ClientOnly>
     <BlogList :list="blobs" />
+
+    <template #fallback>
+      <div pt-20 text-center class="font-italic">
+        Loading...
+      </div>
+    </template>
   </ClientOnly>
 </template>
 

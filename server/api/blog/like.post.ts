@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
 
   const { user } = await requireUserSession(event)
   const likedKey = `liked:${user.id}:${id}`
-  const likesKey = `likes:${user.id}:${id}`
+  const likesKey = `likes:${id}`
 
   await storage.setItem(likedKey, isLiked)
 

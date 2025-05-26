@@ -2,6 +2,8 @@
 import type { BlogMeta, ReplyCommentItem } from '~/types/blog'
 
 const route = useRoute()
+const { $api } = useNuxtApp()
+
 const titleRef = ref<HTMLElement | null>(null)
 const commentIpt = ref('')
 const commentRef = ref<HTMLTextAreaElement | null>(null)
@@ -14,7 +16,7 @@ const { data: page } = await useAsyncData(route.path, () => {
 const { data: comments } = await useAsyncData<ReplyCommentItem[]>('/api/blog/comment', () => {
   if (!page.value)
     return new Promise(() => { })
-  return $fetch('/api/blog/comment', {
+  return $api('/api/blog/comment', {
     method: 'get',
     query: { id: page.value.path.replaceAll('/', '_') },
   })
@@ -86,62 +88,70 @@ async function hdClickSend(val: EmojiInfo[]) {
 </script>
 
 <template>
-  <div w-full>
-    <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
-      <div flex-col-center gap-4>
-        <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
-          <Icon name="material-symbols:arrow-back" />
+  <ClientOnly>
+    <div w-full>
+      <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
+        <div flex-col-center gap-4>
+          <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
+            <Icon name="material-symbols:arrow-back" />
+          </div>
+          <p font-bold>
+            帖子
+          </p>
         </div>
-        <p font-bold>
-          帖子
-        </p>
-      </div>
 
-      <h1
-        ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
-        font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
-      >
-        {{ page?.title }}
-      </h1>
-    </header>
-    <div class="markdown-body">
+        <h1
+          ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
+          font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
+        >
+          {{ page?.title }}
+        </h1>
+      </header>
       <!-- 标题高度 -->
       <p :style="{ height: `${height}px` }" />
-      <ContentRenderer v-if="page" :value="page" />
-    </div>
 
-    <USeparator mb-2 px-2 type="dashed" label="留下你的评论~" />
-
-    <div mx-5>
-      <div mb-2 flex items-center justify-end text-3 font-bold>
-        <div v-if="!loggedIn">
-          <button
-            flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
-            @click="openInPopup('/auth/github')"
-          >
-            <Icon name="skill-icons:github-dark" mr-1 />
-            登录
-          </button>
-        </div>
-
-        <div v-else flex-col-center>
-          <Icon name="carbon:logout" mr-2 text-4 class="rotate-90 cursor-pointer" @click="clear" />
-          <UAvatar size="sm" :src="user?.avatar_url" />
-          <div ml-2>
-            {{ user?.name }}
-          </div>
-        </div>
+      <div class="markdown-body">
+        <ContentRenderer v-if="page" :value="page" />
       </div>
 
-      <BlogComment ref="commentRef" v-model="commentIpt" placeholder="..." :loading="loading" @send="hdClickSend" />
+      <USeparator mb-2 px-2 type="dashed" label="留下你的评论~" />
 
-      <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+      <div mx-5>
+        <div mb-2 flex items-center justify-end text-3 font-bold>
+          <div v-if="!loggedIn">
+            <button
+              flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
+              @click="openInPopup('/auth/github')"
+            >
+              <Icon name="skill-icons:github-dark" mr-1 />
+              登录
+            </button>
+          </div>
 
-      <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
+          <div v-else flex-col-center>
+            <Icon name="carbon:logout" mr-2 text-4 class="rotate-90 cursor-pointer" @click="clear" />
+            <UAvatar size="sm" :src="user?.avatar_url" />
+            <div ml-2>
+              {{ user?.name }}
+            </div>
+          </div>
+        </div>
+
+        <BlogComment ref="commentRef" v-model="commentIpt" placeholder="..." :loading="loading" @send="hdClickSend" />
+
+        <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+
+        <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
+      </div>
+
+      <footer h-80 />
     </div>
-
-    <footer h-80 />
-  </div>
+    <template #fallback>
+      <div pt-20 text-center class="font-italic">
+        Loading...
+      </div>
+    </template>
+  </ClientOnly>
 </template>
 
 <style scoped>

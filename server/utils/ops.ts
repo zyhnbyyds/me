@@ -1,10 +1,14 @@
-export async function getOps(id: string) {
+export async function getOps(id: string, userId?: number) {
   const storage = useStorage('me')
+
+  const likedKey = `liked:${userId}:${id}`
+  const likesKey = `likes:${id}`
+
   const [looked, looks, liked, likes, comments] = await Promise.all([
     storage.getItem<boolean>(`looked:${id}`),
     storage.getItem<number>(`looks:${id}`),
-    storage.getItem<boolean>(`liked:${id}`),
-    storage.getItem<number>(`likes:${id}`),
+    userId ? storage.getItem<boolean>(likedKey) : false,
+    storage.getItem<number>(likesKey),
     storage.getItem<number>(`comments:count:${id}`),
   ])
 

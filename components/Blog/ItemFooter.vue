@@ -3,15 +3,18 @@ import type { BlogOps } from '~/types/blog'
 
 const props = defineProps<{
   id: string
+  readingTime: number
 }>()
 
-const { data: blogOps } = useAsyncData(`blogOps-${props.id}`, () => $fetch<BlogOps>('/api/blog/ops', {
+const { $api } = useNuxtApp()
+
+const { data: blogOps } = useAsyncData(`blogOps-${props.id}`, () => $api<BlogOps>('/api/blog/ops', {
   params: {
     id: props.id,
   },
 }))
 
-function handleClickLike() {
+function _handleClickLike() {
   if (!blogOps.value) {
     return
   }
@@ -22,7 +25,7 @@ function handleClickLike() {
     blogOps.value.likes++
   }
   blogOps.value.liked = !blogOps.value.liked
-  $fetch('/api/blog/like', {
+  $api('/api/blog/like', {
     method: 'post',
     body: {
       id: props.id,
@@ -34,18 +37,24 @@ function handleClickLike() {
 
 <template>
   <!-- 喜欢、评论、浏览 -->
-  <div class="mt-2 flex items-center justify-end gap-5 text-14px">
-    <span class="flex-col-center gap-1 text-12px text-gray">
-      <Icon name="mdi:tooltip-minus-outline" text-4 />
-      <span>{{ blogOps?.comments }}</span>
+  <div class="mt-5 flex items-center justify-between text-14px">
+    <span v-if="props.readingTime >= 2" flex-col-center text-3 text-gray>
+      <Icon name="carbon:alarm" text-4.6 />
+      <span>
+        {{ props.readingTime }}分钟
+      </span>
     </span>
-    <span class="flex-col-center gap-1 text-gray" @click.stop="handleClickLike">
-      <Icon text-4 :name="blogOps?.liked ? 'mdi:cards-heart' : 'mdi:cards-heart-outline'" :class="blogOps?.liked ? 'text-red' : ''" />
-      <span>{{ blogOps?.likes }}</span>
-    </span>
-    <span class="flex-col-center gap-1 text-12px text-gray">
-      <Icon name="mdi:eye-outline" text-4 />
-      <span>{{ blogOps?.looks }}</span>
+    <span v-else />
+
+    <span flex items-center gap-5>
+      <span class="flex-col-center gap-1 text-12px text-gray">
+        <Icon name="mdi:tooltip-minus-outline" text-4 />
+        <span>{{ blogOps?.comments }}</span>
+      </span>
+      <span class="flex-col-center gap-1 text-12px text-gray">
+        <Icon name="mdi:eye-outline" text-4 />
+        <span>{{ blogOps?.looks }}</span>
+      </span>
     </span>
   </div>
 </template>

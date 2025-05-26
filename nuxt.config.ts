@@ -1,4 +1,6 @@
 /* eslint-disable node/prefer-global/process */
+import readingTime from 'reading-time'
+
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
@@ -12,6 +14,17 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     'nuxt-auth-utils',
   ],
+
+  hooks: {
+    'content:file:afterParse': (ctx) => {
+      const { file, content } = ctx
+
+      const wordsPerMinute = 180
+      const text = typeof file.body === 'string' ? file.body : ''
+
+      content.readingTime = Math.ceil(readingTime(text, { wordsPerMinute }).minutes)
+    },
+  },
 
   icon: {
     cssLayer: 'base',

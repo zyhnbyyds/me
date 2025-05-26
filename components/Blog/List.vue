@@ -12,10 +12,11 @@ defineOptions({
 defineProps<Props>()
 
 const { push } = useRouter()
+const $api = useNuxtApp().$api
 
 async function goToBlogInfo(blobItem: BlogCollectionItem) {
   push(blobItem.path)
-  await $fetch('/api/blog/look', { method: 'post', body: blobItem })
+  await $api('/api/blog/look', { method: 'post', body: blobItem })
 }
 </script>
 

@@ -42,6 +42,7 @@ function getImageUrl(name?: string) {
 
         <BlogItemFooter
           :id="blobItem.path.replaceAll('/', '_')"
+          :reading-time="blobItem.readingTime || 0"
         />
       </div>
     </div>
