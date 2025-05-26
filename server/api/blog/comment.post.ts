@@ -3,7 +3,7 @@ import { ulid } from 'ulid'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<PostCommentBody>(event)
-  const { id, comment, fromUserId, toUserId, commentId: parentId = '0', depth } = body
+  const { id, comment, fromUserId, toUserId, parentId = '0', depth } = body
   const storage = useStorage('me')
 
   const commentId = ulid()

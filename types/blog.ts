@@ -37,7 +37,7 @@ export interface ReplyCommentItem extends CommentItem {
   replyList: ReplyCommentItem[]
 }
 
-export type PostCommentBody = Pick<CommentItem, 'fromUserId' | 'toUserId' | 'commentId' | 'depth'> & {
+export type PostCommentBody = Pick<CommentItem, 'fromUserId' | 'toUserId' | 'parentId' | 'depth'> & {
   id: string
   comment: EmojiInfo[]
 }

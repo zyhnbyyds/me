@@ -4,7 +4,6 @@ import type Comment from './Comment.vue'
 import type { PostCommentBody, ReplyCommentItem } from '~/types/blog'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ulid } from 'ulid'
 import 'dayjs/locale/zh-cn'
 
 const props = defineProps<{
@@ -54,16 +53,16 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     return
   comment.isClickReply = false
   const id = props.blog.path.replaceAll('/', '_')
-  const body: PostCommentBody = { id, comment: val, fromUserId: user.value.id, toUserId: comment.fromUserId, depth: comment.depth + 1, commentId: comment.commentId }
+  const body: PostCommentBody = { id, comment: val, fromUserId: user.value.id, toUserId: comment.fromUserId, depth: comment.depth + 1, parentId: comment.commentId }
   loading.value = true
-  await $fetch('/api/blog/comment', { method: 'post', body })
-
+  const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', { method: 'post', body })
+  if (!flag)
+    return
   const toAddComment = {
     fileId: id,
     type: 'comment',
     fromUserId: user.value.id,
     toUserId: comment.fromUserId,
-    commentId: ulid(),
     timestamp: Date.now(),
     content: val,
     fromUser: user.value,
@@ -72,6 +71,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     isClickReply: false,
     depth: comment.depth + 1,
     replyList: [],
+    commentId,
   }
   comment.isClickReply = false
   if (comment.depth === 1) {

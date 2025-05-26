@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     provider: 'local',
   },
 
-  ssr: false,
+  ssr: true,
 
   nitro: {
     storage: {

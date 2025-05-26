@@ -6,18 +6,22 @@ export default defineEventHandler(async (event) => {
   const storage = useStorage('me')
   const likes = await storage.getItem<number>(`likes:${id}`)
 
-  await storage.setItem(`liked:${id}`, isLiked)
+  const { user } = await requireUserSession(event)
+  const likedKey = `liked:${user.id}:${id}`
+  const likesKey = `likes:${user.id}:${id}`
+
+  await storage.setItem(likedKey, isLiked)
 
   if (likes) {
     if (isLiked) {
-      await storage.setItem(`likes:${id}`, likes + 1)
+      await storage.setItem(likesKey, likes + 1)
     }
     else {
-      await storage.setItem(`likes:${id}`, likes - 1)
+      await storage.setItem(likesKey, likes - 1)
     }
   }
   else {
-    await storage.setItem(`likes:${id}`, 1)
+    await storage.setItem(likesKey, 1)
   }
 
   return true
