@@ -1,16 +1,16 @@
 <script lang='ts' setup>
 import type { BlogCollectionItem } from '@nuxt/content'
-import type { BlogMeta } from '~/types/blog'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-cn'
+
+defineProps<Props>()
+dayjs.locale('zh-cn')
+dayjs.extend(relativeTime)
 
 interface Props {
   blobItem: BlogCollectionItem
 }
-
-const props = defineProps<Props>()
-
-const meta = computed(() => {
-  return props.blobItem.meta as unknown as BlogMeta
-})
 
 function getImageUrl(name?: string) {
   if (!name) {
@@ -32,13 +32,13 @@ function getImageUrl(name?: string) {
       <div flex-1>
         <p class="flex items-center gap-2 text-sm font-semibold">
           <span>{{ blobItem.title }}</span>
-          <span class="text-12px text-gray">{{ '@Yuhang_zhang' }} · {{ '3分钟前' }}</span>
+          <span class="text-12px text-gray">{{ '@Yuhang_zhang' }} · {{ dayjs(blobItem.publishAt).fromNow() }}</span>
         </p>
         <p class="mt-2 text-sm">
           {{ blobItem?.description }}
         </p>
 
-        <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(meta?.image)">
+        <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(blobItem?.image)">
 
         <BlogItemFooter
           :id="blobItem.path.replaceAll('/', '_')"

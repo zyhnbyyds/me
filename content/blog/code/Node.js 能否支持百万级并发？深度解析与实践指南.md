@@ -1,9 +1,10 @@
 ---
 title: "NestJS vs Go：现代后端开发的两种选择对比21212"
 description: "描述展示"
-date: "2023-10-01 22:00:00"
 image: "code.png"
-postUser: "作者哈哈哈"
+publishAt: "2023-10-01 22:00:00"
+updateAt: "2024-10-01 22:00:00"
+tags: ["NestJS", "Go", "后端开发", "对比"]
 ---
 
 ![Node.js 并发架构示意图](https://example.com/nodejs-concurrency.png)

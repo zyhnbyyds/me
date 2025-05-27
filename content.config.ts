@@ -8,6 +8,12 @@ export default defineContentConfig({
 
       schema: z.object({
         readingTime: z.number().optional(),
+        title: z.string(),
+        description: z.string().optional(),
+        image: z.string().optional(),
+        publishAt: z.string().datetime(),
+        updateAt: z.string().datetime().optional(),
+        tags: z.array(z.string()).optional(),
       }),
     }),
   },

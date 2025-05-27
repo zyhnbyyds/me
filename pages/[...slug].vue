@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { BlogMeta, ReplyCommentItem } from '~/types/blog'
+import type { ReplyCommentItem } from '~/types/blog'
 
 const route = useRoute()
 const { $api } = useNuxtApp()
@@ -24,14 +24,10 @@ const { data: comments } = await useAsyncData<ReplyCommentItem[]>('/api/blog/com
 
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
-const meta = computed(() => {
-  return page.value?.meta as unknown as BlogMeta
-})
-
 useSeoMeta({
   title: page.value?.title,
-  description: meta.value?.description,
-  ogImage: meta.value?.image,
+  description: page.value?.description,
+  ogImage: page.value?.image,
 })
 
 const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })

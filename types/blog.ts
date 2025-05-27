@@ -41,3 +41,12 @@ export type PostCommentBody = Pick<CommentItem, 'fromUserId' | 'toUserId' | 'par
   id: string
   comment: EmojiInfo[]
 }
+
+export interface ContentMeta {
+  title: string
+  description: string
+  image?: string
+  publishAt: string
+  updateAt?: string
+  tags?: string[]
+}

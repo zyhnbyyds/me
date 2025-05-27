@@ -1,5 +1,5 @@
 /* eslint-disable node/prefer-global/process */
-import readingTime from 'reading-time'
+import { transformContentFileAfterParse } from './transformers/contentFileAfterParse'
 
 export default defineNuxtConfig({
   modules: [
@@ -16,14 +16,7 @@ export default defineNuxtConfig({
   ],
 
   hooks: {
-    'content:file:afterParse': (ctx) => {
-      const { file, content } = ctx
-
-      const wordsPerMinute = 180
-      const text = typeof file.body === 'string' ? file.body : ''
-
-      content.readingTime = Math.ceil(readingTime(text, { wordsPerMinute }).minutes)
-    },
+    'content:file:afterParse': transformContentFileAfterParse,
   },
 
   icon: {
