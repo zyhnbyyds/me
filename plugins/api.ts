@@ -2,6 +2,7 @@ export default defineNuxtPlugin((_nuxtApp) => {
   const { session } = useUserSession()
 
   const api = $fetch.create({
+    timeout: 5000,
     onRequest({ options }) {
       if (session.value?.token) {
         // note that this relies on ofetch >= 1.4.0 - you may need to refresh your lockfile

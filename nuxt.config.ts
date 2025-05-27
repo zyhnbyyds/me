@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 import { transformContentFileAfterParse } from './transformers/contentFileAfterParse'
 
 export default defineNuxtConfig({
@@ -13,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/fonts',
     'nuxt-auth-utils',
+    '@nuxt/image',
   ],
 
   hooks: {
@@ -40,9 +40,9 @@ export default defineNuxtConfig({
     storage: {
       me: {
         driver: 'redis',
-        port: process.env.REDIS_PORT,
-        host: process.env.REDIS_HOST,
-        password: process.env.REDIS_PASSWORD,
+        port: import.meta.env.REDIS_PORT,
+        host: import.meta.env.REDIS_HOST,
+        password: import.meta.env.REDIS_PASSWORD,
       },
     },
 
@@ -101,7 +101,29 @@ export default defineNuxtConfig({
         redirectURL: 'http://localhost:3002/auth/github',
       },
     },
+    minio: {
+      endPoint: import.meta.env.OSS_ENDPOINT,
+      port: Number.parseInt(import.meta.env.OSS_PORT, 10) || 9000,
+      useSSL: import.meta.env.OSS_USE_SSL === 'true',
+      accessKey: import.meta.env.OSS_ACCESS_KEY_ID,
+      secretKey: import.meta.env.OSS_SECRET_ACCESS_KEY,
+      baseURL: import.meta.env.OSS_BASE_URL || 'http://localhost:9000',
+      s3ForcePathStyle: true,
+    },
   },
 
   compatibilityDate: '2025-04-19',
+
+  image: {
+    providers: {
+      minio: {
+        name: 'minio',
+        provider: '~/providers/minio.provider.ts',
+        options: {
+          baseUrl: 'http://8.155.33.112:9000/me-oss',
+        },
+      },
+    },
+    provider: 'minio',
+  },
 })
