@@ -3,9 +3,23 @@ import type { BucketItem } from 'minio'
 
 const { $api } = useNuxtApp()
 
-const { data } = useAsyncData('gallery', async () => {
+const { data, status } = useAsyncData('gallery', async () => {
   return await $api<BucketItem[]>('/api/gallery/list')
 }, { default: () => [] })
+
+const isPreviewing = inject<Ref<boolean>>('previewVisible', ref(false))
+const activeName = ref<string | null>(null)
+
+function hdPreviewImg(name?: string) {
+  if (!name) {
+    isPreviewing.value = false
+    activeName.value = null
+    return
+  }
+
+  isPreviewing.value = true
+  activeName.value = name
+}
 </script>
 
 <template>
@@ -19,19 +33,18 @@ const { data } = useAsyncData('gallery', async () => {
     -->
   <div>
     <CHead title="相册" />
-    <div flex flex-wrap>
-      <NuxtImg
+    <div v-if="status === 'success'" columns-3 gap-x-2>
+      <PreviewImg
         v-for="(item, index) in data"
         :key="index"
-        class="h-50"
-        height="200"
-        width="200"
-        format="webp"
-        :quality="20"
-        :src="item.name"
-        fit="contain"
-        provider="minio"
+        :name="item.name"
+        :active="activeName === item.name"
+        @click="hdPreviewImg(item.name)"
       />
+    </div>
+
+    <div v-if="status === 'pending'" pt-20 text-center class="font-italic">
+      Loading...
     </div>
   </div>
 </template>

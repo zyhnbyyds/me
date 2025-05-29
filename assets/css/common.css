@@ -5,3 +5,10 @@
   margin-right: 2px;
   cursor: default;
 }
+
+#previewImg > img,
+.preview-img img {
+  max-width: 80%;
+  max-height: 80%;
+  margin: auto;
+}
