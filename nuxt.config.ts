@@ -5,7 +5,6 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@unocss/nuxt',
     '@pinia/nuxt',
-    '@nuxt/ui',
     '@nuxtjs/color-mode',
     '@nuxt/content',
     '@nuxt/devtools',
@@ -17,14 +16,6 @@ export default defineNuxtConfig({
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
-  },
-
-  ui: {
-    theme: {
-      colors: [
-        '#10b981',
-      ],
-    },
   },
 
   icon: {

@@ -29,13 +29,11 @@ function clickIptItem(e: ContentExclude) {
 </script>
 
 <template>
-  <!-- TODO: add data -->
   <div ref="iptRef" relative h-10 @click="focused = true">
     <input
       v-model="value"
       h-10 w-full rounded-full px-5 pl-10
-      class="outline-1 outline-light-9 focus:outline-2 dark:outline-dark-500 focus:outline-blue"
-      type="text"
+      class="outline-1 outline-light-9 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
       :placeholder="props.placeholder"
     >
     <div absolute left-3 h-5 w-5 flex-center class="top-1/2 -translate-y-50%">

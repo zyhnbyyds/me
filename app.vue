@@ -3,14 +3,12 @@
 
 <template>
   <div dark:bg-black>
-    <UApp>
-      <NuxtLoadingIndicator :height="2" />
-      <NuxtLayout>
-        <PreviewContainer>
-          <NuxtPage />
-        </PreviewContainer>
-      </NuxtLayout>
-    </UApp>
+    <NuxtLoadingIndicator :height="2" />
+    <NuxtLayout>
+      <PreviewContainer>
+        <NuxtPage />
+      </PreviewContainer>
+    </NuxtLayout>
   </div>
 </template>
 

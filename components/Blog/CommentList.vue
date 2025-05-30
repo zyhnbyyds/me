@@ -89,8 +89,8 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 <template>
   <div>
     <div v-for="(comment, i) in comments" :key="i" class="group">
-      <div relative flex rounded-2 p-2 pb-0 text-3.5 transition-all hover:bg-light2 hover:dark:bg-dark-7>
-        <UAvatar :src="comment.fromUser.avatar_url" />
+      <div relative flex rounded-2 p-2 pb-0 text-3.2 transition-all hover:bg-light2 hover:dark:bg-dark-7>
+        <img h-5 w-5 rounded-full :src="comment.fromUser.avatar_url">
         <div ml-2 w-full>
           <div>
             <span mr-1 font-bold>{{ comment.fromUser.name }} {{ comment.depth === 1 ? '' : `回复 ${comment.toUser && comment.toUser.name} ` }}</span>
@@ -130,7 +130,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
         </div>
       </div>
 
-      <USeparator my-2 />
+      <Separator m-2 />
     </div>
   </div>
 </template>

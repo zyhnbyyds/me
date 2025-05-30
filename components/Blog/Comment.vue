@@ -113,7 +113,7 @@ function hdSendComment() {
     <footer class="flex justify-between px-3 pb-2 pt-1">
       <div class="flex items-center">
         <EmojiPicker v-model="pickerVisible" @select="hdSelectEmoji">
-          <button ref="emojiBtnRef" class="relative mr-3 h-7 w-7 cursor-pointer" @click="hdOpenEmojiPicker">
+          <div ref="emojiBtnRef" class="relative mr-3 h-7 w-7 cursor-pointer" @click="hdOpenEmojiPicker">
             <Transition name="fade" mode="in-out">
               <span v-if="isOutside" absolute left-0 top-0 h-7 w-7 flex-center cursor-pointer>
                 <Icon name="streamline-emojis:worried-face" text-6 />
@@ -122,21 +122,21 @@ function hdSendComment() {
                 <Icon name="streamline-emojis:grimacing-face" text-6 />
               </span>
             </Transition>
-          </button>
+          </div>
         </EmojiPicker>
 
-        <button class="">
+        <div class="">
           <Icon name="streamline-emojis:tent" cursor-pointer text-5 transition-all hover:scale-105 class="mr-1" />
-        </button>
+        </div>
       </div>
 
       <div class="flex items-center text-4 text-dark-3">
         <span mr-4 text-3>
           <span>{{ iptLength }}</span> / 300
         </span>
-        <UButton :loading="loading" size="sm" @click.stop="hdSendComment">
+        <div :loading="loading" cursor-pointer select-none rounded-md px-3 py-1 text-3.3 transition-colors hover:border-common hover:bg-gray2 @click.stop="hdSendComment">
           发送
-        </UButton>
+        </div>
       </div>
     </footer>
   </div>

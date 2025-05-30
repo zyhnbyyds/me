@@ -9,7 +9,6 @@ const { data, status } = useAsyncData('gallery', async () => {
 
 const isPreviewing = inject<Ref<boolean>>('previewVisible', ref(false))
 const activeName = ref<string | null>(null)
-const activeTab = ref(0)
 
 function hdPreviewImg(name?: string) {
   if (!name) {
@@ -29,17 +28,7 @@ function hdPreviewImg(name?: string) {
     3. 视频播放
     -->
   <div>
-    <CHead title="相册">
-      <template #right>
-        <UTabs
-          v-model="activeTab"
-          color="neutral"
-          variant="link"
-          :items="[{ label: '相册' }, { label: '视频' }]"
-          size="sm"
-        />
-      </template>
-    </CHead>
+    <CHead title="图库" />
     <ClientOnly>
       <div v-if="status === 'success'" columns-3 gap-x-2>
         <PreviewImg

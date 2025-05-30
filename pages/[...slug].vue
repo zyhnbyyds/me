@@ -110,7 +110,7 @@ async function hdClickSend(val: EmojiInfo[]) {
         <ContentRenderer v-if="page" :value="page" />
       </div>
 
-      <USeparator mb-2 px-2 type="dashed" label="留下你的评论~" />
+      <Separator mx-5 mb-2 type="dashed" label="留下你的评论~" />
 
       <div mx-5>
         <div mb-2 flex items-center justify-end text-3 font-bold>
@@ -125,17 +125,17 @@ async function hdClickSend(val: EmojiInfo[]) {
           </div>
 
           <div v-else flex-col-center>
-            <Icon name="carbon:logout" mr-2 text-4 class="rotate-90 cursor-pointer" @click="clear" />
-            <UAvatar size="sm" :src="user?.avatar_url" />
+            <Icon name="carbon:logout" mr-2 text-4 class="rotate-180 cursor-pointer" @click="clear" />
+            <img h-5 w-5 rounded-full :src="user?.avatar_url">
             <div ml-2>
               {{ user?.name }}
             </div>
           </div>
         </div>
 
-        <BlogComment ref="commentRef" v-model="commentIpt" placeholder="..." :loading="loading" @send="hdClickSend" />
+        <BlogComment ref="commentRef" v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
 
-        <USeparator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+        <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
 
         <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
       </div>
