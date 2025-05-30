@@ -19,6 +19,14 @@ export default defineNuxtConfig({
     'content:file:afterParse': transformContentFileAfterParse,
   },
 
+  ui: {
+    theme: {
+      colors: [
+        '#10b981',
+      ],
+    },
+  },
+
   icon: {
     cssLayer: 'base',
     mode: 'svg',
@@ -120,7 +128,7 @@ export default defineNuxtConfig({
         name: 'minio',
         provider: '~/providers/minio.provider.ts',
         options: {
-          baseUrl: 'http://8.155.33.112:9000/me-oss',
+          baseUrl: import.meta.env.OSS_MINIO_BASE_URL,
         },
       },
     },

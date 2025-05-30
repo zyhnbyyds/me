@@ -4,7 +4,7 @@
 <template>
   <div dark:bg-black>
     <UApp>
-      <NuxtLoadingIndicator />
+      <NuxtLoadingIndicator :height="2" />
       <NuxtLayout>
         <PreviewContainer>
           <NuxtPage />

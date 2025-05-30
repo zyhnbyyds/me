@@ -9,6 +9,7 @@ const { data, status } = useAsyncData('gallery', async () => {
 
 const isPreviewing = inject<Ref<boolean>>('previewVisible', ref(false))
 const activeName = ref<string | null>(null)
+const activeTab = ref(0)
 
 function hdPreviewImg(name?: string) {
   if (!name) {
@@ -25,27 +26,40 @@ function hdPreviewImg(name?: string) {
 <template>
   <!--
     TODO: 完善相册
-    1. 添加图片预览
-    2. 瀑布流
     3. 视频播放
-    4. 无缝展示
-    5. 远程存储
     -->
   <div>
-    <CHead title="相册" />
-    <div v-if="status === 'success'" columns-3 gap-x-2>
-      <PreviewImg
-        v-for="(item, index) in data"
-        :key="index"
-        :name="item.name"
-        :active="activeName === item.name"
-        @click="hdPreviewImg(item.name)"
-      />
-    </div>
+    <CHead title="相册">
+      <template #right>
+        <UTabs
+          v-model="activeTab"
+          color="neutral"
+          variant="link"
+          :items="[{ label: '相册' }, { label: '视频' }]"
+          size="sm"
+        />
+      </template>
+    </CHead>
+    <ClientOnly>
+      <div v-if="status === 'success'" columns-3 gap-x-2>
+        <PreviewImg
+          v-for="(item, index) in data"
+          :key="index"
+          :name="item.name"
+          :active="activeName === item.name"
+          @click="hdPreviewImg(item.name)"
+        />
+      </div>
+      <div v-if="status === 'pending'" pt-20 text-center class="font-italic">
+        Loading...
+      </div>
 
-    <div v-if="status === 'pending'" pt-20 text-center class="font-italic">
-      Loading...
-    </div>
+      <template #fallback>
+        <div pt-20 text-center class="font-italic">
+          Loading...
+        </div>
+      </template>
+    </ClientOnly>
   </div>
 </template>
 

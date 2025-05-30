@@ -41,6 +41,7 @@ async function calculatePosition(back = false) {
   const top = back ? boxY.value : y.value
   const h = back ? boxHeight.value : height.value
   const w = back ? boxWidth.value : width.value
+  let scale = 1
 
   function calculateStart() {
     if (!back) {
@@ -55,11 +56,13 @@ async function calculatePosition(back = false) {
   }
 
   function calculateEnd() {
+    // ai太强大了，我写了一堆，优化成这么一行 5555, 我是废柴
+    scale = Math.min(wWidth.value * 0.8 / w, wHeight.value * 0.8 / h)
     previewRefStyle.value = {
-      left: `${centerX - w}px`,
-      top: `${centerY - h}px`,
-      height: `${h * 2}px`,
-      width: `${w * 2}px`,
+      left: `${centerX - w * scale / 2}px`,
+      top: `${centerY - h * scale / 2}px`,
+      height: `${h * scale}px`,
+      width: `${w * scale}px`,
     }
   }
 
@@ -89,6 +92,7 @@ onBeforeUnmount(() => {
         :style="(active && isFloating) ? previewRefStyle : null"
         :quality="20"
         :src="name ?? ''"
+        :alt="name ?? ''"
         w-full
         loading="lazy"
         :class="(active && isFloating) ? 'fixed' : ''"

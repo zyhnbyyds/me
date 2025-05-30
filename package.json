@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@nuxt/content": "^3.5.1",
-    "@nuxt/image": "^1.10.0",
+    "@nuxt/image": "npm:@nuxt/image-nightly@latest",
     "@nuxt/ui": "^3.1.2",
     "minio": "^8.0.5",
     "pg": "^8.16.0",
