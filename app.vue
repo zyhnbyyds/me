@@ -6,7 +6,7 @@
     <NuxtLoadingIndicator :height="2" />
     <NuxtLayout>
       <PreviewContainer>
-        <NuxtPage />
+        <NuxtPage :transition="{ name: 'fade-scale', mode: 'out-in' }" />
       </PreviewContainer>
     </NuxtLayout>
   </div>

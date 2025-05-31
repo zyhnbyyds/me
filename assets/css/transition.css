@@ -10,3 +10,23 @@
 .fade-leave-from {
   opacity: 1;
 }
+
+.fade-scale-enter-active,
+.fade-scale-leave-active {
+  transition:
+    transform 0.3s,
+    opacity 0.3s;
+  transform-origin: top;
+}
+
+.fade-scale-enter-from,
+.fade-scale-leave-to {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.fade-scale-enter-to,
+.fade-scale-leave-from {
+  transform: scale(1);
+  opacity: 1;
+}

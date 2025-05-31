@@ -23,10 +23,6 @@ function hdPreviewImg(name?: string) {
 </script>
 
 <template>
-  <!--
-    TODO: 完善相册
-    3. 视频播放
-    -->
   <div>
     <CHead title="图库" />
     <ClientOnly>

@@ -33,6 +33,7 @@ function clickIptItem(e: ContentExclude) {
     <input
       v-model="value"
       h-10 w-full rounded-full px-5 pl-10
+      dark:bg-dark-500 dark:text-white
       class="outline-1 outline-light-9 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
       :placeholder="props.placeholder"
     >

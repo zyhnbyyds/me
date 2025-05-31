@@ -48,16 +48,18 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-  <Tab v-model="activeTab" sticky top-0 w-full blur-common :list="homeTabList" />
-  <ClientOnly>
-    <BlogList :list="blobs" />
+  <div>
+    <Tab v-model="activeTab" sticky top-0 w-full blur-common :list="homeTabList" />
+    <ClientOnly>
+      <BlogList :list="blobs" />
 
-    <template #fallback>
-      <div pt-20 text-center class="font-italic">
-        Loading...
-      </div>
-    </template>
-  </ClientOnly>
+      <template #fallback>
+        <div pt-20 text-center class="font-italic">
+          Loading...
+        </div>
+      </template>
+    </ClientOnly>
+  </div>
 </template>
 
 <style scoped></style>

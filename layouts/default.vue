@@ -36,7 +36,7 @@ provide('scroll', {
       </div> -->
     </header>
 
-    <div ref="scrollRef" class="w-60% <lg:flex-1" overflow-auto>
+    <div ref="scrollRef" class="scroll-container w-60% <lg:flex-1" overflow-auto>
       <div class="relative min-h-screen w-xl border-r-0.5px border-common">
         <slot />
       </div>
@@ -44,4 +44,8 @@ provide('scroll', {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.scroll-container {
+  scrollbar-color: gray transparent;
+}
+</style>

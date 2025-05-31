@@ -84,70 +84,72 @@ async function hdClickSend(val: EmojiInfo[]) {
 </script>
 
 <template>
-  <ClientOnly>
-    <div w-full>
-      <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
-        <div flex-col-center gap-4>
-          <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
-            <Icon name="material-symbols:arrow-back" />
+  <div>
+    <ClientOnly>
+      <div w-full>
+        <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
+          <div flex-col-center gap-4>
+            <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
+              <Icon name="material-symbols:arrow-back" />
+            </div>
+            <p font-bold>
+              帖子
+            </p>
           </div>
-          <p font-bold>
-            帖子
-          </p>
+
+          <h1
+            ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
+            font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
+          >
+            {{ page?.title }}
+          </h1>
+        </header>
+        <!-- 标题高度 -->
+        <p :style="{ height: `${height}px` }" />
+
+        <div class="markdown-body">
+          <ContentRenderer v-if="page" :value="page" />
         </div>
 
-        <h1
-          ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
-          font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
-        >
-          {{ page?.title }}
-        </h1>
-      </header>
-      <!-- 标题高度 -->
-      <p :style="{ height: `${height}px` }" />
+        <Separator mx-5 mb-2 type="dashed" label="留下你的评论~" />
 
-      <div class="markdown-body">
-        <ContentRenderer v-if="page" :value="page" />
-      </div>
+        <div mx-5>
+          <div mb-2 flex items-center justify-end text-3 font-bold>
+            <div v-if="!loggedIn">
+              <button
+                flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
+                @click="openInPopup('/auth/github')"
+              >
+                <Icon name="skill-icons:github-dark" mr-1 />
+                登录
+              </button>
+            </div>
 
-      <Separator mx-5 mb-2 type="dashed" label="留下你的评论~" />
-
-      <div mx-5>
-        <div mb-2 flex items-center justify-end text-3 font-bold>
-          <div v-if="!loggedIn">
-            <button
-              flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
-              @click="openInPopup('/auth/github')"
-            >
-              <Icon name="skill-icons:github-dark" mr-1 />
-              登录
-            </button>
-          </div>
-
-          <div v-else flex-col-center>
-            <Icon name="carbon:logout" mr-2 text-4 class="rotate-180 cursor-pointer" @click="clear" />
-            <img h-5 w-5 rounded-full :src="user?.avatar_url">
-            <div ml-2>
-              {{ user?.name }}
+            <div v-else flex-col-center>
+              <Icon name="carbon:logout" mr-2 text-4 class="rotate-180 cursor-pointer" @click="clear" />
+              <img h-5 w-5 rounded-full :src="user?.avatar_url">
+              <div ml-2>
+                {{ user?.name }}
+              </div>
             </div>
           </div>
+
+          <BlogComment ref="commentRef" v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
+
+          <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+
+          <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
         </div>
 
-        <BlogComment ref="commentRef" v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
-
-        <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
-
-        <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
+        <footer h-80 />
       </div>
-
-      <footer h-80 />
-    </div>
-    <template #fallback>
-      <div pt-20 text-center class="font-italic">
-        Loading...
-      </div>
-    </template>
-  </ClientOnly>
+      <template #fallback>
+        <div pt-20 text-center class="font-italic">
+          Loading...
+        </div>
+      </template>
+    </ClientOnly>
+  </div>
 </template>
 
 <style scoped>
