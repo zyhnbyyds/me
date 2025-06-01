@@ -39,11 +39,6 @@ export default defineNuxtConfig({
         target: 'esnext',
       },
     },
-    routeRules: {
-      '/blog/**': {
-        static: true,
-      },
-    },
   },
 
   colorMode: {
