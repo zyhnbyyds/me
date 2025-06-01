@@ -90,7 +90,7 @@ async function hdClickSend(val: EmojiInfo[]) {
         <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
           <div flex-col-center gap-4>
             <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
-              <Icon name="material-symbols:arrow-back" />
+              <span class="i-material-symbols:arrow-back" />
             </div>
             <p font-bold>
               帖子
@@ -120,13 +120,13 @@ async function hdClickSend(val: EmojiInfo[]) {
                 flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
                 @click="openInPopup('/auth/github')"
               >
-                <Icon name="skill-icons:github-dark" mr-1 />
+                <span class="i-skill-icons:github-dark" mr-1 />
                 登录
               </button>
             </div>
 
             <div v-else flex-col-center>
-              <Icon name="carbon:logout" mr-2 text-4 class="rotate-180 cursor-pointer" @click="clear" />
+              <span mr-2 text-4 class="i-carbon:logout rotate-180 cursor-pointer" @click="clear" />
               <img h-5 w-5 rounded-full :src="user?.avatar_url">
               <div ml-2>
                 {{ user?.name }}

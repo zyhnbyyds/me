@@ -8,8 +8,6 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxt/content',
     '@nuxt/devtools',
-    '@nuxt/icon',
-    '@nuxt/fonts',
     'nuxt-auth-utils',
     '@nuxt/image',
   ],
@@ -18,19 +16,10 @@ export default defineNuxtConfig({
     'content:file:afterParse': transformContentFileAfterParse,
   },
 
-  icon: {
-    cssLayer: 'base',
-    mode: 'svg',
-  },
-
   router: {
     options: {
       scrollBehaviorType: 'smooth',
     },
-  },
-
-  fonts: {
-    provider: 'local',
   },
 
   ssr: true,

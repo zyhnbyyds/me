@@ -1,6 +1,7 @@
 import {
   defineConfig,
   presetAttributify,
+  presetIcons,
   presetTypography,
   presetWind3,
   transformerDirectives,
@@ -23,6 +24,14 @@ export default defineConfig({
     presetWind3(),
     presetAttributify(),
     presetTypography(),
+    presetIcons({
+      warn: true,
+      prefix: ['i-', 'icon-'],
+      extraProperties: {
+        'display': 'inline-block',
+        'vertical-align': 'middle',
+      },
+    }),
   ],
   transformers: [
     transformerDirectives(),

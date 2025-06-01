@@ -16,7 +16,7 @@ const { data: blobs, refresh } = await useAsyncData('blog', () => {
   }
 
   return queryCollection('blog').order('publishAt', 'ASC').all()
-})
+}, { default: () => [] })
 
 useSeoMeta({
   title: '张宇行的博客',

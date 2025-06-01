@@ -1,4 +1,6 @@
 <script lang='ts' setup>
+import { Icon } from '@iconify/vue'
+
 export interface MenuBarItem {
   title: string
   /** 未激活 */
@@ -32,9 +34,9 @@ function handleMenuChange(path: string) {
         :to="item.path" class="mb-3 w-a inline-flex cursor-pointer items-center p-2 text-5 bg-hover-common"
         :class="item.key === active ? 'font-bold' : ''"
       >
-        <div class="h-8 w-8 flex-center">
-          <Icon v-show="item.key === active" :name="item.aIcon" text-8 font-bold />
-          <Icon v-show="item.key !== active" :name="item.icon" text-8 font-bold />
+        <div class="h-8 w-8 flex-center text-8 font-bold">
+          <Icon v-if="item.key === active" :icon="item.aIcon" />
+          <Icon v-if="item.key !== active" :icon="item.icon" />
         </div>
         <span class="ml-5 mr-4 inline-block w-a overflow-hidden text-ellipsis text-nowrap <lg:hidden">
           {{ item.title }}

@@ -8,7 +8,7 @@ const { data: count } = await useAsyncData(() => {
   <div of-x-hidden>
     <header sticky top-0 h-50px w-full flex-col-center gap-4 px-4 text-5 blur-common>
       <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
-        <Icon name="material-symbols:arrow-back" />
+        <span class="i-material-symbols:arrow-back" />
       </div>
       <p text-4.1 font-bold>
         关于我

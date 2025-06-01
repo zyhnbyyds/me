@@ -9,7 +9,7 @@ defineProps<{
     <div w-full flex-col-center justify-between>
       <div flex-col-center gap-4>
         <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
-          <Icon name="material-symbols:arrow-back" />
+          <div name="i-material-symbols:arrow-back" />
         </div>
         <p font-bold>
           {{ title }}

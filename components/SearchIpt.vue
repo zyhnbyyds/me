@@ -38,7 +38,7 @@ function clickIptItem(e: ContentExclude) {
       :placeholder="props.placeholder"
     >
     <div absolute left-3 h-5 w-5 flex-center class="top-1/2 -translate-y-50%">
-      <Icon name="material-symbols:search" text-5 />
+      <span class="i-material-symbols:search" text-5 />
     </div>
 
     <!-- 搜索内容 -->
