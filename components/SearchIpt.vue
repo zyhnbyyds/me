@@ -23,7 +23,7 @@ function clickIptItem(e: ContentExclude) {
   const item = props.list.find(i => i.id === e.id)
   if (item) {
     focused.value = false
-    value.value = item.title
+    useRouter().push(item.path)
   }
 }
 </script>

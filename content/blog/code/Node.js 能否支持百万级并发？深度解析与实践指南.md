@@ -7,8 +7,6 @@ updateAt: "2024-10-01 22:00:00"
 tags: ["NestJS", "Go", "后端开发", "对比"]
 ---
 
-![Node.js 并发架构示意图](https://example.com/nodejs-concurrency.png)
-
 ## 概述
 
 Node.js 作为基于事件驱动和非阻塞 I/O 模型的 JavaScript 运行时，凭借其轻量级、高吞吐的特性，已成为构建高并发服务的热门选择。但其能否支撑**百万级并发**，需要从技术原理、优化策略和实际案例三个维度综合评估:cite[1]:cite[2]。
