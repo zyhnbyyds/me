@@ -89,7 +89,7 @@ async function hdClickSend(val: EmojiInfo[]) {
       <div w-full>
         <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between px-4 text-5 blur-common>
           <div flex-col-center gap-4>
-            <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common" @click="$router.back()">
+            <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common-trans" @click="$router.back()">
               <span class="i-material-symbols:arrow-back" />
             </div>
             <p font-bold>

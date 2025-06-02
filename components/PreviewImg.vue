@@ -69,9 +69,8 @@ async function calculatePosition(back = false) {
   if (!back) {
     calculateStart()
     await nextTick()
-    setTimeout(() => {
-      calculateEnd()
-    }, 0)
+
+    calculateEnd()
   }
   else {
     calculateStart()
@@ -84,7 +83,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :style="{ height: (active && isFloating) ? `${bHeight + 8}px` : 'auto' }" pb-8px>
+  <div :style="{ height: (active && isFloating) ? `${bHeight + 8}px` : '' }" pb-8px>
     <Teleport to="#previewImg" :disabled="!isFloating || !active">
       <NuxtImg
         ref="imgRef"

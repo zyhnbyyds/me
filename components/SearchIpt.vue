@@ -55,7 +55,7 @@ function clickIptItem(e: ContentExclude) {
             v-for="item in list"
             v-show="list.length !== 0" :key="item.id"
             h-60px
-            w-full cursor-pointer rounded-0 px-4 text-4 font-bold lh-60px hover:bg-op4 bg-hover-common @click="clickIptItem(item)"
+            w-full cursor-pointer rounded-0 px-4 text-4 font-bold lh-60px hover:bg-op4 bg-hover-common-trans @click="clickIptItem(item)"
           >
             {{ item.title }}
           </div>

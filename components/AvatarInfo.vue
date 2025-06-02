@@ -3,7 +3,7 @@ import { me } from '~/constants'
 </script>
 
 <template>
-  <div class="cursor-pointer p-3 bg-hover-common">
+  <div class="cursor-pointer p-3 bg-hover-common-trans">
     <div class="flex items-center gap-2">
       <div class="h-10 w-10 overflow-hidden rounded-full">
         <img

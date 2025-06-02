@@ -22,7 +22,7 @@ provide('scroll', {
     <header class="h-full w-40% flex border-r-0.5px <lg:w-auto border-common">
       <div flex-1 />
       <div class="w-50 overflow-hidden px-3 transition-all <lg:w-19">
-        <div class="h-14 w-14 flex-center inline-flex rounded-full transition-all" hover="bg-hover-common">
+        <div class="h-14 w-14 flex-center inline-flex rounded-full transition-all" hover="bg-hover-common-trans">
           <img h-10 w-10 src="/me.png" rounded-full alt="" srcset="">
         </div>
 
