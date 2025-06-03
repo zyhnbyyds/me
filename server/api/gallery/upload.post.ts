@@ -4,9 +4,16 @@ import { consola } from 'consola'
 import oss, { transFileNameToSavePath } from '~/server/utils/minio'
 
 export default defineEventHandler(async (event) => {
+  const permitUserid = import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID
+  const { user } = await getUserSession(event)
+
+  if (!user || permitUserid !== user.id) {
+    return createError({ status: 401, message: '没有权限' })
+  }
+
   const formData = await readFormData(event)
   if (!formData) {
-    throw createError({ statusCode: 400, statusMessage: 'Invalid form data' })
+    throw createError({ status: 400, message: 'Invalid form data' })
   }
   for (const [_key, value] of formData.entries()) {
     if (value instanceof File) {

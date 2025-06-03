@@ -71,8 +71,6 @@ function hdConfirmUpload() {
     },
     maxBodyLength: Infinity,
     onUploadProgress: (progressEvent) => {
-      console.log(progressEvent)
-
       uploadPercent.value = Number.parseFloat(((progressEvent.progress ?? 0) * 100).toFixed(2))
     },
   })

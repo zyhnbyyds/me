@@ -92,6 +92,9 @@ export default defineNuxtConfig({
       secretKey: import.meta.env.OSS_SECRET_ACCESS_KEY,
       pathStyle: true,
     },
+    public: {
+      showUploadBtnGithubUserId: import.meta.env.NUXT_GALLERY_SHOW_UPLOAD_BTN_USER_ID,
+    },
   },
 
   experimental: {

@@ -27,6 +27,7 @@ function hdPreviewImg(name?: string) {
     <CHead title="图库">
       <template #right>
         <div
+          v-if="isShowMinioUploadBtn()"
           class="h-9 w-9 flex-center inline-flex cursor-pointer border-1 text-dark-1 text-op70 border-common hover:text-op100 bg-hover-common-trans"
           @click="$router.push('/gallery/upload')"
         >
