@@ -7,7 +7,7 @@ export default defineProvider<{ baseURL: string }>({
   getImage: (src, { modifiers, baseURL }) => {
     const operations = operationsGenerator(modifiers)
     if (!baseURL) {
-      baseURL = import.meta.env.OSS_MINIO_BASE_URL || 'http://8.155.33.112:9000/me-photos'
+      baseURL = import.meta.env.OSS_MINIO_BASE_URL || 'https://bilisleep.online/me-photos'
     }
     return {
       url: joinURL(baseURL, src + (operations ? `?${operations}` : '')),

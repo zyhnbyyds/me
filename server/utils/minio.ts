@@ -2,7 +2,9 @@ import { Client } from 'minio'
 import { ulid } from 'ulid'
 
 const { minio } = useRuntimeConfig()
+
 const oss = new Client(minio)
+console.log(JSON.stringify(minio))
 
 export default oss
 

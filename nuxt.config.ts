@@ -86,12 +86,11 @@ export default defineNuxtConfig({
     },
     minio: {
       endPoint: import.meta.env.OSS_ENDPOINT,
-      port: Number.parseInt(import.meta.env.OSS_PORT, 10) || 9000,
+      port: Number.parseInt(import.meta.env.OSS_PORT, 10) || 443,
       useSSL: import.meta.env.OSS_USE_SSL === 'true',
       accessKey: import.meta.env.OSS_ACCESS_KEY_ID,
       secretKey: import.meta.env.OSS_SECRET_ACCESS_KEY,
-      baseURL: import.meta.env.OSS_BASE_URL || 'http://localhost:9000',
-      s3ForcePathStyle: true,
+      pathStyle: true,
     },
   },
 

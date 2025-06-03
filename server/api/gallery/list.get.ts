@@ -1,4 +1,5 @@
 import type { BucketItem } from 'minio'
+import consola from 'consola'
 import oss from '~/server/utils/minio'
 
 export default defineEventHandler(async () => {
@@ -13,6 +14,7 @@ export default defineEventHandler(async () => {
       resolve(objList)
     })
     socket.on('error', (err) => {
+      consola.error(err)
       reject(err)
     })
   })
