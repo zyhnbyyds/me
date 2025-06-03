@@ -1,11 +1,6 @@
 <script lang='ts' setup>
 import { homeTabList } from '~/constants'
 
-const app = useState('blobScroll', () => ({
-  recommend: 0,
-  newest: 0,
-}))
-const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
 const activeTab = ref(homeTabList[0].value)
 
 // 一次性加载所有content
@@ -29,22 +24,7 @@ useSeoMeta({
 watch(() => activeTab.value, () => {
   refresh()
 })
-
-if (activeTab.value === 'recommend') {
-  y.value = app.value.recommend
-}
-else if (activeTab.value === 'newest') {
-  y.value = app.value.newest
-}
-
-onBeforeRouteLeave(() => {
-  if (activeTab.value === 'recommend') {
-    app.value.recommend = y.value
-  }
-  else if (activeTab.value === 'newest') {
-    app.value.newest = y.value
-  }
-})
+// TODO: 完善记录滑动的位置
 </script>
 
 <template>

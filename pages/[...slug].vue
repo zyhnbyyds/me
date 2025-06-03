@@ -31,7 +31,6 @@ useSeoMeta({
 })
 
 const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
-y.value = 0
 
 const { height } = useElementBounding(titleRef)
 
@@ -52,6 +51,14 @@ const positionStyle = computed(() => {
     left: '208px',
     fontSize: '14px',
   }
+})
+
+setTimeout(() => {
+  y.value = 0
+}, 300)
+
+onBeforeRouteLeave(() => {
+  y.value = 0
 })
 
 async function hdClickSend(val: EmojiInfo[]) {

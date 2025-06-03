@@ -7,10 +7,15 @@ defineProps({
 </script>
 
 <template>
-  <div>
-    <h1>{{ error?.statusCode }}</h1>
+  <div h-screen w-screen flex-center flex-col dark:bg-dark dark:text-white>
+    <h1 mb-4 text-10 font-bold>
+      {{ error?.statusCode }}
+    </h1>
+    <div mb-4 text-sm text-light-7>
+      {{ error?.message }}
+    </div>
     <NuxtLink to="/">
-      Go back home
+      <Btn label="Go back home" />
     </NuxtLink>
   </div>
 </template>

@@ -1,4 +1,8 @@
 <script lang='ts' setup>
+definePageMeta({
+  middleware: 'auth-middleware',
+})
+
 const { open, onChange, onCancel, reset } = useFileDialog()
 const files = ref<File[]>([])
 const [loading, load] = useToggle(false)

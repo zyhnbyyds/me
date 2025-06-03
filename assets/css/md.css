@@ -415,7 +415,7 @@
 
 .markdown-body h2 {
   font-weight: var(--base-text-weight-semibold, 600);
-  padding-bottom: 0.3em;
+  padding-bottom: 1em;
   font-size: 1.2em;
   border-bottom: 1px solid var(--borderColor-muted);
 }

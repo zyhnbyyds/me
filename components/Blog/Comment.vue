@@ -134,7 +134,7 @@ function hdSendComment() {
         <span mr-4 text-3>
           <span>{{ iptLength }}</span> / 300
         </span>
-        <div :loading="loading" cursor-pointer select-none rounded-md px-3 py-1 text-3.3 transition-colors hover:border-common hover:bg-gray2 @click.stop="hdSendComment">
+        <div :loading="loading" :class="focused ? 'dark:text-gray-1' : ''" cursor-pointer select-none rounded-md px-3 py-1 text-3.3 transition-colors hover:border-common hover:bg-gray2 dark:hover:bg-dark-1 hover:dark:text-gray-2 @click.stop="hdSendComment">
           发送
         </div>
       </div>

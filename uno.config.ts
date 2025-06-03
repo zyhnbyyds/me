@@ -21,6 +21,7 @@ export default defineConfig({
     ['bg-common', 'bg-light-300 dark:bg-dark-300'],
     ['bg-hover-common', 'transition-all bg-light-300 dark:bg-dark-300 hover:bg-light-5 hover:dark:bg-dark-5'],
     ['border-common', 'border-light-700 dark:border-dark-500'],
+    ['page', 'hw-full overflow-auto'],
   ],
   presets: [
     presetWind3(),
