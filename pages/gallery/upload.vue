@@ -1,6 +1,4 @@
 <script lang='ts' setup>
-import { Icon } from '@iconify/vue'
-
 const { open, onChange, onCancel, reset } = useFileDialog()
 const files = ref<File[]>([])
 const [loading, load] = useToggle(false)
@@ -102,7 +100,7 @@ function hdConfirmUpload() {
         <div v-for="item, i in files" :key="item.name" class="group mb-1">
           <div class="flex items-center justify-between rounded-lg p-2 bg-hover-common">
             <span flex-center gap-1>
-              <Icon text-4 :icon="`${showFileTypeIcon(item.name)}`" class="mr-2" />
+              <Icon text-4 :name="`${showFileTypeIcon(item.name)}`" class="mr-2" />
               <div class="text-sm text-op7">
                 {{ item.name }}
               </div>

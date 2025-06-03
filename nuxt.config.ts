@@ -10,7 +10,15 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     'nuxt-auth-utils',
     '@nuxt/image',
+    '@nuxt/icon',
   ],
+
+  icon: {
+    serverBundle: 'local',
+    class: 'name',
+    mode: 'svg',
+    cssSelectorPrefix: 'ni',
+  },
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
@@ -21,8 +29,6 @@ export default defineNuxtConfig({
       scrollBehaviorType: 'smooth',
     },
   },
-
-  ssr: true,
 
   nitro: {
     storage: {
@@ -93,7 +99,7 @@ export default defineNuxtConfig({
       pathStyle: true,
     },
     public: {
-      showUploadBtnGithubUserId: import.meta.env.NUXT_GALLERY_SHOW_UPLOAD_BTN_USER_ID,
+      showUploadBtnGithubUserId: import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID,
     },
   },
 

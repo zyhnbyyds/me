@@ -39,7 +39,7 @@ function _handleClickLike() {
   <!-- 喜欢、评论、浏览 -->
   <div class="mt-5 flex items-center justify-between text-14px">
     <span v-if="props.readingTime >= 2" flex-col-center text-3 text-gray>
-      <span class="i-carbon:alarm" text-4.6 />
+      <Icon name="carbon:alarm" text-4.6 />
       <span>
         {{ props.readingTime }}分钟
       </span>
@@ -48,11 +48,11 @@ function _handleClickLike() {
 
     <span flex items-center gap-5>
       <span class="flex-col-center gap-1 text-12px text-gray">
-        <span class="i-mdi:tooltip-minus-outline" text-4 />
+        <Icon name="mdi:tooltip-minus-outline" text-4.6 />
         <span>{{ blogOps?.comments }}</span>
       </span>
       <span class="flex-col-center gap-1 text-12px text-gray">
-        <span class="i-mdi:eye-outline" text-4 />
+        <Icon name="mdi:eye-outline" text-4.6 />
         <span>{{ blogOps?.looks }}</span>
       </span>
     </span>

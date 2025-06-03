@@ -28,6 +28,7 @@ export default defineConfig({
     presetTypography(),
     presetIcons({
       warn: true,
+      mode: 'auto',
       prefix: ['i-', 'icon-'],
       extraProperties: {
         'display': 'inline-block',

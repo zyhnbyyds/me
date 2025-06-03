@@ -4,10 +4,10 @@ import { consola } from 'consola'
 import oss, { transFileNameToSavePath } from '~/server/utils/minio'
 
 export default defineEventHandler(async (event) => {
-  const permitUserid = import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID
+  const permitUserid = useRuntimeConfig().public.showUploadBtnGithubUserId
   const { user } = await getUserSession(event)
 
-  if (!user || permitUserid !== user.id) {
+  if (!user || permitUserid !== user.id.toString()) {
     return createError({ status: 401, message: '没有权限' })
   }
 
