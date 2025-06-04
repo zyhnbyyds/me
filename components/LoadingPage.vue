@@ -2,6 +2,7 @@
 defineProps<{
   percent?: number
   isAutoLoading?: boolean
+  text?: string
 }>()
 
 const loading = defineModel<boolean>({
@@ -11,9 +12,12 @@ const loading = defineModel<boolean>({
 
 <template>
   <Transition name="fade">
-    <div v-if="loading" class="fixed left-0 top-0 z-9999 h-screen w-screen flex-center bg-light-8 bg-op40 backdrop-blur-md">
+    <div v-if="loading" class="fixed left-0 top-0 z-9999 h-screen w-screen flex-center flex-col bg-light-8 bg-op40 backdrop-blur-md">
       <div class="loader" :class="{ 'auto-loading': isAutoLoading }">
         <div v-if="!isAutoLoading" class="progress" :style="{ width: `${percent ?? 0}%` }" />
+      </div>
+      <div class="loading-text mt-2">
+        {{ text ?? 'Loading...' }}
       </div>
     </div>
   </Transition>
@@ -41,23 +45,20 @@ const loading = defineModel<boolean>({
 }
 
 .progress {
-  height: 100%;
+  height: calc(100% - 2px);
+  margin: 1px 0;
   background: currentColor;
   border-radius: inherit;
   transition: width 0.1s;
 }
 
-.loader::after {
-  content: 'Loading...';
+.loading-text {
   background: linear-gradient(45deg, #34b3d5, #4853d3);
   -webkit-background-clip: text;
   background-clip: text;
   font-weight: bold;
+  font-style: italic;
   color: transparent;
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
   animation: fade 1.5s infinite;
 }
 

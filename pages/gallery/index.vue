@@ -23,7 +23,7 @@ function hdPreviewImg(name?: string) {
 </script>
 
 <template>
-  <div class="page">
+  <div>
     <CHead title="图库">
       <template #right>
         <div

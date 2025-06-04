@@ -19,8 +19,8 @@ export const menuList: MenuBarItem[] = [
     title: '主页',
     icon: 'material-symbols:home-outline-rounded',
     aIcon: 'material-symbols:home-rounded',
-    path: '/blog',
-    key: 'blog',
+    path: '/',
+    key: 'home',
   },
   {
     title: '探索',
@@ -29,13 +29,6 @@ export const menuList: MenuBarItem[] = [
     path: '/explore',
     key: 'explore',
   },
-  // {
-  //   title: '通知',
-  //   icon: 'material-symbols:notifications-outline-rounded',
-  //   path: '/notifications',
-  //   aIcon: 'material-symbols:notifications-rounded',
-  //   key: 'notifications',
-  // },
   {
     title: '个人资料',
     icon: 'material-symbols:person-outline',

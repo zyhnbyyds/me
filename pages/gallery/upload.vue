@@ -7,6 +7,7 @@ const { open, onChange, onCancel, reset } = useFileDialog()
 const files = ref<File[]>([])
 const [loading, load] = useToggle(false)
 const uploadPercent = ref(0)
+const controller = ref<AbortController | null>(null)
 
 const { $axios } = useNuxtApp()
 
@@ -55,7 +56,16 @@ onChange(async (fileList) => {
 onCancel(() => {
 })
 
+onKeyStroke('Escape', () => {
+  if (loading.value) {
+    loading.value = false
+    controller.value?.abort()
+    controller.value = null
+  }
+})
+
 function hdConfirmUpload() {
+  controller.value = new AbortController()
   if (files.value.length === 0) {
     return
   }
@@ -71,6 +81,7 @@ function hdConfirmUpload() {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    signal: controller.value?.signal,
     maxBodyLength: Infinity,
     onUploadProgress: (progressEvent) => {
       uploadPercent.value = Number.parseFloat(((progressEvent.progress ?? 0) * 100).toFixed(2))
@@ -121,6 +132,7 @@ function hdConfirmUpload() {
 
     <LoadingPage
       v-model="loading"
+      text="Uploading..."
       :percent="uploadPercent"
       :is-auto-loading="false"
     />

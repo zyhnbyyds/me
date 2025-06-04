@@ -49,6 +49,7 @@
     "lint-staged": "^16.1.0",
     "nuxt": "^3.17.4",
     "nuxt-auth-utils": "^0.5.20",
+    "nuxt-typed-router": "^3.8.0",
     "pinia": "^3.0.2",
     "typescript": "^5.8.3",
     "ufo": "^1.6.1",

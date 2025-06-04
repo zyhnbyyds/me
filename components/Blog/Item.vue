@@ -11,24 +11,18 @@ dayjs.extend(relativeTime)
 interface Props {
   blobItem: BlogCollectionItem
 }
-
-function getImageUrl(name?: string) {
-  if (!name) {
-    return ''
-  }
-  return new URL(`../../public/blog/${name}`, import.meta.url).href
-}
 </script>
 
 <template>
   <!-- TODO: 添加数据 -->
   <div class="w-full flex flex-col gap-2 rounded-0 hover:bg-op-3 bg-hover-common-trans">
     <div class="w-full flex gap-2 p-4">
-      <img
-        src="/public/me.png"
+      <NuxtImg
+        src="/me.png"
         alt="Avatar"
+        :quality="10"
         class="h-8 w-8 rounded-full"
-      >
+      />
       <div flex-1>
         <p class="flex items-center gap-2 text-sm font-semibold">
           <span>{{ blobItem.title }}</span>
@@ -38,8 +32,7 @@ function getImageUrl(name?: string) {
           {{ blobItem?.description }}
         </p>
 
-        <img mt-2 h-auto w-full rounded-15px :src="getImageUrl(blobItem?.image)">
-
+        <NuxtImg :quality="60" mt-2 h-auto w-full rounded-15px shadow-md :src="`/blog/${blobItem?.image}`" />
         <BlogItemFooter
           :id="blobItem.path.replaceAll('/', '_')"
           :reading-time="blobItem.readingTime || 0"

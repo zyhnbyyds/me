@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxt/image',
     '@nuxt/icon',
+    'nuxt-typed-router',
   ],
 
   icon: {
@@ -119,6 +120,5 @@ export default defineNuxtConfig({
         },
       },
     },
-    provider: 'minio',
   },
 })
