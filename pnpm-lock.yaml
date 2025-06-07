@@ -48,7 +48,7 @@ devDependencies:
     version: 1.2.0
   '@iconify-json/streamline-emojis':
     specifier: ^1.2.1
-    version: 1.2.1
+    version: 1.2.2
   '@iconify-json/twemoji':
     specifier: ^1.2.2
     version: 1.2.2
@@ -1258,8 +1258,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify-json/streamline-emojis@1.2.1:
-    resolution: {integrity: sha512-s782C9Imd9LlY/UyBqOSppaLmMU5ywnyUJZp1/hN4p0nEaWCp9F3D8bjUfna8KV1Qw0sbNQaoWtcxMvOZcwNiw==}
+  /@iconify-json/streamline-emojis@1.2.2:
+    resolution: {integrity: sha512-dwZrfhOSsISzJZl86pSgtQeGfwYHJBLBDihh+0YjlHWid1CosA6ihczkjRQJX1Jym63IA0V61ju3YTn3TCuSHg==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
@@ -12033,6 +12033,11 @@ packages:
 
   /webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
+    dev: true
+
+  /webpack-sources@3.3.2:
+    resolution: {integrity: sha512-ykKKus8lqlgXX/1WjudpIEjqsafjOTcOJqxnAbMLAu/KCsDCJ6GBtvscewvTkrn24HsnvFwrSCbenFrhtcCsAA==}
+    engines: {node: '>=10.13.0'}
     dev: true
 
   /webpack-sources@3.3.2:
