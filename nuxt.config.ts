@@ -14,6 +14,17 @@ export default defineNuxtConfig({
     'nuxt-typed-router',
   ],
 
+  app: {
+    layoutTransition: {
+      name: 'fade-scale',
+      mode: 'out-in',
+    },
+    pageTransition: {
+      name: 'fade-scale',
+      mode: 'out-in',
+    },
+  },
+
   icon: {
     serverBundle: 'local',
     class: 'name',

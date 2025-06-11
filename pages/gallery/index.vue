@@ -1,6 +1,10 @@
 <script lang='ts' setup>
 import type { BucketItem } from 'minio'
 
+definePageMeta({
+  layout: 'gallery',
+})
+
 const { $api } = useNuxtApp()
 
 const { data, status } = useAsyncData('gallery', async () => {
@@ -36,7 +40,7 @@ function hdPreviewImg(name?: string) {
       </template>
     </CHead>
     <ClientOnly>
-      <div v-if="status === 'success'" columns-2 gap-x-2>
+      <div v-if="status === 'success'" columns-4 gap-x-2>
         <PreviewImg
           v-for="(item, index) in data"
           :key="index"

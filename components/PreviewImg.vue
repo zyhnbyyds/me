@@ -95,7 +95,7 @@ onBeforeUnmount(() => {
         w-full
         loading="lazy"
         :class="(active && isFloating) ? 'fixed' : ''"
-        cursor-pointer rounded-md transition-all duration-500 provider="minio"
+        cursor-pointer rounded-md transition-all duration-700 provider="minio"
       />
     </Teleport>
     <div v-if="(active && isFloating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
