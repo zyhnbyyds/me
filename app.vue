@@ -5,7 +5,7 @@
   <div dark:bg-black>
     <NuxtLoadingIndicator :height="2" color="lightblue" />
     <NuxtLayout>
-      <PreviewContainer>
+      <PreviewContainer :duration="700">
         <NuxtPage />
       </PreviewContainer>
     </NuxtLayout>

@@ -12,9 +12,10 @@ export interface MenuBarItem {
 
 interface Props {
   list: MenuBarItem[]
+  isFold?: boolean
 }
 
-defineProps<Props>()
+const { isFold = false } = defineProps<Props>()
 
 const active = computed(() => {
   const { path } = useRoute()
@@ -41,7 +42,7 @@ function handleMenuChange(path: string) {
           <Icon v-show="item.path === active" :name="item.aIcon" />
           <Icon v-show="item.path !== active" :name="item.icon" />
         </div>
-        <span class="ml-5 mr-4 inline-block w-a overflow-hidden text-ellipsis text-nowrap <lg:hidden">
+        <span :class="{ hidden: isFold }" class="ml-5 mr-4 inline-block w-a overflow-hidden text-ellipsis text-nowrap <lg:hidden">
           {{ item.title }}
         </span>
       </div>

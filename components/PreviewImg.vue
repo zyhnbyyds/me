@@ -1,9 +1,14 @@
 <script lang='ts' setup>
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, Reactive } from 'vue'
+import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-const props = defineProps<{
-  name?: string
-  active: boolean
+const { src, active = false } = defineProps<{
+  src: string
+  active?: boolean
+}>()
+
+const emits = defineEmits<{
+  select: [name: string]
 }>()
 
 const imgRef = ref<HTMLImageElement | null>(null)
@@ -11,29 +16,42 @@ const boxRef = ref<HTMLDivElement | null>(null)
 
 const { height: wHeight, width: wWidth } = useWindowSize()
 const previewRefStyle = ref<CSSProperties | null>(null)
-const isPreviewing = inject<Ref<boolean>>('previewVisible', ref(false))
-const isFloating = inject<Ref<boolean>>('isFloating', ref(false))
+const previewInfo = inject<Reactive<any>>('previewInfo', reactive<any>({}))
 const { x, y, height, width } = useElementBounding(imgRef)
 const { x: boxX, y: boxY, height: boxHeight, width: boxWidth } = useElementBounding(boxRef)
+const isLoaded = ref(false)
+
 const bHeight = ref(0)
 
 onClickOutside(imgRef, async () => {
-  if (!isPreviewing.value)
+  if (!previewInfo.visible || previewInfo.floating)
+
     return
-  isPreviewing.value = false
+  previewInfo.visible = false
 })
 
-watch(isPreviewing, async (val) => {
+watch(() => previewInfo.visible, (val) => {
   if (!val) {
-    await calculatePosition(true)
+    calculatePosition(true)
   }
   else {
-    await calculatePosition()
+    calculatePosition()
   }
 })
 
+function handleImgLoad() {
+  isLoaded.value = true
+  // bHeight.value = height.value
+
+  // previewRefStyle.value = {
+  //   transform: `translate(${x.value}px, ${y.value}px) scale(${1})`,
+  //   height: `${height.value}px`,
+  //   width: `${width.value}px`,
+  // }
+}
+
 async function calculatePosition(back = false) {
-  if (!imgRef.value || !props.active)
+  if (!imgRef.value)
     return
   const centerX = wWidth.value / 2
   const centerY = wHeight.value / 2
@@ -48,28 +66,27 @@ async function calculatePosition(back = false) {
       bHeight.value = h
     }
     previewRefStyle.value = {
-      left: `${left}px`,
-      top: `${top}px`,
+      transform: `translate(${left}px, ${top}px) scale(${scale})`,
       height: `${h}px`,
       width: `${w}px`,
     }
   }
 
   function calculateEnd() {
-    // ai太强大了，我写了一堆，优化成这么一行 5555, 我是废柴
     scale = Math.min(wWidth.value * 0.8 / w, wHeight.value * 0.8 / h)
+    const translateX = centerX - w / 2
+    const translateY = centerY - h / 2
+
     previewRefStyle.value = {
-      left: `${centerX - w * scale / 2}px`,
-      top: `${centerY - h * scale / 2}px`,
-      height: `${h * scale}px`,
-      width: `${w * scale}px`,
+      transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+      height: `${h}px`,
+      width: `${w}px`,
     }
   }
 
   if (!back) {
     calculateStart()
     await nextTick()
-
     calculateEnd()
   }
   else {
@@ -77,28 +94,36 @@ async function calculatePosition(back = false) {
   }
 }
 
+function hdClickPreview() {
+  if (previewInfo.floating || !isLoaded.value) {
+    return
+  }
+  emits('select', src)
+  previewInfo.visible = true
+}
+
 onBeforeUnmount(() => {
-  isPreviewing.value = false
+  previewInfo.visible = false
 })
 </script>
 
 <template>
-  <div :style="{ height: (active && isFloating) ? `${bHeight + 8}px` : '' }" pb-8px>
-    <Teleport to="#previewImg" :disabled="!isFloating || !active">
+  <div :style="{ height: (active && previewInfo.floating) ? `${bHeight}px` : '' }" relative>
+    <Teleport to="#previewImg" :disabled="!previewInfo.floating || !active">
       <NuxtImg
         ref="imgRef"
-        format="webp"
-        :style="(active && isFloating) ? previewRefStyle : null"
-        :quality="20"
-        :src="name ?? ''"
-        :alt="name ?? ''"
+        :style="{ ...(active && previewInfo.floating) ? previewRefStyle : {}, ...{ transitionDuration: `${previewInfo.duration}ms` } }"
+        :src="src ?? ''"
+        :alt="src ?? ''"
         w-full
         loading="lazy"
-        :class="(active && isFloating) ? 'fixed' : ''"
-        cursor-pointer rounded-md transition-all duration-700 provider="minio"
+        :class="(active && previewInfo.floating) ? 'absolute' : ''"
+        cursor-pointer
+        rounded-md
+        transition-all provider="minio" @load="handleImgLoad" @click="hdClickPreview"
       />
     </Teleport>
-    <div v-if="(active && isFloating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
+    <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
   </div>
 </template>
 

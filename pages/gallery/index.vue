@@ -11,17 +11,14 @@ const { data, status } = useAsyncData('gallery', async () => {
   return await $api<BucketItem[]>('/api/gallery/list')
 }, { default: () => [] })
 
-const isPreviewing = inject<Ref<boolean>>('previewVisible', ref(false))
 const activeName = ref<string | null>(null)
 
 function hdPreviewImg(name?: string) {
   if (!name) {
-    isPreviewing.value = false
     activeName.value = null
     return
   }
 
-  isPreviewing.value = true
   activeName.value = name
 }
 </script>
@@ -40,15 +37,16 @@ function hdPreviewImg(name?: string) {
       </template>
     </CHead>
     <ClientOnly>
-      <div v-if="status === 'success'" columns-4 gap-x-2>
-        <PreviewImg
-          v-for="(item, index) in data"
-          :key="index"
-          :name="item.name"
-          :active="activeName === item.name"
-          @click="hdPreviewImg(item.name)"
-        />
+      <div v-if="status === 'success'" columns-4 p-4>
+        <div v-for="(item, index) in data" :key="index" pb-2>
+          <PreviewImg
+            :src="item.name ?? ''"
+            :active="activeName === item.name"
+            @select="hdPreviewImg"
+          />
+        </div>
       </div>
+
       <div v-if="status === 'pending'" pt-20 text-center class="font-italic">
         Loading...
       </div>
