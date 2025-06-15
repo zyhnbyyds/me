@@ -37,8 +37,8 @@ function hdPreviewImg(name?: string) {
       </template>
     </CHead>
     <ClientOnly>
-      <div v-if="status === 'success'" columns-4 p-4>
-        <div v-for="(item, index) in data" :key="index" pb-2>
+      <div v-if="status === 'success'" columns-4 class="<lg:columns-3 <md:columns-2 <sm:columns-1" p-4>
+        <div v-for="(item, index) in data" :key="index" mb3>
           <PreviewImg
             :src="item.name ?? ''"
             :active="activeName === item.name"

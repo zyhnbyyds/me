@@ -1,5 +1,5 @@
 ---
-title: 记一次minio使用发生的智障问题
+title: 记一次minio使用问题
 description: "在使用minio，并在生产环境使用https踩坑问题"
 image: "minio-use.png"
 publishAt: "2025-06-03 19:30:00"

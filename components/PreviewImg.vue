@@ -19,7 +19,7 @@ const previewRefStyle = ref<CSSProperties | null>(null)
 const previewInfo = inject<Reactive<any>>('previewInfo', reactive<any>({}))
 const { x, y, height, width } = useElementBounding(imgRef)
 const { x: boxX, y: boxY, height: boxHeight, width: boxWidth } = useElementBounding(boxRef)
-const isLoaded = ref(false)
+const loading = ref(true)
 
 const bHeight = ref(0)
 
@@ -40,14 +40,7 @@ watch(() => previewInfo.visible, (val) => {
 })
 
 function handleImgLoad() {
-  isLoaded.value = true
-  // bHeight.value = height.value
-
-  // previewRefStyle.value = {
-  //   transform: `translate(${x.value}px, ${y.value}px) scale(${1})`,
-  //   height: `${height.value}px`,
-  //   width: `${width.value}px`,
-  // }
+  loading.value = false
 }
 
 async function calculatePosition(back = false) {
@@ -81,6 +74,7 @@ async function calculatePosition(back = false) {
       transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
       height: `${h}px`,
       width: `${w}px`,
+      borderRadius: '0',
     }
   }
 
@@ -95,7 +89,7 @@ async function calculatePosition(back = false) {
 }
 
 function hdClickPreview() {
-  if (previewInfo.floating || !isLoaded.value) {
+  if (previewInfo.floating || loading.value) {
     return
   }
   emits('select', src)
@@ -108,23 +102,42 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :style="{ height: (active && previewInfo.floating) ? `${bHeight}px` : '' }" relative>
+  <div :style="{ height: (active && previewInfo.floating) ? `${bHeight}px` : '' }" relative :class="loading ? 'loading-mask' : ''">
     <Teleport to="#previewImg" :disabled="!previewInfo.floating || !active">
       <NuxtImg
         ref="imgRef"
         :style="{ ...(active && previewInfo.floating) ? previewRefStyle : {}, ...{ transitionDuration: `${previewInfo.duration}ms` } }"
         :src="src ?? ''"
         :alt="src ?? ''"
-        w-full
-        loading="lazy"
-        :class="(active && previewInfo.floating) ? 'absolute' : ''"
-        cursor-pointer
-        rounded-md
-        transition-all provider="minio" @load="handleImgLoad" @click="hdClickPreview"
+        :class="[(active && previewInfo.floating) ? 'absolute' : '']"
+        w-full cursor-pointer rounded-md transition-all provider="minio" @load="handleImgLoad" @click="hdClickPreview"
       />
     </Teleport>
     <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.loading-mask::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+  background-size: 200% 100%;
+  border-radius: 5px;
+  animation: skeleton-loading 2s infinite;
+  content: '';
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+</style>

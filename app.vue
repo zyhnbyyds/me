@@ -5,12 +5,12 @@
   <div dark:bg-black>
     <NuxtLoadingIndicator :height="2" color="lightblue" />
     <NuxtLayout>
-      <PreviewContainer :duration="700">
+      <PreviewContainer :duration="500">
         <NuxtPage />
       </PreviewContainer>
     </NuxtLayout>
   </div>
 </template>
 
-<style>
+<style scoped>
 </style>
