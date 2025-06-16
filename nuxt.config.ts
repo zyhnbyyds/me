@@ -12,6 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     'nuxt-typed-router',
+    '@nuxtjs/supabase',
   ],
 
   app: {
