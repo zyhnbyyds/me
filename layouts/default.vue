@@ -3,7 +3,9 @@ import { menuList } from '~/constants'
 
 const scrollRef = ref<HTMLElement | null>(null)
 
-const { y, x } = useScroll(scrollRef)
+const { y, x } = useScroll(scrollRef, {
+  behavior: 'smooth',
+})
 
 provide('scroll', {
   y,
@@ -31,6 +33,8 @@ provide('scroll', {
         <slot />
       </div>
       <div flex-1 />
+
+      <BackTop v-model="y" />
     </div>
   </div>
 </template>

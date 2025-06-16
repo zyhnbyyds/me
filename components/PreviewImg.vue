@@ -1,10 +1,12 @@
 <script lang='ts' setup>
+import type { ImageProviders } from '@nuxt/image'
 import type { CSSProperties, Reactive } from 'vue'
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-const { src, active = false } = defineProps<{
+const { src, active = false, provider = 'ipx' } = defineProps<{
   src: string
   active?: boolean
+  provider?: keyof ImageProviders | 'minio'
 }>()
 
 const emits = defineEmits<{
@@ -110,7 +112,7 @@ onBeforeUnmount(() => {
         :src="src ?? ''"
         :alt="src ?? ''"
         :class="[(active && previewInfo.floating) ? 'absolute' : '']"
-        w-full cursor-pointer rounded-md transition-all provider="minio" @load="handleImgLoad" @click="hdClickPreview"
+        w-full cursor-pointer rounded-md transition-all :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
       />
     </Teleport>
     <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />

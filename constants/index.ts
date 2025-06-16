@@ -37,6 +37,13 @@ export const menuList: MenuBarItem[] = [
     key: 'profile',
   },
   {
+    title: 'QQ空间',
+    icon: 'mingcute:qq-line',
+    aIcon: 'mingcute:qq-fill',
+    path: '/qq',
+    key: 'qq',
+  },
+  {
     title: '相册',
     icon: 'material-symbols:animated-images-outline-rounded',
     aIcon: 'material-symbols:animated-images',
