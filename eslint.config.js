@@ -8,5 +8,6 @@ export default antfu(
       markdown: 'dprint',
     },
     unocss: true,
+    ignores: ['./server/data'],
   },
 )

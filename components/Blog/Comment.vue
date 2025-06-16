@@ -124,10 +124,6 @@ function hdSendComment() {
             </Transition>
           </div>
         </EmojiPicker>
-
-        <div class="">
-          <span class="i-streamline-emojis:tent" mr-1 cursor-pointer text-5 transition-all hover:scale-105 />
-        </div>
       </div>
 
       <div class="flex items-center text-4 text-dark-3">
