@@ -15,6 +15,10 @@ export default defineNuxtConfig({
     '@nuxtjs/supabase',
   ],
 
+  supabase: {
+    redirect: false,
+  },
+
   app: {
     layoutTransition: {
       name: 'fade-scale',

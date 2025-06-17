@@ -54,10 +54,12 @@
     "nuxt-auth-utils": "^0.5.20",
     "nuxt-typed-router": "^4.0.1",
     "pinia": "^3.0.3",
+    "qface": "^1.4.1",
     "typescript": "^5.8.3",
     "ufo": "^1.6.1",
     "unocss": "^66.2.1",
     "vitest": "^3.2.3",
+    "vue": "^3.5.16",
     "vue-tsc": "^2.2.10"
   }
 }

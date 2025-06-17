@@ -11,7 +11,7 @@ defineProps({
     <h1 mb-4 text-10 font-bold>
       {{ error?.statusCode }}
     </h1>
-    <div mb-4 text-sm text-light-7>
+    <div text-gary-700 mb-4 max-w-lg text-sm dark:text-gray-3>
       {{ error?.message }}
     </div>
     <NuxtLink to="/">
