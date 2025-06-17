@@ -46,6 +46,9 @@ devDependencies:
   '@iconify-json/mdi':
     specifier: ^1.2.3
     version: 1.2.3
+  '@iconify-json/mingcute':
+    specifier: ^1.2.3
+    version: 1.2.3
   '@iconify-json/skill-icons':
     specifier: ^1.2.0
     version: 1.2.0
@@ -1035,6 +1038,12 @@ packages:
 
   /@iconify-json/mdi@1.2.3:
     resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/mingcute@1.2.3:
+    resolution: {integrity: sha512-yiEQfLBF5iwyOdxuY0kEU06+8Mp6Mrp14KVXTb+5jjSVuD71C9EQrzM/mm1Efd8Nu2amJalTPisl3loC8pHBqQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
