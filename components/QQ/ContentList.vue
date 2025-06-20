@@ -20,7 +20,7 @@ dayjs.extend(relativeTime)
 function EmojiImg(props: { qqKey: string }) {
   const qfaceKey = qqEmojiKeyToQFaceEmojiKeyMap[props.qqKey]
 
-  return qqEmojiKeyToQFaceEmojiKeyMap[props.qqKey] ? <NuxtImg src={getUrl(qfaceKey)} class="inline-block h-6 w-6 align-mid" /> : <span>{props.qqKey}</span>
+  return <NuxtImg src={getUrl(qfaceKey)} class="inline-block h-6 w-6 align-mid" />
 }
 
 /**
@@ -39,7 +39,7 @@ function replaceEmojis(content: string) {
       result.push(content.slice(lastIndex, match.index))
     }
     // 添加 EmojiImg 组件
-    result.push(<EmojiImg key={match.index} qqKey={match[1]} />)
+    result.push(qqEmojiKeyToQFaceEmojiKeyMap[match[1]] ? <EmojiImg key={match.index} qqKey={match[1]} /> : match[1])
     lastIndex = regex.lastIndex
   }
   // 添加最后的普通文本

@@ -13,7 +13,17 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     'nuxt-typed-router',
     '@nuxtjs/supabase',
+    '@nuxtjs/seo',
   ],
+
+  site: {
+    url: 'https://zyujie.me',
+    name: '张宇解的个人博客',
+  },
+
+  linkChecker: {
+    enabled: false,
+  },
 
   supabase: {
     redirect: false,

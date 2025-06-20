@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  layout: 'empty',
+})
+
 const supabase = useSupabaseClient()
 const email = ref('')
 
@@ -10,18 +14,27 @@ async function signInWithOtp() {
     },
   })
   if (error)
-    useRouter().push('Error: false')
+    useRouter().push('/error')
 }
 </script>
 
 <template>
-  <div>
-    <button @click="signInWithOtp">
-      Sign In with E-Mail
-    </button>
-    <input
-      v-model="email"
-      type="email"
-    >
+  <div h-screen hw-full min-w-sm flex-center bg-light-3>
+    <Card w-sm text-center title="Login">
+      <div>
+        <input
+          v-model="email"
+          border-1
+          border-red
+          type="email"
+        >
+      </div>
+
+      <template #footer>
+        <Btn m-2 inline-block @click="signInWithOtp">
+          Sign In with E-Mail
+        </Btn>
+      </template>
+    </Card>
   </div>
 </template>
