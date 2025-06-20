@@ -55,7 +55,7 @@
     "lint-staged": "^16.1.2",
     "nuxt": "^3.17.5",
     "nuxt-auth-utils": "^0.5.20",
-    "nuxt-link-checker": "^4.3.0",
+    "nuxt-link-checker": "^4.3.1",
     "nuxt-og-image": "^5.1.7",
     "nuxt-schema-org": "^5.0.5",
     "nuxt-seo-utils": "^7.0.12",
