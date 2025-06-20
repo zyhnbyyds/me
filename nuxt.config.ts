@@ -21,10 +21,6 @@ export default defineNuxtConfig({
     name: '张宇解的个人博客',
   },
 
-  linkChecker: {
-    enabled: false,
-  },
-
   supabase: {
     redirect: false,
   },
