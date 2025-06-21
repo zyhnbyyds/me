@@ -12,3 +12,22 @@
   max-height: 80%;
   margin: auto;
 }
+
+.animate-bg {
+  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+}
+
+.dark .animate-bg {
+  background: linear-gradient(90deg, #2c2c2c 25%, #3c3c3c 37%, #2c2c2c 63%);
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}

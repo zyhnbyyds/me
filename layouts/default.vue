@@ -14,7 +14,7 @@ provide('scroll', {
 </script>
 
 <template>
-  <div class="hw-screen flex overflow-hidden text-common">
+  <div class="hw-full flex overflow-hidden text-common">
     <header class="h-full w-37% flex border-r-0.5px <lg:w-auto border-common">
       <div flex-1 />
       <div class="w-50 overflow-hidden px-3 transition-all <lg:w-19">
@@ -29,7 +29,7 @@ provide('scroll', {
     </header>
 
     <div ref="scrollRef" class="scroll-container h-full w-63% flex overflow-auto <lg:flex-1">
-      <div class="relative h-full w-38rem border-r-0.5px border-common">
+      <div class="page-container relative w-38rem">
         <slot />
       </div>
       <div flex-1 />

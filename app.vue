@@ -2,15 +2,16 @@
 </script>
 
 <template>
-  <div dark:bg-black>
+  <div hw-full dark:bg-black>
     <NuxtLoadingIndicator :height="2" color="lightblue" />
-    <NuxtLayout>
-      <PreviewContainer :duration="500">
+    <PreviewContainer :duration="500">
+      <NuxtLayout>
         <NuxtPage />
-      </PreviewContainer>
-    </NuxtLayout>
+      </NuxtLayout>
+    </PreviewContainer>
   </div>
 </template>
 
 <style scoped>
+
 </style>

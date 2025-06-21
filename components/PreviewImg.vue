@@ -7,6 +7,8 @@ const { src, active = false, provider = 'ipx' } = defineProps<{
   src: string
   active?: boolean
   provider?: keyof ImageProviders | 'minio'
+  height?: number
+  width?: number
 }>()
 
 const emits = defineEmits<{
@@ -46,8 +48,9 @@ function handleImgLoad() {
 }
 
 async function calculatePosition(back = false) {
-  if (!imgRef.value)
+  if (!imgRef.value || !active)
     return
+
   const centerX = wWidth.value / 2
   const centerY = wHeight.value / 2
   const left = back ? boxX.value : x.value
@@ -111,8 +114,10 @@ onBeforeUnmount(() => {
         :style="{ ...(active && previewInfo.floating) ? previewRefStyle : {}, ...{ transitionDuration: `${previewInfo.duration}ms` } }"
         :src="src ?? ''"
         :alt="src ?? ''"
+        loading="lazy"
+        preload
         :class="[(active && previewInfo.floating) ? 'absolute' : '']"
-        w-full cursor-pointer rounded-md transition-all :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
+        w-full cursor-pointer rounded-md object-cover object-center transition-all :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
       />
     </Teleport>
     <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
@@ -130,16 +135,21 @@ onBeforeUnmount(() => {
   background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
   background-size: 200% 100%;
   border-radius: 5px;
-  animation: skeleton-loading 2s infinite;
+  animation: skeleton-loading 1s infinite linear;
   content: '';
+}
+
+.dark .loading-mask::after {
+  background: linear-gradient(90deg, #2c2c2c 25%, #3c3c3c 37%, #2c2c2c 63%);
+  background-size: 200% 100%;
 }
 
 @keyframes skeleton-loading {
   0% {
-    background-position: 100% 0;
+    background-position: 200% 0;
   }
   100% {
-    background-position: -100% 0;
+    background-position: 0% 0;
   }
 }
 </style>

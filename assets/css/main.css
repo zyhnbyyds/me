@@ -1,3 +1,19 @@
 @import '@unocss/reset/tailwind-compat.css';
 @import './transition.css';
 @import './common.css';
+
+html,
+body,
+#__nuxt {
+  height: 100%;
+  width: 100%;
+}
+
+.page-container > div {
+  border-right: 0.5px solid rgb(233 236 239);
+}
+
+/* dark */
+.dark .page-container > div {
+  border-right: 0.5px solid rgb(31 31 31);
+}

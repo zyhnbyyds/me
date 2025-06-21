@@ -17,10 +17,27 @@ defineProps<
 dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
 
+const activePreview = ref('')
+const modalVisible = ref(false)
+const modalVideoVisible = ref(false)
+
 function EmojiImg(props: { qqKey: string }) {
   const qfaceKey = qqEmojiKeyToQFaceEmojiKeyMap[props.qqKey]
 
   return <NuxtImg src={getUrl(qfaceKey)} class="inline-block h-6 w-6 align-mid" />
+}
+
+function calculateImageSize(height: number, width: number) {
+  const ratio = height / width
+  if (ratio > 1.5) {
+    return 'h-auto w-50%'
+  }
+  else if (ratio < 1.5 && ratio > 1) {
+    return 'h-auto w-70%'
+  }
+  else {
+    return 'h-auto w-full'
+  }
 }
 
 /**
@@ -76,27 +93,32 @@ function QQContentRender(props: { content: string }) {
 
           <QQContentRender :content="item.content ?? ''" />
 
-          <div v-if="item.pic" mt-5>
+          <div v-if="item.pic" mt-3 flex flex-wrap gap-2>
             <div
               v-for="itm, idx in item.pic"
               :key="idx"
-              mb-2 mr-2 inline-block h-50 w-50 overflow-hidden rounded-2px
+              :class="
+                item.pic.length === 1
+                  ? calculateImageSize(itm.height, itm.width)
+                  : 'h-50 w-50'"
+              inline-block overflow-hidden
             >
               <!-- @vue-expect-error -->
-              <NuxtImg
-                v-if="!(itm.is_video && itm.is_video === 1)"
+              <PreviewImg v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length === 1" :active="activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`" :src="`/qq/images/image_${item.tid}_${idx}.jpg`" provider="ipx" @select="(src) => activePreview = src" />
+              <!-- @vue-expect-error -->
+              <CImg
+                v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length > 1"
                 :quality="70"
-                hw-full object-cover object-center
-                :src="`/qq/images/image_${item.tid}_${idx}.jpg`"
+                :url="`/qq/images/image_${item.tid}_${idx}.jpg`"
+                @click="
+                  () => {
+                    activePreview = `/qq/images/image_${item.tid}_${idx}.jpg`
+                    modalVisible = true
+                  }
+                "
               />
-
-              <video
-                v-else
-                :poster="`/qq/images/image_${item.tid}_${idx}.jpg`"
-                type="video/mp4"
-                controls autoplay hw-full object-cover object-center
-                :src="`/qq/videos/video_${item.tid}_${idx}.mp4`"
-              />
+              <!-- @vue-expect-error -->
+              <QQMv v-if="(itm.is_video && itm.is_video === 1)" :poster="`/qq/images/image_${item.tid}_${idx}.jpg`" :video-id="`video_${item.tid}_${idx}`" :src="`/qq/videos/video_${item.tid}_${idx}.mp4`" />
             </div>
           </div>
 
@@ -106,6 +128,22 @@ function QQContentRender(props: { content: string }) {
         </div>
       </div>
     </li>
+
+    <Modal v-model="modalVisible" :close-on-click-overlay="true">
+      <div hw-full>
+        <CImg
+          :quality="70"
+          c-class="object-contain"
+          :url="activePreview"
+        />
+      </div>
+    </Modal>
+
+    <Modal v-model="modalVideoVisible" :close-on-click-overlay="true" is-transition>
+      <div hw-full>
+        <QQMv :poster="activePreview" :video-id="activePreview.replace('/qq/videos/', '').replace('.mp4', '')" :src="activePreview.replace('/qq/videos/', '')" />
+      </div>
+    </Modal>
   </ul>
 </template>
 
