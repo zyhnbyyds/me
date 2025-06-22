@@ -73,6 +73,11 @@ function QQContentRender(props: { content: string }) {
     </p>
   )
 }
+
+function handlePlay(src: string) {
+  activePreview.value = src
+  modalVideoVisible.value = true
+}
 </script>
 
 <template>
@@ -118,7 +123,7 @@ function QQContentRender(props: { content: string }) {
                 "
               />
               <!-- @vue-expect-error -->
-              <QQMv v-if="(itm.is_video && itm.is_video === 1)" :poster="`/qq/images/image_${item.tid}_${idx}.jpg`" :video-id="`video_${item.tid}_${idx}`" :src="`/qq/videos/video_${item.tid}_${idx}.mp4`" />
+              <QQMv v-if="(itm.is_video && itm.is_video === 1)" :poster="`/qq/images/image_${item.tid}_${idx}.jpg`" :video-id="`video_${item.tid}_${idx}`" :src="`/qq/videos/video_${item.tid}_${idx}.mp4`" @play="handlePlay" />
             </div>
           </div>
 
@@ -140,9 +145,7 @@ function QQContentRender(props: { content: string }) {
     </Modal>
 
     <Modal v-model="modalVideoVisible" :close-on-click-overlay="true" is-transition>
-      <div hw-full>
-        <QQMv :poster="activePreview" :video-id="activePreview.replace('/qq/videos/', '').replace('.mp4', '')" :src="activePreview.replace('/qq/videos/', '')" />
-      </div>
+      <CVideo :video-id="activePreview.replace('/qq/videos/', '').replace('.mp4', '')" :src="activePreview" />
     </Modal>
   </ul>
 </template>

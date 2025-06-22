@@ -46,11 +46,11 @@ onBeforeUnmount(() => {
 <template>
   <Teleport to="body">
     <transition :name="isTransition ? 'fade' : 'none'">
-      <div
-        v-if="visible"
-        class="fixed inset-0 z-1000 flex items-center justify-center bg-black/40"
-        @click="onOverlayClick"
-      >
+      <div v-if="visible" fixed inset-0 z-1000 flex-center>
+        <div
+          class="absolute left-0 top-0 hw-full bg-black/40"
+          @click="onOverlayClick"
+        />
         <slot />
       </div>
     </transition>
