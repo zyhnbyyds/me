@@ -47,6 +47,7 @@
     "@unocss/nuxt": "66.2.1",
     "@unocss/preset-icons": "^66.2.1",
     "@unocss/preset-web-fonts": "66.2.1",
+    "@videojs/themes": "^1.0.1",
     "@vueuse/nuxt": "^13.3.0",
     "axios": "^1.10.0",
     "consola": "^3.4.2",

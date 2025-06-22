@@ -6,4 +6,5 @@ export const qqEmojiKeyToQFaceEmojiKeyMap: Record<string, number> = {
   e10277: 277,
   e246: 176,
   e130: 30,
+  e118: 30,
 }

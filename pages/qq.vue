@@ -9,7 +9,7 @@ const { data } = await $fetch('/api/qq/list')
 
 <template>
   <div>
-    <!-- TODO: 优化数据请求，分页处理，存储数据库，接入现有评论、喜欢。图片预览完善， 表情处理完善 -->
+    <!-- TODO: 优化数据请求，分页处理，存储数据库。 -->
     <CHead title="QQ空间" />
     <QQContentList :list="data ?? []" />
   </div>

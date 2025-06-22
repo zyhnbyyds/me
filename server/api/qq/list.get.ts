@@ -4,5 +4,5 @@ import qqList from '../../data/data.json'
 
 export default defineEventHandler(() => {
   // TODO: 完善分页，数据库存储
-  return Result.success<QQContentItem[]>(qqList.slice(0, 100))
+  return Result.success<QQContentItem[]>(qqList.slice(0, 20))
 })

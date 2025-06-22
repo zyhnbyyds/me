@@ -1,11 +1,8 @@
 <script lang='tsx' setup>
-import type { JSX } from 'vue/jsx-runtime'
 import type { QQContentItem } from '~/types/qq'
 import { NuxtImg } from '#components'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { getUrl } from 'qface'
-import { qqEmojiKeyToQFaceEmojiKeyMap } from '~/config/qqEmojiToQFaceImage'
 import 'dayjs/locale/zh-cn'
 
 defineProps<
@@ -21,12 +18,6 @@ const activePreview = ref('')
 const modalVisible = ref(false)
 const modalVideoVisible = ref(false)
 
-function EmojiImg(props: { qqKey: string }) {
-  const qfaceKey = qqEmojiKeyToQFaceEmojiKeyMap[props.qqKey]
-
-  return <NuxtImg src={getUrl(qfaceKey)} class="inline-block h-6 w-6 align-mid" />
-}
-
 function calculateImageSize(height: number, width: number) {
   const ratio = height / width
   if (ratio > 1.5) {
@@ -38,40 +29,6 @@ function calculateImageSize(height: number, width: number) {
   else {
     return 'h-auto w-full'
   }
-}
-
-/**
- * From gpt4.1
- */
-function replaceEmojis(content: string) {
-  const result: (string | JSX.Element)[] = []
-  let lastIndex = 0
-  const regex = /\[em\](.*?)\[\/em\]/g
-  let match: RegExpExecArray | null
-
-  // eslint-disable-next-line no-cond-assign
-  while ((match = regex.exec(content)) !== null) {
-    // 添加前面的普通文本
-    if (match.index > lastIndex) {
-      result.push(content.slice(lastIndex, match.index))
-    }
-    // 添加 EmojiImg 组件
-    result.push(qqEmojiKeyToQFaceEmojiKeyMap[match[1]] ? <EmojiImg key={match.index} qqKey={match[1]} /> : match[1])
-    lastIndex = regex.lastIndex
-  }
-  // 添加最后的普通文本
-  if (lastIndex < content.length) {
-    result.push(content.slice(lastIndex))
-  }
-  return result
-}
-
-function QQContentRender(props: { content: string }) {
-  return (
-    <p class="mt-2 inline whitespace-pre-wrap text-sm leading-25px">
-      {replaceEmojis(props.content)}
-    </p>
-  )
 }
 
 function handlePlay(src: string) {
@@ -130,16 +87,19 @@ function handlePlay(src: string) {
           <div mt-2 text-2.5 text-gray>
             {{ item.source_name }}
           </div>
+
+          <QQCommentList :list="item.commentlist ?? []" />
         </div>
       </div>
     </li>
 
-    <Modal v-model="modalVisible" :close-on-click-overlay="true">
-      <div hw-full>
+    <Modal v-model="modalVisible" :close-on-click-overlay="true" :is-transition="true">
+      <div h-screen w-screen>
         <CImg
           :quality="70"
           c-class="object-contain"
           :url="activePreview"
+          @click="modalVisible = false"
         />
       </div>
     </Modal>

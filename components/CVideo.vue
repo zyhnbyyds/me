@@ -19,12 +19,18 @@ onMounted(() => {
     controls: true,
     autoplay: true,
     poster: props.poster,
-    loop: false,
+    loop: true,
     muted: false,
     playsinline: true,
     sources: props.src ? [{ src: props.src }] : [],
     enableSmoothSeeking: true,
     preload: 'metadata',
+  })
+
+  onKeyStroke(['F', 'f'], () => {
+    if (player) {
+      player.isFullscreen() ? player.exitFullscreen() : player.requestFullscreen()
+    }
   })
 })
 
@@ -39,7 +45,7 @@ onUnmounted(() => {
 <template>
   <video
     :id="videoId"
-    class="video-js vjs-default-skin max-h-90% max-w-90%"
+    class="video-js vjs-default-skin max-h-90vh max-w-90vw"
   />
 </template>
 

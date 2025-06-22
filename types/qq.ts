@@ -2,6 +2,24 @@ import type qqList from '~/server/data/data.json'
 
 export type QQContentItem = (typeof qqList)[number]
 
+export type QQContentComment
+  = (NonNullable<(typeof qqList)[number]['commentlist']> extends Array<infer T> ? T : never) & { list_3?: QQContentCommentReply[] }
+
+export interface QQContentCommentReply {
+  abledel: number
+  content: string
+  createTime: string
+  createTime2: string
+  create_time: number
+  name: string
+  source_name: string
+  source_url: string
+  t3_source: number
+  t3_subtype: number
+  t3_termtype: number
+  tid: number
+  uin: number
+}
 /**
  * qq空间说说
  */
