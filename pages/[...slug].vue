@@ -4,6 +4,11 @@ import type { ReplyCommentItem } from '~/types/blog'
 const route = useRoute()
 const { $api } = useNuxtApp()
 
+definePageMeta({
+  title: '帖子详情',
+  description: '查看帖子详情和评论',
+})
+
 const titleRef = ref<HTMLElement | null>(null)
 const commentIpt = ref('')
 const commentRef = ref<HTMLTextAreaElement | null>(null)

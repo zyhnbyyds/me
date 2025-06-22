@@ -101,7 +101,7 @@ function hdConfirmUpload() {
 <template>
   <div>
     <CHead title="上传" />
-    <div class="m-4 flex flex-col cursor-pointer select-none items-center justify-center rounded-lg p-4 transition-colors bg-hover-common" @click="open">
+    <div class="m-4 flex flex-col cursor-pointer select-none items-center justify-center rounded-lg p-4 transition-colors bg-hover-common" @click="open()">
       <div class="mb-4 text-2xl font-bold">
         上传文件
       </div>

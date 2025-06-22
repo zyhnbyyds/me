@@ -1,6 +1,8 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'empty',
+  title: 'Login',
+  description: 'Login page',
 })
 
 const supabase = useSupabaseClient()

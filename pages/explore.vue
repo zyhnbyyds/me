@@ -2,8 +2,13 @@
 import type { BlogCollectionItem } from '@nuxt/content'
 
 export type ContentExclude = Pick<BlogCollectionItem, 'id' | 'path' | 'title' | 'description' | 'meta' | 'navigation'>
-const searchIpt = ref('')
 
+definePageMeta({
+  title: '搜索',
+  description: '搜索博客内容',
+})
+
+const searchIpt = ref('')
 const searchList = ref<ContentExclude[]>([])
 
 async function searchFn() {

@@ -5,12 +5,10 @@ defineProps<{
   cClass?: string
 }>()
 
-const emits = defineEmits<{
+defineEmits<{
   load: []
   click: [url: string]
 }>()
-
-
 </script>
 
 <template>
@@ -21,7 +19,7 @@ const emits = defineEmits<{
     :custom="true"
   >
     <div v-if="!isLoaded" class="animate-bg hw-full rounded-md" />
-    <img v-else :src="src" v-bind="imgAttrs" :class="cClass" class="hw-full rounded-md object-cover object-center" @click="$emit('click', url)" @load="$emit('load')" />
+    <img v-else :src="src" v-bind="imgAttrs" :class="cClass" class="hw-full rounded-md object-cover object-center" @click="$emit('click', url)" @load="$emit('load')">
   </NuxtImg>
 </template>
 
