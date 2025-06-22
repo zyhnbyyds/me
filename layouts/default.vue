@@ -7,9 +7,14 @@ const { y, x } = useScroll(scrollRef, {
   behavior: 'smooth',
 })
 
+const scrollHeight = computed(() => scrollRef.value?.scrollHeight ?? 0)
+const scrollTop = computed(() => scrollRef.value?.scrollTop ?? 0)
+
 provide('scroll', {
   y,
   x,
+  scrollHeight,
+  scrollTop,
 })
 </script>
 

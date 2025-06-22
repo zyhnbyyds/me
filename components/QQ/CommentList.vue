@@ -10,16 +10,16 @@ function CommentName(props: { name: string, content: string }) {
     const replyName = props.content.match(/nick:([^,}]*)/)
     const nick = replyName ? replyName[1] : null
     return (
-      <span class="mr-1 text-dark font-600">
+      <span class="mr-1 text-dark font-600 dark:text-gray1">
         {props.name}
-        <span class="text-gray"> 回复 </span>
+        <span class="text-gray dark:text-gray5"> 回复 </span>
         {nick}
         :
       </span>
     )
   }
   return (
-    <span class="mr-1 text-dark font-600">
+    <span class="mr-1 text-dark font-600 dark:text-gray1">
       {props.name}
       :
     </span>
