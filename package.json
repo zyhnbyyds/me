@@ -65,7 +65,6 @@
     "nuxt-typed-router": "^4.0.1",
     "pinia": "^3.0.3",
     "qface": "^1.4.1",
-    "supabase": "^2.26.9",
     "typescript": "^5.8.3",
     "ufo": "^1.6.1",
     "unocss": "^66.2.1",
