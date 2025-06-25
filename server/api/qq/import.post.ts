@@ -5,27 +5,23 @@ import { Result } from '~/server/utils/result'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-
+  let result: any
   try {
-    await Promise.all(list.map(async (item) => {
+    result = await Promise.all(list.map(async (item) => {
       const record = {
         tid: item.tid,
-        uin: item.uin ?? null,
         name: item.name ?? null,
         content: item.content ?? null,
-        created_time: item.created_time ?? null,
-        createTime: item.createTime ?? null,
-        lastmodify: item.lastmodify ?? null,
         source_name: item.source_name ?? null,
         commentlist: item.commentlist as QQContentComment[] ?? null,
         video: item.video ?? null,
         pic: item.pic as Pic[] ?? null,
       }
-      return await client.from('qq_content').insert(record).select()
+      return await client.from('qq_content').update(record).eq('tid', item.tid).select()
     }))
   }
   catch (error) {
     return Result.fail(500, error as string)
   }
-  return Result.success('QQ content imported successfully')
+  return Result.success(result)
 })
