@@ -39,12 +39,11 @@ const parsedContent = computed(() => parseContent(props.content))
         {{ item.value }}
       </template>
       <template v-else>
+        <!-- TODO: emoji部分没有定义应映射关系，暂时默认展示277 -->
         <NuxtImg
-          v-if="qqEmojiKeyToQFaceEmojiKeyMap[item.value]"
-          :src="getUrl(qqEmojiKeyToQFaceEmojiKeyMap[item.value])"
+          :src="getUrl(qqEmojiKeyToQFaceEmojiKeyMap[item.value] ?? 277)"
           :class="`inline-block ${props.emojiSize === 'small' ? 'h-4 w-4' : props.emojiSize === 'medium' ? 'h-6 w-6' : 'h-8 w-8'} align-mid`"
         />
-        <span v-else>{{ item.value }}</span>
       </template>
     </template>
   </p>

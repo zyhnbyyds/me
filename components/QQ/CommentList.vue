@@ -11,18 +11,14 @@ function CommentName(props: { name: string, content: string }) {
     const nick = replyName ? replyName[1] : null
     return (
       <span class="mr-1 text-dark font-600 dark:text-gray1">
-        {props.name}
+        <QQContentRender customClass="mr-0.5 text-dark font-600 dark:text-gray1 leading-normal mt0 text-3!" emojiSize="small" content={`${props.name}`} />
         <span class="text-gray dark:text-gray5"> 回复 </span>
-        {nick}
-        :
+        <QQContentRender customClass="mr-0.5 text-dark font-600 dark:text-gray1 leading-normal mt0 text-3!" emojiSize="small" content={`${nick}:`} />
       </span>
     )
   }
   return (
-    <span class="mr-1 text-dark font-600 dark:text-gray1">
-      {props.name}
-      :
-    </span>
+    <QQContentRender customClass="mr-1 text-dark font-600 dark:text-gray1 leading-normal mt0 text-3!" emojiSize="small" content={`${props.name}:`} />
   )
 }
 
@@ -30,7 +26,7 @@ function CommentItem(props: { content: string, name: string }) {
   const transCon = props.content.replace(/@\{([^}]*)\}/g, '')
   return (
     <div class="flex text-3">
-      <div class="w-full flex flex-wrap items-center gap-2">
+      <div class="w-full flex flex-wrap items-center gap-1">
         <CommentName name={props.name} content={props.content} />
         <QQContentRender emoji-size="small" custom-class="text-3! mt0! leading-normal! text-dark-1! text-op40 dark:text-light6!" content={transCon} />
       </div>

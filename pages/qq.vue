@@ -10,6 +10,7 @@ const scrollRef = ref<HTMLElement | null>(null)
 const { height } = useElementBounding(scrollRef)
 const { height: windowHeight } = useWindowSize()
 const qQContentList = ref<QQContentItem[]>([])
+const totalNum = ref(0)
 
 const { y } = inject<{ y: Ref<number> }>('scroll', { y: ref(0) })
 const page = ref({
@@ -20,13 +21,14 @@ const [loading, load] = useToggle()
 
 async function getQQContentList(loadMore: boolean = false) {
   load(true)
-  const data = await $fetch<QQContentItem[]>('/api/qq/list', {
+  const { data, total } = await $fetch<{ data: QQContentItem[], total: number }>('/api/qq/list', {
     method: 'GET',
     params: {
       current: page.value.current,
       size: page.value.size,
     },
   })
+  totalNum.value = total
   if (loadMore) {
     qQContentList.value = [...qQContentList.value, ...data]
   }
@@ -39,9 +41,10 @@ getQQContentList()
 
 watch(() => y.value, async () => {
   if ((height.value - y.value) - windowHeight.value < 2000) {
-    if (loading.value)
+    if (loading.value || (page.value.current + 1 > Math.ceil(totalNum.value / page.value.size)))
       return
     page.value.current += 1
+
     await getQQContentList(true)
     await nextTick()
   }
@@ -50,7 +53,6 @@ watch(() => y.value, async () => {
 
 <template>
   <div ref="scrollRef">
-    <!-- TODO: 优化数据请求，分页处理，存储数据库。 -->
     <CHead title="QQ空间" />
     <QQContentList :list="qQContentList" />
     <div class="mt-4 flex justify-center">

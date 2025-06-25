@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const offset = (currentNumber - 1) * sizeNumber
 
-  const { data, error } = await client
+  const { data, error, count } = await client
     .from('qq_content')
     .select('*', { count: 'exact' })
     .order('created_time', { ascending: false })
@@ -23,7 +23,10 @@ export default defineEventHandler(async (event) => {
   }
 
   if (!data || data.length === 0) {
-    return []
+    return {
+      data: [],
+      total: 0,
+    }
   }
   const transformedData = data.map((item) => {
     return {
@@ -34,5 +37,8 @@ export default defineEventHandler(async (event) => {
     } as QQContentItem
   })
 
-  return transformedData
+  return {
+    data: transformedData,
+    total: count,
+  }
 })
