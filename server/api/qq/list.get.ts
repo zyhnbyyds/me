@@ -1,6 +1,7 @@
 import type { PageQuery } from '~/types/page'
 import type { QQContentItem } from '~/types/qq'
 import { serverSupabaseClient } from '#supabase/server'
+import consola from 'consola'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient (event)
@@ -9,7 +10,6 @@ export default defineEventHandler(async (event) => {
   const sizeNumber = Number(size) || 20
 
   const offset = (currentNumber - 1) * sizeNumber
-  console.warn(`Fetching QQ content list: current=${currentNumber}, size=${sizeNumber} offset=${offset}, end=${Number(offset) + sizeNumber - 1}`)
 
   const { data, error } = await client
     .from('qq_content')
@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     .range(offset, offset + sizeNumber - 1)
 
   if (error) {
+    consola.error(error)
     createError({ statusCode: 500, statusMessage: error.message })
   }
 
