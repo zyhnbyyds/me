@@ -38,7 +38,7 @@ function handleMenuChange(path: string) {
         :to="item.path" class="mb-3 w-a inline-flex cursor-pointer items-center p-2 text-5 bg-hover-common-trans"
         :class="item.path === active ? 'font-bold' : ''"
       >
-        <div class="h-8 w-8 flex-center text-8 font-bold">
+        <div class="h-8 w-8 flex-center text-7 font-bold">
           <Icon v-show="item.path === active" :name="item.aIcon" />
           <Icon v-show="item.path !== active" :name="item.icon" />
         </div>

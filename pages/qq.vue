@@ -55,14 +55,9 @@ watch(() => y.value, async () => {
   <div ref="scrollRef">
     <CHead title="QQ空间" />
     <QQContentList :list="qQContentList" />
-    <div class="mt-4 flex justify-center">
-      <div
-        v-if="loading"
-        class="py-5 text-center text-lg text-gray-500"
-      >
-        加载中...
-      </div>
-    </div>
+    <Loading :loading="loading">
+      <div class="h-30" />
+    </Loading>
   </div>
 </template>
 
