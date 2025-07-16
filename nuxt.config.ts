@@ -78,6 +78,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/md.css',
     '~/assets/css/main.css',
+    'vue-boom/dist/index.css',
   ],
 
   content: {

@@ -23,6 +23,13 @@ export const menuList: MenuBarItem[] = [
     key: 'home',
   },
   {
+    title: '日历',
+    icon: 'material-symbols:calendar-month-outline-sharp',
+    aIcon: 'material-symbols:calendar-month-sharp',
+    path: '/calendar',
+    key: 'calendar',
+  },
+  {
     title: '探索',
     icon: 'material-symbols:search-rounded',
     aIcon: 'material-symbols:search-check-2',

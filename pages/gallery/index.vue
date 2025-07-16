@@ -2,9 +2,10 @@
 import type { BucketItem } from 'minio'
 
 definePageMeta({
-  layout: 'gallery',
+  layout: 'full',
   title: '图库',
   description: '图库',
+  scrollToTop: true,
 })
 
 const { $api } = useNuxtApp()
