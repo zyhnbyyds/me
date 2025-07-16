@@ -1,4 +1,4 @@
-import { getOps } from '~/server/utils/ops'
+import { getOps } from '~~/server/utils/ops'
 
 export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event)

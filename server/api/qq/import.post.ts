@@ -1,10 +1,10 @@
-import type { Pic, QQContentComment } from '~/types/qq'
+import type { Pic, QQContentComment } from '~~/types/qq'
 import { serverSupabaseClient } from '#supabase/server'
-import list from '~/server/data/data.json'
-import { Result } from '~/server/utils/result'
+import list from '~~/server/data/data.json'
+import { Result } from '~~/server/utils/result'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
+  const client = await serverSupabaseClient<any>(event)
   let result: any
   try {
     result = await Promise.all(list.map(async (item) => {

@@ -1,4 +1,4 @@
-import type { PostCommentBody } from '~/types/blog'
+import type { PostCommentBody } from '~~/types/blog'
 import { ulid } from 'ulid'
 
 export default defineEventHandler(async (event) => {

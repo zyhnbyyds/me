@@ -1,6 +1,6 @@
 import type { BucketItem } from 'minio'
 import consola from 'consola'
-import oss from '~/server/utils/minio'
+import oss from '~~/server/utils/minio'
 
 export default defineEventHandler(async () => {
   const socket = oss.listObjectsV2('me-photos', 'album/', true)

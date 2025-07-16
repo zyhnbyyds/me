@@ -1,4 +1,4 @@
-import { transformContentFileAfterParse } from './transformers/contentFileAfterParse'
+import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
 export default defineNuxtConfig({
   modules: [
@@ -135,7 +135,7 @@ export default defineNuxtConfig({
     providers: {
       minio: {
         name: 'minio',
-        provider: '~/providers/minio.provider.ts',
+        provider: './providers/minio.provider.ts',
         options: {
           baseUrl: import.meta.env.OSS_MINIO_BASE_URL,
         },

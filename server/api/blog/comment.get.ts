@@ -1,7 +1,12 @@
 import type { User } from '#auth-utils'
-import type { CommentItemDataField } from '~/server/utils/comment'
-import type { CommentItem } from '~/types/blog'
-import { buildFlattenedTwoLevelTree, transformStoreKeyToDataField } from '~/server/utils/comment'
+import type { CommentItemDataField } from '~~/server/utils/comment'
+import type { CommentItem } from '~~/types/blog'
+import { buildFlattenedTwoLevelTree, transformStoreKeyToDataField } from '~~/server/utils/comment'
+
+interface EmojiInfo {
+  type: 'emoji' | 'text'
+  value: string
+}
 
 export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event)

@@ -15,7 +15,7 @@ interface Props {
 
 <template>
   <!-- TODO: 添加数据 -->
-  <div class="w-full flex flex-col gap-2 rounded-0 hover:bg-op-3 bg-hover-common-trans">
+  <div class="w-full flex flex-col gap-2 bg-hover-common-trans rounded-0 hover:bg-op-3">
     <div class="w-full flex gap-2 p-4">
       <NuxtImg
         src="/me.png"

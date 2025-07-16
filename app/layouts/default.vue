@@ -20,7 +20,7 @@ provide('scroll', {
 
 <template>
   <div class="hw-full flex overflow-hidden text-common">
-    <header class="h-full w-37% flex border-r-0.5px <lg:w-auto border-common">
+    <header class="h-full w-37% flex border-r-0.5px border-common <lg:w-auto">
       <div flex-1 />
       <div class="w-50 overflow-hidden px-3 transition-all <lg:w-19">
         <div class="h-14 w-14 flex-center inline-flex rounded-full transition-all" hover="bg-hover-common-trans">

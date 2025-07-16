@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer'
 import { Readable } from 'node:stream'
 import { consola } from 'consola'
-import oss, { transFileNameToSavePath } from '~/server/utils/minio'
+import oss, { transFileNameToSavePath } from '~~/server/utils/minio'
 
 export default defineEventHandler(async (event) => {
   const permitUserid = useRuntimeConfig().public.showUploadBtnGithubUserId

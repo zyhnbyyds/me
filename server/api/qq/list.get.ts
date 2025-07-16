@@ -1,10 +1,10 @@
-import type { PageQuery } from '~/types/page'
-import type { QQContentItem } from '~/types/qq'
+import type { PageQuery } from '~~/types/page'
+import type { QQContentItem } from '~~/types/qq'
 import { serverSupabaseClient } from '#supabase/server'
 import consola from 'consola'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient (event)
+  const client = await serverSupabaseClient<any>(event)
   const { current = 1, size = 20 } = getQuery<PageQuery>(event)
   const currentNumber = Number(current) || 1
   const sizeNumber = Number(size) || 20

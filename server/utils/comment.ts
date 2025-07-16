@@ -1,4 +1,4 @@
-import type { CommentItem } from '~/types/blog'
+import type { CommentItem } from '~~/types/blog'
 
 export type CommentItemDataField = Omit<CommentItem, 'content' | 'toUser' | 'fromUser' | 'replyList'> & { replyList: CommentItemDataField[], key: string }
 export function transformStoreKeyToDataField(key: string): CommentItemDataField {
