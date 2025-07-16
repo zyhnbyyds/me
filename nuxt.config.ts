@@ -131,12 +131,6 @@ export default defineNuxtConfig({
     },
   },
 
-  experimental: {
-    typedPages: true,
-  },
-
-  compatibilityDate: '2025-04-19',
-
   image: {
     providers: {
       minio: {

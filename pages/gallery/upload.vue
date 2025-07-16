@@ -3,13 +3,11 @@ definePageMeta({
   middleware: 'auth-middleware',
 })
 
-const { open, onChange, onCancel, reset } = useFileDialog()
+const { open, onChange, onCancel } = useFileDialog()
 const files = ref<File[]>([])
 const [loading, load] = useToggle(false)
 const uploadPercent = ref(0)
 const controller = ref<AbortController | null>(null)
-
-const { $axios } = useNuxtApp()
 
 function showFileTypeIcon(fileName: string): string {
   const fileTypeMap = {
@@ -64,7 +62,7 @@ onKeyStroke('Escape', () => {
   }
 })
 
-function hdConfirmUpload() {
+async function hdConfirmUpload() {
   controller.value = new AbortController()
   if (files.value.length === 0) {
     return
@@ -76,32 +74,19 @@ function hdConfirmUpload() {
     formData.append('files', file)
   })
 
-  $axios.post('/api/gallery/upload', formData, {
-    timeout: 0,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    signal: controller.value?.signal,
-    maxBodyLength: Infinity,
-    onUploadProgress: (progressEvent) => {
-      uploadPercent.value = Number.parseFloat(((progressEvent.progress ?? 0) * 100).toFixed(2))
-    },
+  load(true)
+  await $fetch('/api/gallery/upload', {
+    method: 'POST',
+    body: formData,
   })
-    .then(() => {
-      reset()
-      files.value = []
-      load(false)
-    })
-    .catch((_error) => {
-      load(false)
-    })
+  load(false)
 }
 </script>
 
 <template>
   <div>
     <CHead title="上传" />
-    <div class="m-4 flex flex-col cursor-pointer select-none items-center justify-center rounded-lg p-4 transition-colors bg-hover-common" @click="open()">
+    <div class="m-4 flex flex-col cursor-pointer select-none items-center justify-center rounded-lg bg-hover-common p-4 transition-colors" @click="open()">
       <div class="mb-4 text-2xl font-bold">
         上传文件
       </div>
@@ -113,7 +98,7 @@ function hdConfirmUpload() {
     <div mx-5>
       <TransitionGroup name="fade" tag="div">
         <div v-for="item, i in files" :key="item.name" class="group mb-1">
-          <div class="flex items-center justify-between rounded-lg p-2 bg-hover-common">
+          <div class="flex items-center justify-between rounded-lg bg-hover-common p-2">
             <span flex-center gap-1>
               <Icon text-4 :name="`${showFileTypeIcon(item.name)}`" class="mr-2" />
               <div class="text-sm text-op7">

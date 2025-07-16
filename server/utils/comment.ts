@@ -2,7 +2,7 @@ import type { CommentItem } from '~/types/blog'
 
 export type CommentItemDataField = Omit<CommentItem, 'content' | 'toUser' | 'fromUser' | 'replyList'> & { replyList: CommentItemDataField[], key: string }
 export function transformStoreKeyToDataField(key: string): CommentItemDataField {
-  const [type, fileId, fromUserId, _to, toUserId, commentId, _toComment, parentId = '0', depth, timestamp] = key.split(':')
+  const [type = '', fileId = '', fromUserId = '0', _to, toUserId = '0', commentId = '0', _toComment, parentId = '0', depth = '1', timestamp = '0'] = key.split(':') as string[]
 
   return {
     type,
