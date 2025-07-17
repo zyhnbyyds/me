@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import consola from 'consola'
 
-defineProps({
+const props = defineProps({
   error: Object as () => NuxtError,
 })
+
+consola.log(props.error)
 </script>
 
 <template>

@@ -34,7 +34,7 @@ watch(() => activeTab.value, () => {
       <BlogList :list="blobs" />
 
       <template #fallback>
-        <Loading mt-10 :loading="true" />
+        <Loading mt20 :loading="true" />
       </template>
     </ClientOnly>
   </div>
