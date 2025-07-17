@@ -3,7 +3,7 @@ import {
   presetAttributify,
   presetIcons,
   presetTypography,
-  presetWind3,
+  presetWind4,
   transformerDirectives,
   transformerVariantGroup,
 } from 'unocss'
@@ -19,12 +19,16 @@ export default defineConfig({
     ['flex-row-center', 'flex justify-center'],
     ['blur-common', 'backdrop-blur-md bg-[rgba(255,255,255,0.9)] dark:bg-[rgba(0,0,0,0.8)]'],
     ['bg-common', 'bg-light-300 dark:bg-dark-300'],
-    ['bg-hover-common', 'transition-all bg-light-300 dark:bg-dark-300 hover:bg-light-5 hover:dark:bg-dark-5'],
+    ['bg-hover-common', 'transition-all bg-light-300 dark:bg-dark-300 hover:bg-light-500 hover:dark:bg-dark-500'],
     ['border-common', 'border-light-700 dark:border-dark-500'],
     ['page', 'hw-full overflow-auto'],
   ],
   presets: [
-    presetWind3(),
+    presetWind4({
+      preflights: {
+        reset: true,
+      },
+    }),
     presetAttributify(),
     presetTypography(),
     presetIcons({

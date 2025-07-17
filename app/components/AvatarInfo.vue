@@ -3,9 +3,9 @@ import { me } from '~/constants'
 </script>
 
 <template>
-  <div class="cursor-pointer bg-hover-common-trans p-3">
-    <div class="flex items-center gap-2">
-      <div class="h-10 w-10 overflow-hidden rounded-full">
+  <div class="p-3 bg-hover-common-trans cursor-pointer">
+    <div class="flex gap-2 items-center">
+      <div class="rounded-full h-10 w-10 overflow-hidden">
         <img
           class="hw-full"
           src="/public/me.png"

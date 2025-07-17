@@ -97,9 +97,9 @@ async function hdClickSend(val: EmojiInfo[]) {
   <div>
     <ClientOnly>
       <div w-full>
-        <header sticky top-0 z-9999 h-50px w-full flex-col-center justify-between blur-common px-4 text-5>
+        <header text-5 px-4 blur-common flex-col-center h-50px w-full top-0 justify-between sticky z-9999>
           <div flex-col-center gap-4>
-            <div class="h-9 w-9 flex-center inline-flex cursor-pointer bg-hover-common-trans" @click="$router.back()">
+            <div class="bg-hover-common-trans flex-center inline-flex h-9 w-9 cursor-pointer" @click="$router.back()">
               <span class="i-material-symbols:arrow-back" />
             </div>
             <p font-bold>
@@ -108,8 +108,8 @@ async function hdClickSend(val: EmojiInfo[]) {
           </div>
 
           <h1
-            ref="titleRef" :style="positionStyle" absolute left-0 top-0 min-h-50px flex-col-center justify-end pr-4
-            font-bold :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
+            ref="titleRef" :style="positionStyle"
+            font-bold pr-4 flex-col-center min-h-50px left-0 top-0 justify-end absolute :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
           >
             {{ page?.title }}
           </h1>
@@ -124,10 +124,10 @@ async function hdClickSend(val: EmojiInfo[]) {
         <Separator mx-5 mb-2 type="dashed" label="留下你的评论~" />
 
         <div mx-5>
-          <div mb-2 flex items-center justify-end text-3 font-bold>
+          <div text-3 font-bold mb-2 flex items-center justify-end>
             <div v-if="!loggedIn">
               <button
-                flex-col-center cursor-pointer rounded-md bg-light-7 px-2 py-1 dark:bg-dark-3
+                px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
                 @click="openInPopup('/auth/github')"
               >
                 <span class="i-skill-icons:github-dark" mr-1 />
@@ -136,8 +136,8 @@ async function hdClickSend(val: EmojiInfo[]) {
             </div>
 
             <div v-else flex-col-center>
-              <span mr-2 text-4 class="i-carbon:logout rotate-180 cursor-pointer" @click="clear" />
-              <img h-5 w-5 rounded-full :src="user?.avatar_url">
+              <span text-4 mr-2 class="i-carbon:logout cursor-pointer rotate-180" @click="clear" />
+              <img rounded-full h-5 w-5 :src="user?.avatar_url">
               <div ml-2>
                 {{ user?.name }}
               </div>

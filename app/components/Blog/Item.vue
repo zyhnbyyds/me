@@ -15,24 +15,24 @@ interface Props {
 
 <template>
   <!-- TODO: 添加数据 -->
-  <div class="w-full flex flex-col gap-2 bg-hover-common-trans rounded-0 hover:bg-op-3">
-    <div class="w-full flex gap-2 p-4">
+  <div class="bg-hover-common-trans rounded-0 flex flex-col gap-2 w-full hover:bg-op-3">
+    <div class="p-4 flex gap-2 w-full">
       <NuxtImg
         src="/me.png"
         alt="Avatar"
         :quality="10"
-        class="h-8 w-8 rounded-full"
+        class="rounded-full h-8 w-8"
       />
       <div flex-1>
-        <p class="flex items-center gap-2 text-sm font-semibold">
+        <p class="text-sm font-semibold flex gap-2 items-center">
           <span>{{ blobItem.title }}</span>
           <span class="text-12px text-gray">{{ '@Yuhang_zhang' }} · {{ dayjs(blobItem.publishAt).fromNow() }}</span>
         </p>
-        <p class="mt-2 text-sm">
+        <p class="text-sm mt-2">
           {{ blobItem?.description }}
         </p>
 
-        <NuxtImg :quality="60" mt-2 h-auto w-full rounded-15px shadow-md :src="`/blog/${blobItem?.image}`" />
+        <NuxtImg :quality="60" mt-2 rounded-15px h-auto w-full shadow-md :src="`/blog/${blobItem?.image}`" />
         <BlogItemFooter
           :id="blobItem.path.replaceAll('/', '_')"
           :reading-time="blobItem.readingTime || 0"

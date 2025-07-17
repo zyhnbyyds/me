@@ -33,7 +33,7 @@ const parsedContent = computed(() => parseContent(props.content))
 </script>
 
 <template>
-  <p class="mt-2 inline whitespace-pre-wrap text-sm leading-25px" :class="props.customClass">
+  <p class="text-sm leading-25px mt-2 inline whitespace-pre-wrap" :class="props.customClass">
     <template v-for="(item, idx) in parsedContent" :key="idx">
       <template v-if="item.type === 'text'">
         {{ item.value }}

@@ -86,11 +86,11 @@ async function hdConfirmUpload() {
 <template>
   <div>
     <CHead title="上传" />
-    <div class="m-4 flex flex-col cursor-pointer select-none items-center justify-center rounded-lg bg-hover-common p-4 transition-colors" @click="open()">
-      <div class="mb-4 text-2xl font-bold">
+    <div class="m-4 p-4 rounded-lg bg-hover-common flex flex-col cursor-pointer select-none transition-colors items-center justify-center" @click="open()">
+      <div class="text-2xl font-bold mb-4">
         上传文件
       </div>
-      <div class="mt-2 text-sm">
+      <div class="text-sm mt-2">
         支持(图片或者视频) 上传，支持批量上传，最大支持 50MB 的文件。
       </div>
     </div>
@@ -98,7 +98,7 @@ async function hdConfirmUpload() {
     <div mx-5>
       <TransitionGroup name="fade" tag="div">
         <div v-for="item, i in files" :key="item.name" class="group mb-1">
-          <div class="flex items-center justify-between rounded-lg bg-hover-common p-2">
+          <div class="p-2 rounded-lg bg-hover-common flex items-center justify-between">
             <span flex-center gap-1>
               <Icon text-4 :name="`${showFileTypeIcon(item.name)}`" class="mr-2" />
               <div class="text-sm text-op7">
@@ -106,7 +106,7 @@ async function hdConfirmUpload() {
               </div>
             </span>
             <div class="hidden transition-all group-hover:inline-flex">
-              <span class="cursor-pointer text-3 text-red-500 hover:text-red-700" @click="files ? files.splice(i, 1) : null">
+              <span class="text-3 text-red-500 cursor-pointer hover:text-red-700" @click="files ? files.splice(i, 1) : null">
                 删除
               </span>
             </div>

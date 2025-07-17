@@ -9,8 +9,8 @@ const { text = 'Loading...' } = defineProps<{
   <div relative>
     <slot />
     <Transition name="fade" :duration="300">
-      <div v-if="loading" absolute inset-0 h-full min-h-20 w-full flex items-center justify-center>
-        <div class="animate-pulse from-purple-500 to-pink-500 bg-gradient-to-r bg-clip-text text-5 text-transparent font-bold font-italic">
+      <div v-if="loading" flex h-full min-h-20 w-full items-center inset-0 justify-center absolute>
+        <div class="text-5 text-transparent font-bold font-italic animate-pulse from-purple-500 to-pink-500 bg-linear-to-r bg-clip-text">
           {{ text }}
         </div>
       </div>

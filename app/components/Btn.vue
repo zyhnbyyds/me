@@ -5,7 +5,7 @@ defineProps<{
 </script>
 
 <template>
-  <button class="cursor-pointer select-none rounded-lg bg-blue-500 px-4 py-2 text-3.5 text-white transition-colors active:bg-blue-700 hover:bg-blue-600">
+  <button class="text-3.5 text-white px-4 py-2 rounded-lg bg-blue-500 cursor-pointer select-none transition-colors active:bg-blue-700 hover:bg-blue-600">
     <slot>
       {{ label }}
     </slot>

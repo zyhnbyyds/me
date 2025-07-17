@@ -88,19 +88,19 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 <template>
   <div>
     <div v-for="(comment, i) in comments" :key="i" class="group">
-      <div relative flex rounded-2 p-2 pb-0 text-3.2 transition-all hover:bg-light2 hover:dark:bg-dark-7>
-        <img h-5 w-5 rounded-full :src="comment.fromUser.avatar_url">
+      <div text-3.2 p-2 pb-0 rounded-2 flex transition-all relative hover:bg-light200 hover:dark:bg-dark-700>
+        <img rounded-full h-5 w-5 :src="comment.fromUser.avatar_url">
         <div ml-2 w-full>
           <div>
-            <span mr-1 font-bold>{{ comment.fromUser.name }} {{ comment.depth === 1 ? '' : `回复 ${comment.toUser && comment.toUser.name} ` }}</span>
+            <span font-bold mr-1>{{ comment.fromUser.name }} {{ comment.depth === 1 ? '' : `回复 ${comment.toUser && comment.toUser.name} ` }}</span>
             <span class="text-[#536471] text-op-80">
               <span v-if="comment.depth === 1">@{{ comment.fromUser.login }}</span>
               <span> · </span>
               <span text-3>{{ formatDate(comment.timestamp) }}</span>
             </span>
             <span
-              float-end flex-col-center inline-flex
-              text-3 text-gray-4
+
+              text-3 text-gray-400 flex-col-center inline-flex float-end
             >
               <span mr-2px class="i-material-symbols:location-on-outline" />
               <span>
@@ -108,16 +108,16 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
               </span>
             </span>
           </div>
-          <div mt-2 break-all text-3.5 text-dark-6 dark:text-light6>
+          <div text-3.5 text-dark-600 mt-2 break-all dark:text-light600>
             <span v-for="(item, idx) in comment.content" :key="`${idx}item`">
               <img v-if="item.type === 'emoji'" :src="`/emojis/${item.value}`" class="emoji-sm">
               <span v-else>{{ item.value }}</span>
             </span>
           </div>
 
-          <footer flex items-start py-2>
-            <span mr-2 flex-col-center :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471] dark:text-light5'" inline-flex flex-nowrap cursor-pointer select-none rounded-md px-1.2 py-0.7 transition-all hover:bg-light-5 hover:dark:bg-dark-2 @click="hdClickReply(comment, true)">
-              <span mr1 class="i-carbon:add-comment" text-4 text-op-80 />
+          <footer py-2 flex items-start>
+            <span :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471] dark:text-light5'" hover:dark:bg-dark-2 mr-2 px-1.2 py-0.7 rounded-md flex-col-center inline-flex flex-nowrap cursor-pointer select-none transition-all hover:bg-light-500 @click="hdClickReply(comment, true)">
+              <span class="i-carbon:add-comment" text-4 text-op-80 mr1 />
               <span text-3>回复</span>
             </span>
           </footer>

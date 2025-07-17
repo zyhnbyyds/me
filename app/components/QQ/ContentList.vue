@@ -39,15 +39,15 @@ function handlePlay(src: string) {
 <template>
   <ul>
     <li v-for="item in (list ?? [])" v-show="!(item.video && item.video.length > 0)" :key="item.tid" class="border-b-0.5px border-common">
-      <div class="w-full flex gap-2 p-4">
+      <div class="p-4 flex gap-2 w-full">
         <NuxtImg
           src="/me.png"
           alt="Avatar"
           :quality="10"
-          class="h-8 w-8 rounded-full"
+          class="rounded-full h-8 w-8"
         />
         <div flex-1>
-          <p class="flex items-center gap-2 text-sm font-semibold">
+          <p class="text-sm font-semibold flex gap-2 items-center">
             <span>{{ item.name }}</span>
             <span class="text-12px text-gray">· {{ dayjs(item.created_time * 1000).fromNow() }}</span>
           </p>
@@ -83,7 +83,7 @@ function handlePlay(src: string) {
             </div>
           </div>
 
-          <div mt-2 text-2.5 text-gray>
+          <div text-2.5 text-gray mt-2>
             {{ item.source_name }}
           </div>
 

@@ -10,11 +10,11 @@ consola.log(props.error)
 </script>
 
 <template>
-  <div h-screen w-screen flex-center flex-col dark:bg-dark dark:text-white>
-    <h1 mb-4 text-10 font-bold>
+  <div flex-center flex-col h-screen w-screen dark:text-white dark:bg-dark>
+    <h1 text-10 font-bold mb-4>
       {{ error?.statusCode }}
     </h1>
-    <div text-gary-700 mb-4 max-w-lg text-sm dark:text-gray-3>
+    <div text-gary-700 dark:text-gray-3 text-sm mb-4 max-w-lg>
       {{ error }}
     </div>
     <NuxtLink to="/">

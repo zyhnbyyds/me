@@ -34,7 +34,7 @@ function hdStopPreview() {
     <slot />
     <div id="previewImg" class="preview-img" :class="previewInfo.floating ? 'fixed left-0 top-0 z-50 h-full w-full' : ''" @click="hdStopPreview" />
     <Transition name="fade">
-      <div v-if="previewInfo.visible" fixed left-0 top-0 z-45 h-full w-full overflow-hidden bg-black bg-op40 :style="{ transitionDuration: `${previewInfo.duration}ms` }" />
+      <div v-if="previewInfo.visible" bg-black bg-op40 h-full w-full left-0 top-0 fixed z-45 overflow-hidden :style="{ transitionDuration: `${previewInfo.duration}ms` }" />
     </Transition>
   </div>
 </template>

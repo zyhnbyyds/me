@@ -134,7 +134,7 @@ function insertTextAtCursor(text: string) {
 <template>
   <div
     ref="editableRef"
-    class="chat-ipt w-full overflow-auto break-all px-3 py-2 text-3.5 outline-none"
+    class="chat-ipt text-3.5 px-3 py-2 outline-none w-full break-all overflow-auto"
     :class="len > 0 ? 'after:hidden' : 'after:block'"
     contenteditable="true"
     :placeholder="showPlaceholder"

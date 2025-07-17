@@ -18,13 +18,13 @@ defineEmits<{
 </script>
 
 <template>
-  <div relative h-full w-full select-none>
+  <div h-full w-full select-none relative>
     <NuxtImg
       :src="props.poster"
-      class="inset-0 h-full w-full object-cover"
+      class="h-full w-full inset-0 object-cover"
     />
-    <div class="left-50% top-50% transition-all -translate-x-50% -translate-y-50% hover:bg-dark-3 hover:bg-opacity-20" absolute flex cursor-pointer items-center justify-center border-2 border-gray-1 rounded-full p-6 @click="$emit('play', props.src, props.videoId)">
-      <Icon name="carbon:play-filled-alt" absolute text-5 text-gray-1 />
+    <div class="transition-all left-50% top-50% hover:bg-dark-300 hover:bg-opacity-20 -translate-x-50% -translate-y-50%" p-6 border-2 border-gray-100 rounded-full flex cursor-pointer items-center justify-center absolute @click="$emit('play', props.src, props.videoId)">
+      <Icon name="carbon:play-filled-alt" text-gray-1 text-5 absolute />
     </div>
   </div>
 </template>

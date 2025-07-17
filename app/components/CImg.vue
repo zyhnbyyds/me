@@ -18,8 +18,8 @@ defineEmits<{
     :src="url"
     :custom="true"
   >
-    <div v-if="!isLoaded" class="animate-bg hw-full rounded-md" />
-    <img v-else :src="src" v-bind="imgAttrs" :class="cClass" class="hw-full rounded-md object-cover object-center" @click="$emit('click', url)" @load="$emit('load')">
+    <div v-if="!isLoaded" class="animate-bg rounded-md hw-full" />
+    <img v-else :src="src" v-bind="imgAttrs" :class="cClass" class="rounded-md hw-full object-cover object-center" @click="$emit('click', url)" @load="$emit('load')">
   </NuxtImg>
 </template>
 

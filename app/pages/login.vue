@@ -21,8 +21,8 @@ async function signInWithOtp() {
 </script>
 
 <template>
-  <div h-screen hw-full min-w-sm flex-center bg-light-3>
-    <Card w-sm text-center title="Login">
+  <div bg-light-300 flex-center h-screen hw-full min-w-sm>
+    <Card text-center w-sm title="Login">
       <div>
         <input
           v-model="email"

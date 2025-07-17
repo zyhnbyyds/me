@@ -29,15 +29,15 @@ function clickIptItem(e: ContentExclude) {
 </script>
 
 <template>
-  <div ref="iptRef" relative h-10 @click="focused = true">
+  <div ref="iptRef" h-10 relative @click="focused = true">
     <input
       v-model="value"
-      h-10 w-full rounded-full px-5 pl-10
-      dark:bg-dark-500 dark:text-white
-      class="outline-1 outline-light-9 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
+
+      px-5 pl-10 rounded-full h-10 w-full dark:text-white dark:bg-dark-500
+      class="outline-light-9 outline-1 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
       :placeholder="props.placeholder"
     >
-    <div absolute left-3 h-5 w-5 flex-center class="top-1/2 -translate-y-50%">
+    <div flex-center h-5 w-5 left-3 absolute class="top-1/2 -translate-y-50%">
       <span class="i-material-symbols:search" text-5 />
     </div>
 
@@ -45,17 +45,17 @@ function clickIptItem(e: ContentExclude) {
     <Transition name="fade" class="origin-t">
       <div
         v-show="focused"
-        class="absolute left-0 top-11 z-10 w-full overflow-hidden rounded-lg bg-white shadow-lg dark:bg-dark-500"
+        class="rounded-lg bg-white w-full shadow-lg left-0 top-11 absolute z-10 overflow-hidden dark:bg-dark-500"
       >
         <div
-          class="max-h-150 min-h-40 overflow-auto transition-height"
+          class="max-h-150 min-h-40 transition-height overflow-auto"
           :style="{ height: `${list.length * 60}px` }"
         >
           <div
             v-for="item in list"
             v-show="list.length !== 0" :key="item.id"
 
-            h-60px w-full cursor-pointer bg-hover-common-trans rounded-0 px-4 text-4 font-bold lh-60px hover:bg-op4 @click="clickIptItem(item)"
+            text-4 lh-60px font-bold px-4 bg-hover-common-trans rounded-0 h-60px w-full cursor-pointer hover:bg-op4 @click="clickIptItem(item)"
           >
             {{ item.title }}
           </div>

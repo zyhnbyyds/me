@@ -5,9 +5,9 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="rounded-lg bg-white p-2 shadow-md dark:bg-dark-7">
+  <div class="p-2 rounded-lg bg-white shadow-md dark:bg-dark-700">
     <slot name="header">
-      <h1 py-2 text-5 font-bold>
+      <h1 text-5 font-bold py-2>
         {{ props.title }}
       </h1>
     </slot>

@@ -12,20 +12,20 @@ provide('scroll', {
 </script>
 
 <template>
-  <div class="hw-screen flex overflow-hidden text-common">
-    <header class="h-full w-auto flex border-r-0.5px border-common">
-      <div class="w-19 overflow-hidden px-3 transition-all">
-        <div class="h-14 w-14 flex-center inline-flex rounded-full transition-all" hover="bg-hover-common-trans">
-          <NuxtImg h-10 w-10 src="/me.png" :quality="30" rounded-full alt="me-face" />
+  <div class="text-common flex hw-screen overflow-hidden">
+    <header class="border-r-0.5px border-common flex h-full w-auto">
+      <div class="px-3 w-19 transition-all overflow-hidden">
+        <div class="rounded-full flex-center inline-flex h-14 w-14 transition-all" hover="bg-hover-common-trans">
+          <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
         </div>
 
-        <div class="h-[calc(100%-52px)] pt-4px">
+        <div class="pt-4px h-[calc(100%-52px)]">
           <MenuBar :list="menuList" :is-fold="true" />
         </div>
       </div>
     </header>
-    <div ref="scrollRef" class="scroll-container h-full flex flex-1 overflow-auto">
-      <div class="relative h-full w-full border-r-0.5px border-common">
+    <div ref="scrollRef" class="scroll-container flex flex-1 h-full overflow-auto">
+      <div class="border-r-0.5px border-common h-full w-full relative">
         <slot />
       </div>
     </div>

@@ -115,12 +115,12 @@ onBeforeUnmount(() => {
         :src="src ?? ''"
         :alt="src ?? ''"
         loading="lazy"
-        preload
+
         :class="[(active && previewInfo.floating) ? 'absolute' : '']"
-        w-full cursor-pointer rounded-md object-cover object-center transition-all :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
+        preload rounded-md w-full cursor-pointer transition-all object-cover object-center :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
       />
     </Teleport>
-    <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" invisible w-full inline-flex />
+    <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" inline-flex w-full invisible />
   </div>
 </template>
 

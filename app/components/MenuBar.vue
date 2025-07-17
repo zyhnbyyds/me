@@ -36,14 +36,14 @@ function handleMenuChange(path: string) {
   <ul class="font-twitter">
     <li v-for="item in list" :key="item.path" class="w-a" @click="handleMenuChange(item.path)">
       <div
-        :to="item.path" class="mb-3 w-a inline-flex cursor-pointer items-center bg-hover-common-trans p-2 text-5"
+        :to="item.path" class="text-5 mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center"
         :class="item.path === active ? 'font-bold' : ''"
       >
-        <div class="h-8 w-8 flex-center text-7 font-bold">
+        <div class="text-7 font-bold flex-center h-8 w-8">
           <Icon v-show="item.path === active" :name="item.aIcon" />
           <Icon v-show="item.path !== active" :name="item.icon" />
         </div>
-        <span :class="{ hidden: isFold }" class="ml-5 mr-4 inline-block w-a overflow-hidden text-ellipsis text-nowrap <lg:hidden">
+        <span :class="{ hidden: isFold }" class="ml-5 mr-4 w-a inline-block text-nowrap text-ellipsis overflow-hidden <lg:hidden">
           {{ item.title }}
         </span>
       </div>

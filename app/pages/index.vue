@@ -29,7 +29,7 @@ watch(() => activeTab.value, () => {
 
 <template>
   <div>
-    <Tab v-model="activeTab" sticky top-0 w-full blur-common :list="homeTabList" />
+    <Tab v-model="activeTab" blur-common w-full top-0 sticky :list="homeTabList" />
     <ClientOnly>
       <BlogList :list="blobs" />
 
