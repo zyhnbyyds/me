@@ -14,12 +14,11 @@ interface Props {
   list: MenuBarItem[]
   isFold?: boolean
 }
-
 const { isFold = false } = defineProps<Props>()
 
 const active = computed(() => {
   if (!import.meta.client)
-    return
+    return '/'
   const { path } = useRoute()
   const splits = path.split('/')
   if (splits[1] === 'blog') {
