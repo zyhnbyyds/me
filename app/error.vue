@@ -15,7 +15,7 @@ consola.log(props.error)
       {{ error?.statusCode }}
     </h1>
     <div text-gary-700 mb-4 max-w-lg text-sm dark:text-gray-3>
-      {{ error?.message }}
+      {{ error }}
     </div>
     <NuxtLink to="/">
       <Btn label="Go back home" />
