@@ -1,5 +1,4 @@
 import type { FileAfterParseHook } from '@nuxt/content'
-import type { ContentMeta } from '~/types/blog'
 import readingTime from 'reading-time'
 
 export function transformContentFileAfterParse(ctx: FileAfterParseHook) {

@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 interface ImportMetaEnv {
   OSS_MINIO_BASE_URL: string
   readonly REDIS_HOST: string

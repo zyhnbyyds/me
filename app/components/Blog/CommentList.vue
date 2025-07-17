@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import type { BlogCollectionItem } from '@nuxt/content'
 import type Comment from './Comment.vue'
-import type { PostCommentBody, ReplyCommentItem } from '~/types/blog'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
 
 const props = defineProps<{
-  blog: BlogCollectionItem | null
+  blog?: BlogCollectionItem | null
 }>()
 
 const replyContent = ref('')
@@ -43,7 +42,7 @@ function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }, isRe
 
   nextTick(() => {
     if (commentsIptRefList.value && toValue(commentsIptRefList.value)[0]) {
-      toValue(commentsIptRefList.value)[0].focus()
+      toValue(commentsIptRefList.value)[0]?.focus()
     }
   })
 }

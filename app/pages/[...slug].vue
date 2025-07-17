@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { ReplyCommentItem } from '~/types/blog'
-
 const route = useRoute()
 const { $api } = useNuxtApp()
 

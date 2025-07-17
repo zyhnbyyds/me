@@ -1,5 +1,5 @@
-import type { PageQuery } from '~~/types/page'
-import type { QQContentItem } from '~~/types/qq'
+import type { PageQuery } from '~~/shared/types/page'
+import type { QQContentItem } from '~~/shared/types/qq'
 import { serverSupabaseClient } from '#supabase/server'
 import consola from 'consola'
 

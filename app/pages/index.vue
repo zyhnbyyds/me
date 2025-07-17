@@ -1,7 +1,7 @@
 <script lang='ts' setup>
 import { homeTabList } from '~/constants'
 
-const activeTab = ref(homeTabList[0].value)
+const activeTab = ref(homeTabList[0]?.value)
 
 // 一次性加载所有content
 const { data: blobs, refresh } = await useAsyncData('blog', () => {

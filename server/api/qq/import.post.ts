@@ -1,4 +1,4 @@
-import type { Pic, QQContentComment } from '~~/types/qq'
+import type { Pic, QQContentComment } from '~~/shared/types/qq'
 import { serverSupabaseClient } from '#supabase/server'
 import list from '~~/server/data/data.json'
 import { Result } from '~~/server/utils/result'

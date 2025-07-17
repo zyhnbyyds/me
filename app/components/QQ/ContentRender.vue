@@ -20,7 +20,7 @@ function parseContent(content: string) {
     if (match.index > lastIndex) {
       result.push({ type: 'text', value: content.slice(lastIndex, match.index) })
     }
-    result.push({ type: 'emoji', value: match[1] })
+    result.push({ type: 'emoji', value: match[1] ?? '' })
     lastIndex = regex.lastIndex
   }
   if (lastIndex < content.length) {

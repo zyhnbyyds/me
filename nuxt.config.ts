@@ -24,6 +24,7 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false,
   },
+  compatibilityDate: '2025-07-17',
 
   app: {
     layoutTransition: {

@@ -1,8 +1,3 @@
-export interface EmojiInfo {
-  type: 'emoji' | 'text'
-  value: string
-}
-
 /**
  * 解析包含 emoji 的 HTML 内容
  * 该函数旨在将给定的 HTML 字符串转换为一个包含文本和 emoji 信息的数组

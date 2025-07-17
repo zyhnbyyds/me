@@ -1,6 +1,4 @@
 <script lang='ts' setup>
-import type { QQContentItem } from '~/types/qq'
-
 definePageMeta({
   title: 'QQ空间',
   description: 'QQ空间说说列表， 数据来自我的QQ空间',

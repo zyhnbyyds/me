@@ -1,5 +1,4 @@
 <script lang='tsx' setup>
-import type { QQContentComment } from '~/types/qq'
 import { QQContentRender } from '#components'
 
 defineProps<{

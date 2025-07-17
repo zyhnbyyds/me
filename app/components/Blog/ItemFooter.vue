@@ -1,6 +1,4 @@
 <script lang='ts' setup>
-import type { BlogOps } from '~/types/blog'
-
 const props = defineProps<{
   id: string
   readingTime: number

@@ -1,5 +1,4 @@
 <script lang='tsx' setup>
-import type { QQContentItem } from '~/types/qq'
 import { NuxtImg } from '#components'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
