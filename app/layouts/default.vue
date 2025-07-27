@@ -1,5 +1,5 @@
 <script lang='ts' setup>
-// import { menuList } from '~/constants'
+import { menuList } from '~/constants'
 
 const scrollRef = ref<HTMLElement | null>(null)
 
@@ -29,8 +29,7 @@ provide('scroll', {
         </div>
 
         <div class="pt-4px h-[calc(100%-52px)]">
-          <!-- <MenuBar :list="menuList" /> -->
-          测试
+          <MenuBar :list="menuList" />
         </div>
       </div>
     </header>
