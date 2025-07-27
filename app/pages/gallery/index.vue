@@ -51,14 +51,10 @@ function hdPreviewImg(name?: string) {
         </div>
       </div>
 
-      <div v-if="status === 'pending'" pt-20 text-center class="font-italic">
-        Loading...
-      </div>
+      <Loading v-if="status === 'pending'" mt20 :loading="true" />
 
       <template #fallback>
-        <div pt-20 text-center class="font-italic">
-          Loading...
-        </div>
+        <Loading mt20 :loading="true" />
       </template>
     </ClientOnly>
   </div>

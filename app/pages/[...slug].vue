@@ -154,9 +154,7 @@ async function hdClickSend(val: EmojiInfo[]) {
         <footer h-80 />
       </div>
       <template #fallback>
-        <div pt-20 text-center class="font-italic">
-          Loading...
-        </div>
+        <Loading mt20 :loading="true" />
       </template>
     </ClientOnly>
   </div>
