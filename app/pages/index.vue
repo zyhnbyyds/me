@@ -13,6 +13,10 @@ const { data: blobs, refresh } = await useAsyncData('blog', () => {
   return queryCollection('blog').order('publishAt', 'ASC').all()
 }, { default: () => [] })
 
+if (import.meta.client) {
+  refresh()
+}
+
 useSeoMeta({
   title: '张宇行的博客',
   description: '张宇行的博客，在这里分享生活、代码、学习、工作等方面的内容',

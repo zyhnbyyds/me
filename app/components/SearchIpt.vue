@@ -32,9 +32,8 @@ function clickIptItem(e: ContentExclude) {
   <div ref="iptRef" h-10 relative @click="focused = true">
     <input
       v-model="value"
-
       px-5 pl-10 rounded-full h-10 w-full dark:text-white dark:bg-dark-500
-      class="outline-light-9 outline-1 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
+      class="outline-1 outline-light-900 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
       :placeholder="props.placeholder"
     >
     <div flex-center h-5 w-5 left-3 absolute class="top-1/2 -translate-y-50%">
