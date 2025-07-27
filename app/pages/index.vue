@@ -4,7 +4,7 @@ import { homeTabList } from '~/constants'
 const activeTab = ref(homeTabList[0]?.value)
 
 // 一次性加载所有content
-const { data: _blobs, refresh } = await useAsyncData('blog', () => {
+const { data: blobs, refresh } = await useAsyncData('blog', () => {
   // TODO: 优化查询，避免一次性加载所有数据, 目前数据不多
   if (activeTab.value === 'recommend') {
     return queryCollection('blog').all()
@@ -31,9 +31,7 @@ watch(() => activeTab.value, () => {
   <div>
     <Tab v-model="activeTab" blur-common w-full top-0 sticky :list="homeTabList" />
     <ClientOnly>
-      <!-- <BlogList :list="blobs" /> -->
-      <!-- 测试 -->
-      <span>测试</span>
+      <BlogList :list="blobs" />
 
       <template #fallback>
         <Loading mt20 :loading="true" />
