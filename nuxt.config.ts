@@ -144,7 +144,7 @@ export default defineNuxtConfig({
     providers: {
       minio: {
         name: 'minio',
-        provider: './providers/minio.provider.ts',
+        provider: './app/providers/minio.provider.ts',
         options: {
           baseUrl: import.meta.env.OSS_MINIO_BASE_URL,
         },
