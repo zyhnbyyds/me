@@ -44,6 +44,13 @@ export default defineNuxtConfig({
     cssSelectorPrefix: 'ni',
   },
 
+  seo: {
+    meta: {
+      title: '张宇解的个人博客',
+      description: '张宇解的个人博客',
+    },
+  },
+
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
   },
@@ -91,6 +98,7 @@ export default defineNuxtConfig({
             default: 'github-light',
             dark: 'github-dark',
           },
+          langs: ['c', 'js', 'json', 'ts', 'tsx', 'vue', 'java', 'rust', 'yml'],
         },
       },
     },

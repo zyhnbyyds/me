@@ -32,7 +32,7 @@ interface Props {
           {{ blobItem?.description }}
         </p>
 
-        <NuxtImg :quality="60" mt-2 rounded-15px h-auto w-full shadow-md :src="`/blog/${blobItem?.image}`" />
+        <NuxtImg :quality="60" mt-2 rounded-15px max-h-500px w-full shadow-md object-cover :src="`/blog/${blobItem?.image}`" />
         <BlogItemFooter
           :id="blobItem.path.replaceAll('/', '_')"
           :reading-time="blobItem.readingTime || 0"
