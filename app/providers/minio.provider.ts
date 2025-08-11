@@ -1,20 +1,18 @@
-import type { ProviderGetImage } from '@nuxt/image'
-import { createOperationsGenerator } from '#image'
+import { createOperationsGenerator, defineProvider } from '@nuxt/image/runtime'
 import { joinURL } from 'ufo'
 
 const operationsGenerator = createOperationsGenerator()
 
-export const getImage: ProviderGetImage = (
-  src,
-  { modifiers = {}, baseUrl } = {},
-) => {
-  if (!baseUrl) {
-    baseUrl = import.meta.env.OSS_MINIO_BASE_URL || 'https://bilisleep.online/me-photos'
-  }
+export default defineProvider<{ baseURL?: string }>({
+  getImage: (src, { modifiers, baseURL }) => {
+    if (!baseURL) {
+      baseURL = import.meta.env.OSS_MINIO_BASE_URL || 'https://bilisleep.online/me-photos'
+    }
 
-  const operations = operationsGenerator(modifiers)
+    const operations = operationsGenerator(modifiers)
 
-  return {
-    url: joinURL(baseUrl, src + (operations ? `?${operations}` : '')),
-  }
-}
+    return {
+      url: joinURL(baseURL, src + (operations ? `?${operations}` : '')),
+    }
+  },
+})
