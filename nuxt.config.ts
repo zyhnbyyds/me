@@ -1,3 +1,4 @@
+/* eslint-disable node/prefer-global/process */
 import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
 export default defineNuxtConfig({
@@ -101,6 +102,10 @@ export default defineNuxtConfig({
           langs: ['c', 'js', 'json', 'ts', 'tsx', 'vue', 'java', 'rust', 'yml'],
         },
       },
+    },
+    database: {
+      type: 'postgres',
+      url: process.env.DATABASE_URL ?? '',
     },
     renderer: {
       anchorLinks: {

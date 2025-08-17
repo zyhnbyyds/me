@@ -56,6 +56,7 @@
     "nuxt-schema-org": "^5.0.6",
     "nuxt-seo-utils": "^7.0.14",
     "nuxt-typed-router": "^4.0.2",
+    "pg": "^8.16.3",
     "pinia": "^3.0.3",
     "qface": "^1.4.1",
     "reading-time": "^1.5.0",
