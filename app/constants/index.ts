@@ -22,6 +22,13 @@ export const menuList: MenuBarItem[] = [
     path: '/',
     key: 'home',
   },
+  // {
+  //   title: '硬件',
+  //   icon: 'material-symbols:hardware',
+  //   aIcon: 'material-symbols:hardware',
+  //   path: '/hardware',
+  //   key: 'hardware',
+  // },
   {
     title: '日历',
     icon: 'material-symbols:calendar-month-outline-sharp',
@@ -36,13 +43,13 @@ export const menuList: MenuBarItem[] = [
     path: '/explore',
     key: 'explore',
   },
-  {
-    title: '个人资料',
-    icon: 'material-symbols:person-outline',
-    aIcon: 'material-symbols:person',
-    path: '/profile',
-    key: 'profile',
-  },
+  // {
+  //   title: '个人资料',
+  //   icon: 'material-symbols:person-outline',
+  //   aIcon: 'material-symbols:person',
+  //   path: '/profile',
+  //   key: 'profile',
+  // },
   {
     title: 'QQ空间',
     icon: 'mingcute:qq-line',
@@ -50,13 +57,13 @@ export const menuList: MenuBarItem[] = [
     path: '/qq',
     key: 'qq',
   },
-  {
-    title: '相册',
-    icon: 'material-symbols:animated-images-outline-rounded',
-    aIcon: 'material-symbols:animated-images',
-    path: '/gallery',
-    key: 'gallery',
-  },
+  // {
+  //   title: '相册',
+  //   icon: 'material-symbols:animated-images-outline-rounded',
+  //   aIcon: 'material-symbols:animated-images',
+  //   path: '/gallery',
+  //   key: 'gallery',
+  // },
 ]
 
 export const appIcon = '/favicon.ico'
