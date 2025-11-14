@@ -114,6 +114,9 @@ export default defineNuxtConfig({
         h3: false,
       },
     },
+    experimental: {
+      sqliteConnector: 'native',
+    },
   },
 
   devtools: {

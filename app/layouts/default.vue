@@ -4,7 +4,7 @@ import { menuList } from '~/constants'
 const scrollRef = ref<HTMLElement | null>(null)
 
 const { y, x } = useScroll(scrollRef, {
-  behavior: 'smooth',
+  behavior: 'auto',
 })
 
 const scrollHeight = computed(() => scrollRef.value?.scrollHeight ?? 0)
