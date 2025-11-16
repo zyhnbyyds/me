@@ -71,13 +71,8 @@ export default defineNuxtConfig({
         password: import.meta.env.REDIS_PASSWORD,
       },
     },
-
-    esbuild: {
-      options: {
-        target: 'esnext',
-      },
-    },
   },
+  sourcemap: false,
 
   colorMode: {
     classPrefix: '',

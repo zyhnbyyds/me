@@ -5,4 +5,5 @@ dist
 .nuxt
 .env
 .idea/
-.data
+
+.data/content/contents.sqlite
