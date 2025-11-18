@@ -27,17 +27,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-17',
 
-  app: {
-    layoutTransition: {
-      name: 'fade-scale',
-      mode: 'out-in',
-    },
-    pageTransition: {
-      name: 'fade-scale',
-      mode: 'out-in',
-    },
-  },
-
   icon: {
     serverBundle: 'local',
     class: 'name',

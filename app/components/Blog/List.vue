@@ -20,13 +20,15 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
 </script>
 
 <template>
-  <ul>
-    <li v-for="blobItem in (list ?? [])" :key="blobItem.id" class="border-b-0.5px border-common" cursor-pointer>
-      <div @click="goToBlogInfo(blobItem)">
-        <BlogItem :blob-item="blobItem" />
-      </div>
-    </li>
-  </ul>
+  <div class="p-4 min-h-[calc(100vh-50px)]">
+    <ul gap-4 grid grid-cols-3 class="<lg:grid-cols-2 <md:grid-cols-1">
+      <li v-for="blobItem in (list ?? [])" :key="blobItem.id" cursor-pointer>
+        <div @click="goToBlogInfo(blobItem)">
+          <BlogItem :blob-item="blobItem" />
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style scoped></style>

@@ -33,7 +33,7 @@ function handleMenuChange(path: string) {
 </script>
 
 <template>
-  <ul class="font-twitter">
+  <ul>
     <li v-for="item in list" :key="item.path" class="w-a" @click="handleMenuChange(item.path)">
       <div
         :to="item.path" class="text-5 mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center"
@@ -52,15 +52,4 @@ function handleMenuChange(path: string) {
 </template>
 
 <style scoped>
-.font-twitter {
-  font-family:
-    TwitterChirp,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
-}
 </style>

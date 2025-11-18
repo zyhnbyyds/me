@@ -20,7 +20,7 @@ provide('scroll', {
 
 <template>
   <div class="text-common flex hw-full overflow-hidden">
-    <header class="border-r-0.5px border-common flex h-full w-37% <lg:w-auto">
+    <header class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto">
       <div flex-1 />
       <div class="px-3 w-50 transition-all overflow-hidden <lg:w-19">
         <div class="rounded-full flex-center inline-flex h-14 w-14 transition-all" hover="bg-hover-common-trans">
@@ -30,13 +30,15 @@ provide('scroll', {
         </div>
 
         <div class="pt-4px h-[calc(100%-52px)]">
-          <MenuBar :list="menuList" />
+          <ClientOnly>
+            <MenuBar :list="menuList" />
+          </ClientOnly>
         </div>
       </div>
     </header>
 
-    <div ref="scrollRef" class="scroll-container flex h-full w-63% overflow-auto <lg:flex-1">
-      <div class="page-container w-38rem relative">
+    <div ref="scrollRef" class="scroll-container flex h-full w-80% overflow-auto <lg:flex-1">
+      <div class="page-container w-80% relative <lg:w-full">
         <slot />
       </div>
       <div flex-1 />

@@ -6,6 +6,8 @@ body,
 #__nuxt {
   height: 100%;
   width: 100%;
+  font-family: 楷体;
+  font-weight: 500;
 }
 
 .page-container > div {

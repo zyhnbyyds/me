@@ -62,7 +62,7 @@ function handlePlay(src: string) {
                 item.pic.length === 1
                   ? calculateImageSize(itm.height, itm.width)
                   : 'h-50 w-50'"
-              inline-block overflow-hidden
+              max-w-500px inline-block overflow-hidden
             >
               <!-- @vue-expect-error -->
               <PreviewImg v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length === 1" :active="activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`" :src="`/qq/images/image_${item.tid}_${idx}.jpg`" provider="ipx" @select="(src) => activePreview = src" />
@@ -92,7 +92,7 @@ function handlePlay(src: string) {
       </div>
     </li>
 
-    <Modal v-model="modalVisible" :close-on-click-overlay="true" :is-transition="true">
+    <Modal v-model="modalVisible" :close-on-click-overlay="true">
       <div h-screen w-screen>
         <CImg
           :quality="70"
