@@ -38,7 +38,7 @@
   .markdown-body,
   [data-theme='dark'] {
     color-scheme: dark;
-    --bgColor-default: #1a1a1a;
+    --bgColor-default: rgb(26, 26, 26, 0.6);
     --bgColor-muted: #262626;
     --bgColor-neutral-muted: #33333388;
     --fgColor-default: #e8e8e8;
@@ -54,24 +54,15 @@
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
-  margin: 0;
+  margin: 10px 16px;
   color: var(--fgColor-default);
-  font-family:
-    'STKaiti',
-    'KaiTi',
-    '楷体',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    'Noto Sans',
-    Helvetica,
-    Arial,
-    sans-serif;
   font-size: 16px;
   line-height: 1.8;
   word-wrap: break-word;
-  padding: 0 16px;
+  padding: 16px;
   background: var(--bgColor-default);
+  border: 1px solid var(--borderColor-default);
+  border-radius: 4px;
 }
 
 /* 标题样式 */
@@ -85,7 +76,7 @@
 }
 
 .markdown-body h2 {
-  margin: 1.3em 0 0.6em;
+  margin: 0 0 0.6em;
   padding-bottom: 0.3em;
   font-size: 1.5em;
   font-weight: 600;
@@ -163,7 +154,6 @@
   padding: 0.2em 0.4em;
   margin: 0;
   font-size: 90%;
-  font-family: var(--fontStack-monospace);
   background-color: var(--bgColor-muted);
   border: 1px solid var(--borderColor-muted);
   border-radius: 3px;
@@ -175,7 +165,6 @@
   overflow: auto;
   font-size: 90%;
   line-height: 1.6;
-  font-family: var(--fontStack-monospace);
   background-color: var(--bgColor-muted);
   border: 1px solid var(--borderColor-default);
   border-radius: 4px;
@@ -248,7 +237,6 @@
 .markdown-body kbd {
   display: inline-block;
   padding: 0.2em 0.5em;
-  font-family: var(--fontStack-monospace);
   font-size: 90%;
   color: var(--fgColor-default);
   background-color: var(--bgColor-muted);

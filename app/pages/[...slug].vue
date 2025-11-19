@@ -37,25 +37,6 @@ const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), 
 
 const { height } = useElementBounding(titleRef)
 
-const positionStyle = computed(() => {
-  const percent = Math.abs(y.value) / 60
-  if (y.value <= 60) {
-    return {
-      top: `${(60 - y.value) < 0 ? 0 : (60 - y.value)}px`,
-      left: `${208 * percent < 20 ? 20 : 208 * percent}px`,
-      fontSize: `${20 - ((20 * percent) > 6 ? 6 : 20 * percent)}px`,
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-    }
-  }
-  return {
-    top: `${0}px`,
-    left: '208px',
-    fontSize: '14px',
-  }
-})
-
 setTimeout(() => {
   y.value = 0
 }, 300)
@@ -97,23 +78,8 @@ async function hdClickSend(val: EmojiInfo[]) {
   <div>
     <ClientOnly>
       <div w-full>
-        <header text-5 px-4 blur-common flex-col-center h-50px w-full top-0 justify-between sticky z-9999>
-          <div flex-col-center gap-4>
-            <div class="bg-hover-common-trans flex-center inline-flex h-9 w-9 cursor-pointer" @click="$router.back()">
-              <span class="i-material-symbols:arrow-back" />
-            </div>
-            <p font-bold>
-              帖子
-            </p>
-          </div>
+        <CHead :title="page?.title" />
 
-          <h1
-            ref="titleRef" :style="positionStyle"
-            font-bold pr-4 flex-col-center min-h-50px left-0 top-0 justify-end absolute :class="y > 60 ? 'w-[calc(100%-208px)]' : ''"
-          >
-            {{ page?.title }}
-          </h1>
-        </header>
         <!-- 标题高度 -->
         <p :style="{ height: `${height}px` }" />
 
@@ -121,7 +87,7 @@ async function hdClickSend(val: EmojiInfo[]) {
           <ContentRenderer v-if="page" :value="page" />
         </div>
 
-        <Separator mx-5 mb-2 type="dashed" label="留下你的评论~" />
+        <Separator mx-5 mb-2 type="dashed" label="留下你的评论" />
 
         <div mx-5>
           <div text-3 font-bold mb-2 flex items-center justify-end>

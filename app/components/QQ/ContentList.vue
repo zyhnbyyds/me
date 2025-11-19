@@ -20,13 +20,13 @@ const modalVideoVisible = ref(false)
 function calculateImageSize(height: number, width: number) {
   const ratio = height / width
   if (ratio > 1.5) {
-    return 'h-auto w-50%'
+    return 'h-auto w-30% '
   }
   else if (ratio < 1.5 && ratio > 1) {
-    return 'h-auto w-70%'
+    return 'h-auto w-50% '
   }
   else {
-    return 'h-auto w-full'
+    return 'h-auto w-50%'
   }
 }
 
@@ -62,7 +62,7 @@ function handlePlay(src: string) {
                 item.pic.length === 1
                   ? calculateImageSize(itm.height, itm.width)
                   : 'h-50 w-50'"
-              max-w-500px inline-block overflow-hidden
+              inline-block overflow-hidden
             >
               <!-- @vue-expect-error -->
               <PreviewImg v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length === 1" :active="activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`" :src="`/qq/images/image_${item.tid}_${idx}.jpg`" provider="ipx" @select="(src) => activePreview = src" />

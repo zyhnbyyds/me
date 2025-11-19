@@ -36,6 +36,7 @@ function handleMenuChange(path: string) {
   <ul>
     <li v-for="item in list" :key="item.path" class="w-a" @click="handleMenuChange(item.path)">
       <div
+        style="font-family: kaiti;"
         :to="item.path" class="text-5 mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center"
         :class="item.path === active ? 'font-bold' : ''"
       >
