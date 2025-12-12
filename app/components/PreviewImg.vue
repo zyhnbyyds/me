@@ -115,7 +115,6 @@ onBeforeUnmount(() => {
         :src="src ?? ''"
         :alt="src ?? ''"
         loading="lazy"
-
         :class="[(active && previewInfo.floating) ? 'absolute' : '']"
         preload rounded-md w-full cursor-pointer transition-all object-cover object-center :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
       />

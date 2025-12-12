@@ -50,6 +50,7 @@ provide('scroll', {
 
 <style scoped>
 .scroll-container {
-  scrollbar-color: gray transparent;
+  scrollbar-color: lightgray transparent;
+  scrollbar-gutter: stable;
 }
 </style>

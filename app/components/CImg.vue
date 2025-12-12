@@ -16,6 +16,7 @@ defineEmits<{
     v-slot="{ isLoaded, imgAttrs, src }"
     :quality="quality"
     :src="url"
+    preload
     :custom="true"
   >
     <div v-if="!isLoaded" class="animate-bg rounded-md hw-full" />
