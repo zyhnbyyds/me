@@ -5,15 +5,34 @@ import consola from 'consola'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient<any>(event)
-  const { current = 1, size = 20 } = getQuery<PageQuery>(event)
+  const { current = 1, size = 20, tid = '', content } = getQuery<PageQuery & { tid?: string, content?: string }>(event)
   const currentNumber = Number(current) || 1
   const sizeNumber = Number(size) || 20
 
   const offset = (currentNumber - 1) * sizeNumber
 
+  let searchSingleResult: any = null
+  if (tid) {
+    const { data, error } = await client
+      .from('qq_content')
+      .select('*')
+      .eq('tid', tid)
+      .single()
+
+    if (error) {
+      consola.error(error)
+      createError({ statusCode: 500, statusMessage: error.message })
+    }
+
+    searchSingleResult = data
+    searchSingleResult.isSearchSingle = true
+  }
+
   const { data, error, count } = await client
     .from('qq_content')
     .select('*', { count: 'exact' })
+    .like('content', `%${content || ''}%`)
+    .neq('tid', tid)
     .order('created_time', { ascending: false })
     .range(offset, offset + sizeNumber - 1)
 
@@ -28,7 +47,7 @@ export default defineEventHandler(async (event) => {
       total: 0,
     }
   }
-  const transformedData = data.map((item) => {
+  const transformedData = [searchSingleResult, ...data].filter(item => item !== null).map((item) => {
     return {
       ...item,
       commentlist: item.commentlist ? JSON.parse(item.commentlist) : null,

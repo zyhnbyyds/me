@@ -29,10 +29,10 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
       <li v-for="blobItem in (list ?? [])" :key="blobItem.id" cursor-pointer>
         <div @click="goToBlogInfo(blobItem)">
           <div class="p-2 border border-common rounded-lg bg-common bg-op30 flex flex-col h-60 w-full">
-            <CImg v-if="blobItem.image" :quality="70" c-class="border-1 border-common rounded-lg h-40 w-full object-cover" :url="`/blog/${blobItem?.image}`" />
+            <NuxtImg v-if="blobItem.image" :quality="70" class="border-1 border-common rounded-lg h-40 w-full object-cover" :src="`/blog/${blobItem?.image}`" />
             <div flex-1 relative style="font-family: kaiti;">
-              <p mt2 class="text-14px">
-                <span>{{ blobItem.title }}</span>
+              <p mt2 class="text-14px text-nowrap text-ellipsis overflow-hidden">
+                {{ blobItem.title }}
               </p>
               <div class="text-14px text-gray flex w-full bottom-0 left-0 justify-between absolute z-1">
                 <span>{{ dayjs(blobItem.publishAt).fromNow() }}</span>

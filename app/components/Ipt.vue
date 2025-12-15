@@ -10,7 +10,7 @@ const emits = defineEmits<{
 }>()
 
 const iptVal = defineModel<string>({ default: '' })
-const editableRef = ref<HTMLElement | null>(null)
+const editableRef = ref<HTMLElement>()
 const { focused } = useFocus(editableRef)
 const len = ref<number>(0)
 

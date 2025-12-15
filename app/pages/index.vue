@@ -10,7 +10,7 @@ const { data: blobs, refresh } = await useAsyncData('blog', () => {
     return queryCollection('blog').all()
   }
 
-  return queryCollection('blog').order('publishAt', 'ASC').all()
+  return queryCollection('blog').order('updateAt', 'DESC').all()
 }, { default: () => [] })
 
 if (import.meta.client) {

@@ -7,7 +7,7 @@ const isDark = useDark()
     <NuxtLoadingIndicator :height="4" :color="isDark ? 'gray' : 'lightblue'" />
     <PreviewContainer :duration="500">
       <NuxtLayout>
-        <NuxtPage />
+        <NuxtPage :keepalive="{ exclude: 'qq' }" />
       </NuxtLayout>
     </PreviewContainer>
   </div>

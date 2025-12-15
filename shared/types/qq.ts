@@ -17,6 +17,7 @@ export interface QQContentItem {
   tid: string
   uin?: number | null
   video?: any[] | null
+  isSearchSingle?: boolean
 }
 
 export interface QQContentComment {

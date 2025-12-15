@@ -7,9 +7,8 @@ definePageMeta({
   description: '查看帖子详情和评论',
 })
 
-const titleRef = ref<HTMLElement | null>(null)
+const titleRef = ref<HTMLElement>()
 const commentIpt = ref('')
-const commentRef = ref<HTMLTextAreaElement | null>(null)
 
 const [loading, load] = useToggle(false)
 
@@ -110,7 +109,7 @@ async function hdClickSend(val: EmojiInfo[]) {
             </div>
           </div>
 
-          <BlogComment ref="commentRef" v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
+          <BlogComment v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
 
           <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
 

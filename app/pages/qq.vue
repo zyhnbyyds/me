@@ -9,6 +9,7 @@ dayjs.extend(relativeTime)
 definePageMeta({
   title: 'QQ空间',
   description: 'QQ空间说说列表， 数据来自我的QQ空间',
+  keepalive: false,
 })
 
 const scrollRef = ref<HTMLElement>()
@@ -34,6 +35,7 @@ async function getQQContentList(loadMore: boolean = false) {
     params: {
       current: page.value.current,
       size: page.value.size,
+      tid: useRoute().query.tid || '',
     },
   })
   totalNum.value = total
@@ -82,7 +84,7 @@ watch(() => y.value, async () => {
   <div ref="scrollRef">
     <CHead title="QQ空间" />
     <ul>
-      <li v-for="item in (qQContentList ?? [])" v-show="!(item.video && item.video.length > 0)" :key="item.tid" class="border-b-0.5px border-common">
+      <li v-for="item in (qQContentList ?? [])" v-show="!(item.video && item.video.length > 0)" :key="item.tid" :class="[item.isSearchSingle ? 'animate-fade-in animate-count-3' : '']" class="border-b-0.5px border-common">
         <div class="p-4 flex gap-2 w-full">
           <NuxtImg
             src="/me.png"

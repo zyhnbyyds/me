@@ -1,9 +1,9 @@
 <script lang='ts' setup>
-import type { ContentExclude } from '~/pages/explore.vue'
+import type { SearchResItem } from '~/pages/explore.vue'
 
 export interface SearchIptProps {
   placeholder?: string
-  list: ContentExclude[]
+  list: SearchResItem[]
 }
 
 const props = withDefaults(defineProps<SearchIptProps>(), {
@@ -19,12 +19,8 @@ onClickOutside(iptRef, () => {
 
 const value = defineModel<string>({ default: '' })
 
-function clickIptItem(e: ContentExclude) {
-  const item = props.list.find(i => i.id === e.id)
-  if (item) {
-    focused.value = false
-    useRouter().push(item.path)
-  }
+function clickIptItem(e: SearchResItem) {
+  useRouter().push(e.path)
 }
 </script>
 
@@ -53,13 +49,12 @@ function clickIptItem(e: ContentExclude) {
           <div
             v-for="item in list"
             v-show="list.length !== 0" :key="item.id"
-
-            text-4 lh-60px font-bold px-4 bg-hover-common-trans rounded-0 h-60px w-full cursor-pointer hover:bg-op4 @click="clickIptItem(item)"
+            text-3.5 lh-40px px-4 border-b border-common bg-hover-common-trans rounded-0 border-dashed h-40px w-full cursor-pointer text-nowrap text-ellipsis overflow-hidden hover:text-black hover:bg-light-200 @click="clickIptItem(item)"
           >
-            {{ item.title }}
+            {{ item.keyword }}
           </div>
           <div v-show="list.length === 0" pb-20 pt-10 text-center class="text-[rgb(83,100,113)]">
-            尝试搜索人物、列表或关键词
+            尝试输入关键词搜索
           </div>
         </div>
       </div>

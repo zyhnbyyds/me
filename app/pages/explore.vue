@@ -1,7 +1,10 @@
 <script lang='ts' setup>
-import type { BlogCollectionItem } from '@nuxt/content'
-
-export type ContentExclude = Pick<BlogCollectionItem, 'id' | 'path' | 'title' | 'description' | 'meta' | 'navigation'>
+export interface SearchResItem {
+  keyword: string
+  id: string
+  source: 'blog' | 'qq'
+  path: string
+}
 
 definePageMeta({
   title: '搜索',
@@ -9,13 +12,17 @@ definePageMeta({
 })
 
 const searchIpt = ref('')
-const searchList = ref<ContentExclude[]>([])
+const searchList = ref<SearchResItem[]>([])
 
 async function searchFn() {
-  searchList.value = await queryCollection('blog').orWhere(
-    q => q.where('title', 'LIKE', `%${searchIpt.value}%`)
-      .where('description', 'LIKE', `%${searchIpt.value}%`),
-  ).select('meta', 'path', 'description', 'title', 'id', 'navigation').limit(10).all()
+  const { data } = await $fetch<Result<SearchResItem[]>>('/api/search/homeSearch', {
+    method: 'POST',
+    body: {
+      keyword: searchIpt.value,
+    },
+  })
+
+  searchList.value = data ?? []
 }
 
 watchEffect(() => {
