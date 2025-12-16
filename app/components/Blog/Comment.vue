@@ -16,8 +16,8 @@ const emits = defineEmits<{
 
 const textarea = defineModel<string>({ default: '' })
 const textareaRef = useTemplateRef<IptType>('textareaRef')
-const commentRef = ref<HTMLDivElement | null>(null)
-const emojiBtnRef = ref<HTMLButtonElement | null>(null)
+const commentRef = ref<HTMLDivElement>()
+const emojiBtnRef = ref<HTMLButtonElement>()
 const { isOutside } = useMouseInElement(emojiBtnRef)
 
 const pickerVisible = ref(false)

@@ -1,7 +1,7 @@
 <script lang='ts' setup>
 import { menuList } from '~/constants'
 
-const scrollRef = ref<HTMLElement | null>(null)
+const scrollRef = ref<HTMLElement>()
 
 const { y, x } = useScroll(scrollRef)
 

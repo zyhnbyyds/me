@@ -34,21 +34,19 @@
   --focus-outlineColor: #d0504f;
 }
 
-@media (prefers-color-scheme: dark) {
-  .markdown-body,
-  [data-theme='dark'] {
-    color-scheme: dark;
-    --bgColor-default: rgb(26, 26, 26, 0.6);
-    --bgColor-muted: #262626;
-    --bgColor-neutral-muted: #33333388;
-    --fgColor-default: #e8e8e8;
-    --fgColor-muted: #a0a0a0;
-    --fgColor-accent: #e85d5d;
-    --borderColor-default: #404040;
-    --borderColor-muted: #333333;
-    --borderColor-accent: #e85d5d;
-    --focus-outlineColor: #e85d5d;
-  }
+.dark .markdown-body,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bgColor-default: rgb(26, 26, 26, 0.6);
+  --bgColor-muted: #262626;
+  --bgColor-neutral-muted: #33333388;
+  --fgColor-default: #e8e8e8;
+  --fgColor-muted: #a0a0a0;
+  --fgColor-accent: #e85d5d;
+  --borderColor-default: #404040;
+  --borderColor-muted: #333333;
+  --borderColor-accent: #e85d5d;
+  --focus-outlineColor: #e85d5d;
 }
 
 .markdown-body {

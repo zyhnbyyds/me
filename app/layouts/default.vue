@@ -22,8 +22,8 @@ provide('scroll', {
   <div class="text-common flex hw-full overflow-hidden">
     <header class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto">
       <div flex-1 />
-      <div class="px-3 w-50 transition-all overflow-hidden <lg:w-19">
-        <div class="rounded-full flex-center inline-flex h-14 w-14 transition-all" hover="bg-hover-common-trans">
+      <div class="px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0">
+        <div class="rounded-full flex-center inline-flex h-14 w-14 <md:hidden">
           <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
         </div>
 
@@ -37,9 +37,8 @@ provide('scroll', {
       <div class="page-container w-80% relative <lg:w-full">
         <slot />
       </div>
-      <div flex-1 />
 
-      <BackTop v-model="y" />
+      <BackTop v-model="y" class="bottom-4 right-4 fixed <md:hidden" />
     </div>
   </div>
 </template>

@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     name: '张宇解的个人博客',
   },
 
-  ssr: false,
+  ssr: true,
 
   supabase: {
     redirect: false,
