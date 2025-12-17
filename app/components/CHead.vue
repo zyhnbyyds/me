@@ -9,7 +9,7 @@ defineProps<{
     <div flex-col-center w-full justify-between>
       <div flex-col-center gap-4 w-full relative>
         <div class="bg-hover-common-trans flex-center inline-flex h-9 w-9 cursor-pointer" @click="$router.back()">
-          <div class="i-material-symbols:arrow-back" />
+          <Icon name="material-symbols:arrow-back" />
         </div>
         <p v-if="title" text-16px font-bold flex-1 text-nowrap text-ellipsis absolute overflow-hidden class="max-w-70% left-1/2 -translate-x-1/2">
           {{ title }}

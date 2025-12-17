@@ -15,8 +15,8 @@ const emits = defineEmits<{
   select: [name: string]
 }>()
 
-const imgRef = ref<HTMLImageElement | null>(null)
-const boxRef = ref<HTMLDivElement | null>(null)
+const imgRef = ref<HTMLImageElement>()
+const boxRef = ref<HTMLDivElement>()
 
 const { height: wHeight, width: wWidth } = useWindowSize()
 const previewRefStyle = ref<CSSProperties | null>(null)

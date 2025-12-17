@@ -4,7 +4,7 @@ import { serverSupabaseClient } from '#supabase/server'
 import consola from 'consola'
 
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient<any>(event)
+  const client = await serverSupabaseClient(event)
   const { current = 1, size = 20, tid = '', content } = getQuery<PageQuery & { tid?: string, content?: string }>(event)
   const currentNumber = Number(current) || 1
   const sizeNumber = Number(size) || 20

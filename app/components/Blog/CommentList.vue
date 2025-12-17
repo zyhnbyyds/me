@@ -102,7 +102,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 
               text-3 text-gray-400 flex-col-center inline-flex float-end
             >
-              <span mr-2px class="i-material-symbols:location-on-outline" />
+              <Icon name="material-symbols:location-on-outline" mr-2px />
               <span>
                 {{ comment.fromUser.location }}
               </span>
@@ -117,7 +117,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 
           <footer py-2 flex items-start>
             <span :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471] dark:text-light5'" hover:dark:bg-dark-2 mr-2 px-1.2 py-0.7 rounded-md flex-col-center inline-flex flex-nowrap cursor-pointer select-none transition-all hover:bg-light-500 @click="hdClickReply(comment, true)">
-              <span class="i-carbon:add-comment" text-4 text-op-80 mr1 />
+              <Icon name="carbon:add-comment" text-4 text-op-80 mr1 />
               <span text-3>回复</span>
             </span>
           </footer>

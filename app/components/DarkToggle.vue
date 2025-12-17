@@ -4,7 +4,7 @@ const mode = useColorMode()
 
 <template>
   <div text-6 px-2 @click="mode.preference = mode.preference === 'dark' ? 'light' : 'dark'">
-    <div class="i-streamline-emojis:first-quarter-moon" />
+    <Icon name="i-streamline-emojis:first-quarter-moon" />
   </div>
 </template>
 

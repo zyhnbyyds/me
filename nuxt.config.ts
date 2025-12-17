@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     name: '张宇解的个人博客',
   },
 
-  ssr: false,
+  ssr: true,
 
   supabase: {
     redirect: false,
@@ -30,10 +30,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-17',
 
   icon: {
-    serverBundle: 'local',
-    class: 'name',
-    mode: 'svg',
-    cssSelectorPrefix: 'ni',
+    serverBundle: 'auto',
   },
 
   seo: {

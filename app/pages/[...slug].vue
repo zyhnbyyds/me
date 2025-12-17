@@ -95,7 +95,7 @@ async function hdClickSend(val: EmojiInfo[]) {
                 px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
                 @click="openInPopup('/auth/github')"
               >
-                <span class="i-skill-icons:github-dark" mr-1 />
+                <Icon name="i-skill-icons:github-dark" mr-1 />
                 登录
               </button>
             </div>

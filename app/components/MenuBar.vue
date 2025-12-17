@@ -45,8 +45,8 @@ function handleMenuChange(path: string) {
         :class="item.path === active ? 'font-bold' : ''"
       >
         <div class="text-7 font-bold flex-center h-8 w-8">
-          <Icon v-show="item.path === active" :name="item.aIcon" />
-          <Icon v-show="item.path !== active" :name="item.icon" />
+          <Icon v-if="item.path === active" :name="item.aIcon" />
+          <Icon v-else :name="item.icon" />
         </div>
         <span :class="{ hidden: isFold }" class="ml-5 mr-4 w-a inline-block text-nowrap text-ellipsis overflow-hidden <lg:hidden">
           {{ item.title }}

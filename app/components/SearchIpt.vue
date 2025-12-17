@@ -33,14 +33,14 @@ function clickIptItem(e: SearchResItem) {
       :placeholder="props.placeholder"
     >
     <div flex-center h-5 w-5 left-3 absolute class="top-1/2 -translate-y-50%">
-      <span class="i-material-symbols:search" text-5 />
+      <Icon name="material-symbols:search" text-5 />
     </div>
 
     <!-- 搜索内容 -->
     <Transition name="fade" class="origin-t">
       <div
         v-show="focused"
-        class="rounded-lg bg-white w-full shadow-lg left-0 top-11 absolute z-10 overflow-hidden dark:bg-dark-500"
+        class="rounded-lg bg-white/60 w-full shadow-lg left-0 top-11 absolute z-10 overflow-hidden backdrop-blur-lg dark:bg-dark-500/60"
       >
         <div
           class="max-h-150 min-h-40 transition-height overflow-auto"

@@ -1,6 +1,7 @@
 {
   "cSpell.enabledFileTypes": {
-    "json": false
+    "json": false,
+    "toml": false
   },
   "cSpell.words": [
     "abledel",
