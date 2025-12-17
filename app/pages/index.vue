@@ -42,33 +42,27 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
 <template>
   <div>
     <Tab v-model="activeTab" blur-common w-full top-0 sticky z-9999 :list="homeTabList" />
-    <ClientOnly>
-      <div class="p-4 min-h-[calc(100vh-50px)]">
-        <ul gap-4 grid grid-cols-3 class="<lg:grid-cols-2 <md:grid-cols-1">
-          <li v-for="blobItem in (blobs ?? [])" :key="blobItem.id" cursor-pointer>
-            <div @click="goToBlogInfo(blobItem)">
-              <div class="p-2 border border-common rounded-lg bg-common bg-op30 flex flex-col h-60 w-full">
-                <NuxtImg v-if="blobItem.image" :quality="70" class="border-1 border-common rounded-lg h-40 w-full object-cover" :src="`/blog/${blobItem?.image}`" />
-                <div flex-1 relative style="font-family: kaiti;">
-                  <p mt2 class="text-14px text-nowrap text-ellipsis overflow-hidden">
-                    {{ blobItem.title }}
-                  </p>
-                  <div class="text-14px text-gray flex w-full bottom-0 left-0 justify-between absolute z-1">
-                    <span>{{ dayjs(blobItem.publishAt).fromNow() }}</span>
+    <div class="p-4 min-h-[calc(100vh-50px)]">
+      <ul gap-4 grid grid-cols-3 class="<lg:grid-cols-2 <md:grid-cols-1">
+        <li v-for="blobItem in (blobs ?? [])" :key="blobItem.id" cursor-pointer>
+          <div @click="goToBlogInfo(blobItem)">
+            <div class="p-2 border border-common rounded-lg bg-common bg-op30 flex flex-col h-60 w-full">
+              <NuxtImg v-if="blobItem.image" :quality="70" class="border-1 border-common rounded-lg h-40 w-full object-cover" :src="`/blog/${blobItem?.image}`" />
+              <div flex-1 relative style="font-family: kaiti;">
+                <p mt2 class="text-14px text-nowrap text-ellipsis overflow-hidden">
+                  {{ blobItem.title }}
+                </p>
+                <div class="text-14px text-gray flex w-full bottom-0 left-0 justify-between absolute z-1">
+                  <span>{{ dayjs(blobItem.publishAt).fromNow() }}</span>
 
-                    <span>阅读需要{{ blobItem.readingTime }}分钟</span>
-                  </div>
+                  <span>阅读需要{{ blobItem.readingTime }}分钟</span>
                 </div>
               </div>
             </div>
-          </li>
-        </ul>
-      </div>
-
-      <template #fallback>
-        <Loading mt20 :loading="true" />
-      </template>
-    </ClientOnly>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 

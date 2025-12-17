@@ -75,53 +75,54 @@ async function hdClickSend(val: EmojiInfo[]) {
 
 <template>
   <div>
-    <ClientOnly>
-      <div w-full>
-        <CHead :title="page?.title" />
+    <div w-full>
+      <CHead :title="page?.title" />
 
-        <!-- 标题高度 -->
-        <p :style="{ height: `${height}px` }" />
+      <!-- 标题高度 -->
+      <p :style="{ height: `${height}px` }" />
 
-        <div class="markdown-body">
+      <div class="markdown-body">
+        <ClientOnly>
           <ContentRenderer v-if="page" :value="page" />
-        </div>
 
-        <Separator mx-5 mb-2 type="dashed" label="留下你的评论" />
+          <template #fallback>
+            <Loading mt20 :loading="true" />
+          </template>
+        </ClientOnly>
+      </div>
 
-        <div mx-5>
-          <div text-3 font-bold mb-2 flex items-center justify-end>
-            <div v-if="!loggedIn">
-              <button
-                px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
-                @click="openInPopup('/auth/github')"
-              >
-                <Icon name="i-skill-icons:github-dark" mr-1 />
-                登录
-              </button>
-            </div>
+      <Separator mx-5 mb-2 type="dashed" label="留下你的评论" />
 
-            <div v-else flex-col-center>
-              <span text-4 mr-2 class="i-carbon:logout cursor-pointer rotate-180" @click="clear" />
-              <img rounded-full h-5 w-5 :src="user?.avatar_url">
-              <div ml-2>
-                {{ user?.name }}
-              </div>
-            </div>
+      <div mx-5>
+        <div text-3 font-bold mb-2 flex items-center justify-end>
+          <div v-if="!loggedIn">
+            <button
+              px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
+              @click="openInPopup('/auth/github')"
+            >
+              <Icon name="i-skill-icons:github-dark" mr-1 />
+              登录
+            </button>
           </div>
 
-          <BlogComment v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
-
-          <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
-
-          <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
+          <div v-else flex-col-center>
+            <span text-4 mr-2 class="i-carbon:logout cursor-pointer rotate-180" @click="clear" />
+            <img rounded-full h-5 w-5 :src="user?.avatar_url">
+            <div ml-2>
+              {{ user?.name }}
+            </div>
+          </div>
         </div>
 
-        <footer h-80 />
+        <BlogComment v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
+
+        <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+
+        <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
       </div>
-      <template #fallback>
-        <Loading mt20 :loading="true" />
-      </template>
-    </ClientOnly>
+
+      <footer h-80 />
+    </div>
   </div>
 </template>
 

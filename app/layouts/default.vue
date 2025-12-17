@@ -24,7 +24,9 @@ provide('scroll', {
       <div flex-1 />
       <div class="px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0">
         <div class="rounded-full flex-center inline-flex h-14 w-14 <md:hidden">
-          <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
+          <ClientOnly>
+            <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
+          </ClientOnly>
         </div>
 
         <div class="pt-4px h-[calc(100%-52px)]">

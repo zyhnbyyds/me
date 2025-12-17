@@ -33,13 +33,6 @@ export default defineNuxtConfig({
     serverBundle: 'auto',
   },
 
-  seo: {
-    meta: {
-      title: '张宇解的个人博客',
-      description: '张宇解的个人博客',
-    },
-  },
-
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
   },
