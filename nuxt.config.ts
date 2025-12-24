@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     name: '张宇解的个人博客',
   },
 
-  ssr: true,
+  ssr: false,
 
   supabase: {
     redirect: false,
@@ -31,12 +31,6 @@ export default defineNuxtConfig({
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
-  },
-
-  router: {
-    options: {
-      scrollBehaviorType: 'smooth',
-    },
   },
 
   nitro: {
@@ -49,7 +43,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  sourcemap: false,
 
   colorMode: {
     classPrefix: '',
@@ -117,18 +110,6 @@ export default defineNuxtConfig({
     },
     public: {
       showUploadBtnGithubUserId: import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID,
-    },
-  },
-
-  image: {
-    providers: {
-      minio: {
-        name: 'minio',
-        provider: './app/providers/minio.provider.ts',
-        options: {
-          baseUrl: import.meta.env.OSS_MINIO_BASE_URL,
-        },
-      },
     },
   },
 })
