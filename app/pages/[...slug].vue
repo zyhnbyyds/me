@@ -2,7 +2,6 @@
 const route = useRoute()
 const { $api } = useNuxtApp()
 
-const titleRef = ref<HTMLElement>()
 const commentIpt = ref('')
 
 const [loading, load] = useToggle(false)
@@ -28,8 +27,6 @@ useSeoMeta({
 })
 
 const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
-
-const { height } = useElementBounding(titleRef)
 
 setTimeout(() => {
   y.value = 0
@@ -73,20 +70,22 @@ async function hdClickSend(val: EmojiInfo[]) {
     <div w-full>
       <CHead :title="page?.title" />
 
-      <!-- 标题高度 -->
-      <p :style="{ height: `${height}px` }" />
-
       <div class="markdown-body">
         <ClientOnly>
           <ContentRenderer v-if="page" :value="page" />
 
+          <Separator mb-2 label="~封面图~" />
+
+          <div py-5 flex-center>
+            <NuxtImg v-if="page?.image" :quality="70" class="border-1 border-common rounded-lg max-h-150 w-auto overflow-hidden" :src="`/blog/${page?.image}`" />
+          </div>
           <template #fallback>
             <Loading mt20 :loading="true" />
           </template>
         </ClientOnly>
       </div>
 
-      <Separator mx-5 mb-2 type="dashed" label="留下你的评论" />
+      <Separator mx-5 mb-2 label="留下你的评论" />
 
       <div mx-5>
         <div text-3 font-bold mb-2 flex items-center justify-end>

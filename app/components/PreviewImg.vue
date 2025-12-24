@@ -7,8 +7,6 @@ const { src, active = false, provider = 'ipx' } = defineProps<{
   src: string
   active?: boolean
   provider?: keyof ImageProviders | 'minio'
-  height?: number
-  width?: number
 }>()
 
 const emits = defineEmits<{

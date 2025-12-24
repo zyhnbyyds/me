@@ -10,11 +10,11 @@ withDefaults(defineProps<{
 
 <template>
   <div flex="~ row" class="items-center justify-center">
-    <div bg-gray-200 flex-1 dark:bg-dark-500 :style="{ height: `${height}px` }" />
+    <div border-t border-gray-200 border-dashed flex-1 dark:border-dark-500 :style="{ borderTopWidth: `${height}px` }" />
     <slot name="content">
-      <span v-if="label" text-3.5 text-dark-100 mx-3>{{ label }}</span>
+      <span v-if="label" text-3.5 mx-5>{{ label }}</span>
     </slot>
-    <div bg-gray-200 flex-1 dark:bg-dark-500 :style="{ height: `${height}px` }" />
+    <div border-t border-gray-200 border-dashed flex-1 dark:border-dark-500 :style="{ borderTopWidth: `${height}px` }" />
   </div>
 </template>
 
