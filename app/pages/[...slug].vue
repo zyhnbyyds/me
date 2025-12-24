@@ -2,27 +2,22 @@
 const route = useRoute()
 const { $api } = useNuxtApp()
 
-definePageMeta({
-  title: '帖子详情',
-  description: '查看帖子详情和评论',
-})
-
 const titleRef = ref<HTMLElement>()
 const commentIpt = ref('')
 
 const [loading, load] = useToggle(false)
 
-const { data: page } = await useAsyncData(route.path, () => {
-  return queryCollection('blog').path(route.path).first()
+const { data: page } = useAsyncData(decodeURIComponent(route.path), () => {
+  return queryCollection('blog').path(decodeURIComponent(route.path)).first()
 })
-const { data: comments } = await useAsyncData<ReplyCommentItem[]>('/api/blog/comment', () => {
+const { data: comments } = useAsyncData<ReplyCommentItem[]>('/api/blog/comment', () => {
   if (!page.value)
     return new Promise(() => { })
   return $api('/api/blog/comment', {
     method: 'get',
     query: { id: page.value.path.replaceAll('/', '_') },
   })
-}, { default: () => [] })
+}, { default: () => [], watch: [page] })
 
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
@@ -100,7 +95,7 @@ async function hdClickSend(val: EmojiInfo[]) {
               px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
               @click="openInPopup('/auth/github')"
             >
-              <Icon name="i-skill-icons:github-dark" mr-1 />
+              <Icon name="skill-icons:github-dark" mr-1 />
               登录
             </button>
           </div>

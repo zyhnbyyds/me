@@ -5,6 +5,7 @@ const props = defineProps<{
   title?: string
   width?: string | number
   isTransition?: boolean
+  showMask?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -45,10 +46,11 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <transition :name="isTransition ? 'fade' : 'none'">
+    <transition :name="isTransition ? 'fade-scale' : 'none'">
       <div v-if="visible" inset-0 fixed z-1000>
         <div
-          class="bg-black/40 flex-center hw-full left-0 top-0 absolute z-60"
+          class="flex-center hw-full left-0 top-0 absolute z-60"
+          :class="showMask ? 'backdrop-blur-sm bg-black/40' : ''"
           @click="onOverlayClick"
         >
           <div @click.stop>

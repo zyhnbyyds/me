@@ -21,14 +21,6 @@ const { data: blobs, refresh } = useAsyncData('blog', () => {
   return queryCollection('blog').order('updateAt', 'DESC').all()
 }, { default: () => [] })
 
-useSeoMeta({
-  title: '张宇行的博客',
-  description: '张宇行的博客，在这里分享生活、代码、学习、工作等方面的内容',
-  ogImage: '/me.png',
-  ogType: 'profile',
-  ogTitle: '张宇行的博客',
-})
-
 watch(() => activeTab.value, () => {
   refresh()
 })
@@ -42,7 +34,7 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
 <template>
   <div>
     <Tab v-model="activeTab" blur-common w-full top-0 sticky z-9999 :list="homeTabList" />
-    <div class="p-4 min-h-[calc(100vh-50px)]">
+    <div class="p-4 pb-30 min-h-[calc(100vh-50px)]">
       <ul gap-4 grid grid-cols-3 class="<lg:grid-cols-2 <md:grid-cols-1">
         <li v-for="blobItem in (blobs ?? [])" :key="blobItem.id" cursor-pointer>
           <div @click="goToBlogInfo(blobItem)">

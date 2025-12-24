@@ -1,10 +1,5 @@
 <script lang='ts' setup>
-definePageMeta({
-  title: '关于我',
-  description: '关于我页面',
-})
-
-const { data: count } = await useAsyncData(() => {
+const { data: count } = useAsyncData(() => {
   return queryCollection('blog').count()
 })
 </script>

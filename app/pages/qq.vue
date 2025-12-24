@@ -138,7 +138,7 @@ watch(() => y.value, async () => {
         </div>
       </li>
 
-      <Modal v-model="modalVisible" :close-on-click-overlay="true">
+      <Modal v-model="modalVisible" :is-transition="true" :close-on-click-overlay="true">
         <div h-screen w-screen>
           <CImg
             :quality="70"

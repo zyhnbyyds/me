@@ -115,11 +115,11 @@ function hdSendComment() {
         <EmojiPicker v-model="pickerVisible" @select="hdSelectEmoji">
           <div ref="emojiBtnRef" class="mr-3 h-7 w-7 cursor-pointer relative" @click="hdOpenEmojiPicker">
             <Transition name="fade" mode="in-out">
-              <span v-if="isOutside" flex-center h-7 w-7 cursor-pointer left-0 top-0 absolute>
-                <Icon name="streamline-emojis:worried-face" text-6 />
+              <span v-if="isOutside && !focused" flex-center h-7 w-7 cursor-pointer left-0 top-0 absolute>
+                <Icon name="streamline-emojis:face-with-steam-from-nose" text-6 />
               </span>
               <span v-else flex-center h-7 w-7 left-0 top-0 absolute>
-                <Icon name="streamline-emojis:grimacing-face" text-6 />
+                <Icon name="streamline-emojis:crazy-face" text-6 />
               </span>
             </Transition>
           </div>
