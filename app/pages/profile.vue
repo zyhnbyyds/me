@@ -13,7 +13,7 @@ const { data: count } = await useAsyncData(() => {
   <div of-x-hidden>
     <header text-5 px-4 blur-common flex-col-center gap-4 h-50px w-full top-0 sticky>
       <div class="bg-hover-common-trans flex-center inline-flex h-9 w-9 cursor-pointer" @click="$router.back()">
-        <span class="i-material-symbols:arrow-back" />
+        <Icon name="material-symbols:arrow-back" />
       </div>
       <p text-4.1 font-bold>
         关于我

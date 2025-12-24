@@ -35,7 +35,7 @@ function hdPreviewImg(name?: string) {
           class="text-dark-1 text-op70 border-1 border-common bg-hover-common-trans flex-center inline-flex h-9 w-9 cursor-pointer hover:text-op100"
           @click="$router.push('/gallery/upload')"
         >
-          <div text-6 class="i-line-md:cloud-alt-upload-filled-loop" />
+          <Icon text-6 name="line-md:cloud-alt-upload-filled-loop" />
         </div>
       </template>
     </CHead>

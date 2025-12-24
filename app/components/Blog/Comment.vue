@@ -116,10 +116,10 @@ function hdSendComment() {
           <div ref="emojiBtnRef" class="mr-3 h-7 w-7 cursor-pointer relative" @click="hdOpenEmojiPicker">
             <Transition name="fade" mode="in-out">
               <span v-if="isOutside" flex-center h-7 w-7 cursor-pointer left-0 top-0 absolute>
-                <Icon name="i-streamline-emojis:worried-face" text-6 />
+                <Icon name="streamline-emojis:worried-face" text-6 />
               </span>
               <span v-else flex-center h-7 w-7 left-0 top-0 absolute>
-                <Icon name="i-streamline-emojis:grimacing-face" text-6 />
+                <Icon name="streamline-emojis:grimacing-face" text-6 />
               </span>
             </Transition>
           </div>

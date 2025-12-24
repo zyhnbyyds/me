@@ -29,10 +29,6 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-17',
 
-  icon: {
-    serverBundle: 'auto',
-  },
-
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
   },
