@@ -1,5 +1,4 @@
-export function mdFileQuery() {
-}
+export function mdFileQuery() {}
 
 export interface MdFileQuery {
   fileName?: string

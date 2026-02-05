@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import Ipt from '../Ipt.vue'
 
 type IptType = InstanceType<typeof Ipt>
@@ -44,14 +44,16 @@ onKeyStroke(
   { target: commentRef },
 )
 
-watch(() => focused.value, (val) => {
-  if (!val) {
-    emits('blur')
-  }
-  else {
-    emits('focus')
-  }
-})
+watch(
+  () => focused.value,
+  (val) => {
+    if (!val) {
+      emits('blur')
+    } else {
+      emits('focus')
+    }
+  },
+)
 
 defineExpose({
   focus: () => {
@@ -71,8 +73,7 @@ function hdSelectEmoji(url: string) {
 function hdOpenEmojiPicker() {
   if (focused.value) {
     pickerVisible.value = !pickerVisible.value
-  }
-  else {
+  } else {
     focused.value = true
     pickerVisible.value = !pickerVisible.value
   }
@@ -94,10 +95,12 @@ function hdSendComment() {
     ref="commentRef"
     class="text-3.5 outline-none border-2 border-transparent rounded-md bg-light-500 w-full transition-all duration-300 focus:border-2 focus:border-blue-300 dark:bg-dark-500 hover:bg-dark-300 hover:bg-op8 dark:hover:bg-op100"
     :class="[focused ? 'border-blue-300! dark:border-dark-300! bg-transparent!' : '']"
-    @click="() => {
-      focused = true;
-      textareaRef?.focus();
-    }"
+    @click="
+      () => {
+        focused = true
+        textareaRef?.focus()
+      }
+    "
   >
     <Ipt
       ref="textareaRef"
@@ -113,9 +116,16 @@ function hdSendComment() {
     <footer class="px-3 pb-2 pt-1 flex justify-between">
       <div class="flex items-center">
         <EmojiPicker v-model="pickerVisible" @select="hdSelectEmoji">
-          <div ref="emojiBtnRef" class="mr-3 h-7 w-7 cursor-pointer relative" @click="hdOpenEmojiPicker">
+          <div
+            ref="emojiBtnRef"
+            class="mr-3 h-7 w-7 cursor-pointer relative"
+            @click="hdOpenEmojiPicker"
+          >
             <Transition name="fade" mode="in-out">
-              <span v-if="isOutside && !focused" flex-center h-7 w-7 cursor-pointer left-0 top-0 absolute>
+              <span
+                v-if="isOutside && !focused"
+                class="flex-center h-7 w-7 cursor-pointer left-0 top-0 absolute"
+              >
                 <Icon name="streamline-emojis:face-with-steam-from-nose" text-6 />
               </span>
               <span v-else flex-center h-7 w-7 left-0 top-0 absolute>
@@ -130,7 +140,22 @@ function hdSendComment() {
         <span text-3 mr-4>
           <span>{{ iptLength }}</span> / 300
         </span>
-        <div :loading="loading" :class="focused ? 'dark:text-gray-1' : ''" text-3.3 px-3 py-1 rounded-md cursor-pointer select-none transition-colors hover:border-common hover:bg-gray200 hover:dark:text-gray-200 dark:hover:bg-dark-100 @click.stop="hdSendComment">
+        <div
+          :loading="loading"
+          :class="focused ? 'dark:text-gray-1' : ''"
+          text-3.3
+          px-3
+          py-1
+          rounded-md
+          cursor-pointer
+          select-none
+          transition-colors
+          hover:border-common
+          hover:bg-gray200
+          hover:dark:text-gray-200
+          dark:hover:bg-dark-100
+          @click.stop="hdSendComment"
+        >
           发送
         </div>
       </div>
@@ -138,6 +163,4 @@ function hdSendComment() {
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

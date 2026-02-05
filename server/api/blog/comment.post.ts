@@ -7,13 +7,15 @@ export default defineEventHandler(async (event) => {
   const storage = useStorage('me')
 
   const commentId = ulid()
-  await storage.setItem(`comments:${id}:${fromUserId}:to:${toUserId}:${commentId}:parentId:${parentId}:${depth}:${Date.now()}`, comment)
+  await storage.setItem(
+    `comments:${id}:${fromUserId}:to:${toUserId}:${commentId}:parentId:${parentId}:${depth}:${Date.now()}`,
+    comment,
+  )
 
   const commentCount = await storage.getItem<number>(`comments:count:${id}`)
   if (!commentCount) {
     await storage.setItem(`comments:count:${id}`, 1)
-  }
-  else {
+  } else {
     await storage.setItem(`comments:count:${id}`, commentCount + 1)
   }
 

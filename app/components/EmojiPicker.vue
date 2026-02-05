@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { emojiList } from '~/config/emoji'
 
 const emits = defineEmits<{
@@ -20,10 +20,30 @@ function hdImgUrl(name: string) {
   <div ref="pickerRef" flex-col-center select-none relative>
     <slot />
     <Transition name="fade-scale">
-      <div v-if="pickerVisible" class="bg-light/40 top-100% backdrop-blur-md dark:bg-dark/40" mt5 p-2 rounded-md left-0 absolute z-100>
+      <div
+        v-if="pickerVisible"
+        class="bg-light/40 top-100% backdrop-blur-md dark:bg-dark/40"
+        mt5
+        p-2
+        rounded-md
+        left-0
+        absolute
+        z-100
+      >
         <div max-h-60 w-84 overflow-auto>
-          <div v-for="item in emojiList" :key="item" rounded-1.5 cursor-pointer transition-all hover:bg-light700 hover:backdrop-blur-md dark:hover:bg-dark-900 class="flex-center inline-flex h-10 w-10" @click="emits('select', hdImgUrl(item))">
-            <img :src="hdImgUrl(item)" h-6.5 w-6.5 :alt="item">
+          <div
+            v-for="item in emojiList"
+            :key="item"
+            rounded-1.5
+            cursor-pointer
+            transition-all
+            hover:bg-light700
+            hover:backdrop-blur-md
+            dark:hover:bg-dark-900
+            class="flex-center inline-flex h-10 w-10"
+            @click="emits('select', hdImgUrl(item))"
+          >
+            <img :src="hdImgUrl(item)" h-6.5 w-6.5 :alt="item" />
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ export function parseEmojiContent(html: string): EmojiInfo[] {
   const container = document.createElement('div')
   container.innerHTML = html
 
-  const result: { type: 'emoji' | 'text', value: string }[] = []
+  const result: { type: 'emoji' | 'text'; value: string }[] = []
 
   container.childNodes.forEach((node) => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -21,8 +21,7 @@ export function parseEmojiContent(html: string): EmojiInfo[] {
           value: text,
         })
       }
-    }
-    else if (node.nodeType === Node.ELEMENT_NODE) {
+    } else if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as HTMLElement
       if (el.tagName === 'IMG' && el.getAttribute('src')?.startsWith('/emojis/')) {
         const src = el.getAttribute('src')!
@@ -31,8 +30,7 @@ export function parseEmojiContent(html: string): EmojiInfo[] {
           type: 'emoji',
           value: filename,
         })
-      }
-      else {
+      } else {
         // 嵌套元素中也可能有文字或 emoji，再递归处理
         result.push(...parseEmojiContent(el.innerHTML))
       }

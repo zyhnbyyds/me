@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
   const looks = await storage.getItem<number>(`looks:${id}`)
   if (looks) {
     await storage.setItem(`looks:${id}`, looks + 1)
-  }
-  else {
+  } else {
     await storage.setItem(`looks:${id}`, 1)
   }
 

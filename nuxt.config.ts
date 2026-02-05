@@ -43,11 +43,7 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
-  css: [
-    '~/assets/css/md.css',
-    '~/assets/css/main.css',
-    'vue-boom/dist/index.css',
-  ],
+  css: ['~/assets/css/md.css', '~/assets/css/main.css', 'vue-boom/dist/index.css'],
 
   content: {
     build: {

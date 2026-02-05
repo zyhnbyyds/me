@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const contentResult = await queryCollection(event, 'blog').where('title', 'LIKE', `%${keyword || ''}%`).all()
+    const contentResult = await queryCollection(event, 'blog')
+      .where('title', 'LIKE', `%${keyword || ''}%`)
+      .all()
 
     const qqResult = await $fetch('/api/qq/list', { query: { content: keyword } })
 
@@ -24,8 +26,7 @@ export default defineEventHandler(async (event) => {
     })
 
     return Result.success(searchResults)
-  }
-  catch (error) {
+  } catch (error) {
     consola.error(error)
     Result.fail(500, error as string)
   }

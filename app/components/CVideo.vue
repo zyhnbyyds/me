@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 
@@ -29,7 +29,11 @@ onMounted(() => {
 
   onKeyStroke(['F', 'f'], () => {
     if (player) {
-      player.isFullscreen() ? player.exitFullscreen() : player.requestFullscreen()
+      if (player.isFullscreen()) {
+        player.exitFullscreen()
+      } else {
+        player.requestFullscreen()
+      }
     }
   })
 })
@@ -43,10 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <video
-    :id="videoId"
-    class="video-js vjs-default-skin max-h-90vh max-w-90vw"
-  />
+  <video :id="videoId" class="video-js vjs-default-skin max-h-90vh max-w-90vw" />
 </template>
 
 <style scoped></style>

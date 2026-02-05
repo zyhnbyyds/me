@@ -15,9 +15,12 @@ const emits = defineEmits<{
 
 const visible = ref(props.modelValue)
 
-watch(() => props.modelValue, (val) => {
-  visible.value = val
-})
+watch(
+  () => props.modelValue,
+  (val) => {
+    visible.value = val
+  },
+)
 
 function close() {
   visible.value = false
@@ -26,13 +29,11 @@ function close() {
 }
 
 function onOverlayClick() {
-  if (props.closeOnClickOverlay !== false)
-    close()
+  if (props.closeOnClickOverlay !== false) close()
 }
 
 function onEsc(e: KeyboardEvent) {
-  if (e.key === 'Escape' && visible.value)
-    close()
+  if (e.key === 'Escape' && visible.value) close()
 }
 
 onMounted(() => {
@@ -62,5 +63,4 @@ onBeforeUnmount(() => {
   </Teleport>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 defineProps<{
   percent?: number
   isAutoLoading?: boolean
@@ -12,7 +12,10 @@ const loading = defineModel<boolean>({
 
 <template>
   <Transition name="fade">
-    <div v-if="loading" class="bg-light-800 bg-op40 flex-center flex-col h-screen w-screen left-0 top-0 fixed z-9999 backdrop-blur-md">
+    <div
+      v-if="loading"
+      class="bg-light-800 bg-op40 flex-center flex-col h-screen w-screen left-0 top-0 fixed z-9999 backdrop-blur-md"
+    >
       <div class="loader" :class="{ 'auto-loading': isAutoLoading }">
         <div v-if="!isAutoLoading" class="progress" :style="{ width: `${percent ?? 0}%` }" />
       </div>

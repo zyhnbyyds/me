@@ -29,5 +29,9 @@
     "termtype",
     "unilikekey",
     "wbid"
-  ]
+  ],
+  "eslint.enable": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSaveMode": "file"
 }

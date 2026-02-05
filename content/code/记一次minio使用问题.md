@@ -1,10 +1,10 @@
 ---
 title: 记一次minio使用问题
-description: "在使用minio，并在生产环境使用https踩坑问题"
-image: "minio-use.png"
-publishAt: "2025-06-03 19:30:00"
-updateAt: "2025-06-03 19:30:00"
-tags: ["Nuxt", "minio", "全栈开发", "OSS存储"]
+description: '在使用minio，并在生产环境使用https踩坑问题'
+image: 'minio-use.png'
+publishAt: '2025-06-03 19:30:00'
+updateAt: '2025-06-03 19:30:00'
+tags: ['Nuxt', 'minio', '全栈开发', 'OSS存储']
 ---
 
 ## minio简介

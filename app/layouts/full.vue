@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { menuList } from '~/constants'
 
 const scrollRef = ref<HTMLElement>()
@@ -15,7 +15,10 @@ provide('scroll', {
   <div class="text-common flex hw-screen overflow-hidden">
     <header class="border-r-0.5px border-common flex h-full w-auto">
       <div class="px-3 w-19 transition-all overflow-hidden">
-        <div class="rounded-full flex-center inline-flex h-14 w-14 transition-all" hover="bg-hover-common-trans">
+        <div
+          class="rounded-full flex-center inline-flex h-14 w-14 transition-all"
+          hover="bg-hover-common-trans"
+        >
           <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
         </div>
 

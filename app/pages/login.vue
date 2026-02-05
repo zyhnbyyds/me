@@ -15,8 +15,7 @@ async function signInWithOtp() {
       emailRedirectTo: 'http://localhost:3100/confirm',
     },
   })
-  if (error)
-    useRouter().push('/error')
+  if (error) useRouter().push('/error')
 }
 </script>
 
@@ -24,18 +23,11 @@ async function signInWithOtp() {
   <div bg-light-300 flex-center h-screen hw-full min-w-sm>
     <Card text-center w-sm title="Login">
       <div>
-        <input
-          v-model="email"
-          border-1
-          border-red
-          type="email"
-        >
+        <input v-model="email" border-1 border-red type="email" />
       </div>
 
       <template #footer>
-        <Btn m-2 inline-block @click="signInWithOtp">
-          Sign In with E-Mail
-        </Btn>
+        <Btn m-2 inline-block @click="signInWithOtp"> Sign In with E-Mail </Btn>
       </template>
     </Card>
   </div>

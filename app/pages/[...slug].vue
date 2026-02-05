@@ -9,14 +9,17 @@ const [loading, load] = useToggle(false)
 const { data: page } = useAsyncData(decodeURIComponent(route.path), () => {
   return queryCollection('blog').path(decodeURIComponent(route.path)).first()
 })
-const { data: comments } = useAsyncData<ReplyCommentItem[]>('/api/blog/comment', () => {
-  if (!page.value)
-    return new Promise(() => { })
-  return $api('/api/blog/comment', {
-    method: 'get',
-    query: { id: page.value.path.replaceAll('/', '_') },
-  })
-}, { default: () => [], watch: [page] })
+const { data: comments } = useAsyncData<ReplyCommentItem[]>(
+  '/api/blog/comment',
+  () => {
+    if (!page.value) return new Promise(() => {})
+    return $api('/api/blog/comment', {
+      method: 'get',
+      query: { id: page.value.path.replaceAll('/', '_') },
+    })
+  },
+  { default: () => [], watch: [page] },
+)
 
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
@@ -26,7 +29,7 @@ useSeoMeta({
   ogImage: page.value?.image,
 })
 
-const { y } = inject<{ x: Ref<number>, y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
+const { y } = inject<{ x: Ref<number>; y: Ref<number> }>('scroll', { x: ref(0), y: ref(0) })
 
 setTimeout(() => {
   y.value = 0
@@ -37,13 +40,15 @@ onBeforeRouteLeave(() => {
 })
 
 async function hdClickSend(val: EmojiInfo[]) {
-  if (!page.value || !loggedIn.value || !user.value)
-    return
+  if (!page.value || !loggedIn.value || !user.value) return
 
   const id = page.value.path.replaceAll('/', '_')
   const body = { id, comment: val, fromUserId: user.value.id, toUserId: 0, depth: 1 }
   load(true)
-  const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', { method: 'post', body })
+  const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', {
+    method: 'post',
+    body,
+  })
   if (flag) {
     comments.value.unshift({
       fileId: id,
@@ -77,7 +82,12 @@ async function hdClickSend(val: EmojiInfo[]) {
           <Separator mb-2 label="~封面图~" />
 
           <div py-5 flex-center>
-            <NuxtImg v-if="page?.image" :quality="70" class="border-1 border-common rounded-lg max-h-150 w-auto overflow-hidden" :src="`/blog/${page?.image}`" />
+            <NuxtImg
+              v-if="page?.image"
+              :quality="70"
+              class="border-1 border-common rounded-lg max-h-150 w-auto overflow-hidden"
+              :src="`/blog/${page?.image}`"
+            />
           </div>
           <template #fallback>
             <Loading mt20 :loading="true" />
@@ -91,7 +101,13 @@ async function hdClickSend(val: EmojiInfo[]) {
         <div text-3 font-bold mb-2 flex items-center justify-end>
           <div v-if="!loggedIn">
             <button
-              px-2 py-1 rounded-md bg-light-700 flex-col-center cursor-pointer dark:bg-dark-300
+              px-2
+              py-1
+              rounded-md
+              bg-light-700
+              flex-col-center
+              cursor-pointer
+              dark:bg-dark-300
               @click="openInPopup('/auth/github')"
             >
               <Icon name="skill-icons:github-dark" mr-1 />
@@ -101,16 +117,27 @@ async function hdClickSend(val: EmojiInfo[]) {
 
           <div v-else flex-col-center>
             <span text-4 mr-2 class="i-carbon:logout cursor-pointer rotate-180" @click="clear" />
-            <img rounded-full h-5 w-5 :src="user?.avatar_url">
+            <img rounded-full h-5 w-5 :src="user?.avatar_url" />
             <div ml-2>
               {{ user?.name }}
             </div>
           </div>
         </div>
 
-        <BlogComment v-model="commentIpt" placeholder="来评论一下吧，留下你的足迹..." :loading="loading" @send="hdClickSend" />
+        <BlogComment
+          v-model="commentIpt"
+          placeholder="来评论一下吧，留下你的足迹..."
+          :loading="loading"
+          @send="hdClickSend"
+        />
 
-        <Separator v-if="comments && comments.length > 0" class="my-5" px-2 type="dashed" label="评论列表" />
+        <Separator
+          v-if="comments && comments.length > 0"
+          class="my-5"
+          px-2
+          type="dashed"
+          label="评论列表"
+        />
 
         <BlogCommentList v-model:loading="loading" v-model:comments="comments" :blog="page" />
       </div>

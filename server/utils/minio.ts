@@ -15,17 +15,13 @@ export function transFileNameToSavePath(file: File) {
   let suffix = ''
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'ico'].includes(ext)) {
     suffix = 'album'
-  }
-  else if (['mp4', 'avi', 'mov', 'mkv'].includes(ext)) {
+  } else if (['mp4', 'avi', 'mov', 'mkv'].includes(ext)) {
     suffix = 'video'
-  }
-  else if (['mp3', 'wav', 'flac'].includes(ext)) {
+  } else if (['mp3', 'wav', 'flac'].includes(ext)) {
     suffix = 'audio'
-  }
-  else if (['pdf', 'doc', 'docx', 'txt', 'zip'].includes(ext)) {
+  } else if (['pdf', 'doc', 'docx', 'txt', 'zip'].includes(ext)) {
     suffix = 'document'
-  }
-  else {
+  } else {
     throw new Error(`Unsupported file type ${ext}`)
   }
   return `${suffix}/${ulid()}.${ext}`

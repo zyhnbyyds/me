@@ -15,12 +15,10 @@ export default defineEventHandler(async (event) => {
   if (likes) {
     if (isLiked) {
       await storage.setItem(likesKey, likes + 1)
-    }
-    else {
+    } else {
       await storage.setItem(likesKey, likes - 1)
     }
-  }
-  else {
+  } else {
     await storage.setItem(likesKey, 1)
   }
 

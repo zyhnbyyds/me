@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 defineProps<{
   url: string
   quality?: number
@@ -20,7 +20,15 @@ defineEmits<{
     :custom="true"
   >
     <div v-if="!isLoaded" class="animate-bg rounded-md hw-full" />
-    <img v-else :src="src" v-bind="imgAttrs" :class="cClass" class="rounded-md hw-full object-cover object-center" @click="$emit('click', url)" @load="$emit('load')">
+    <img
+      v-else
+      :src="src"
+      v-bind="imgAttrs"
+      :class="cClass"
+      class="rounded-md hw-full object-cover object-center"
+      @click="$emit('click', url)"
+      @load="$emit('load')"
+    />
   </NuxtImg>
 </template>
 

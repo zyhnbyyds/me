@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { me } from '~/constants'
 </script>
 
@@ -6,11 +6,7 @@ import { me } from '~/constants'
   <div class="p-3 bg-hover-common-trans cursor-pointer">
     <div class="flex gap-2 items-center">
       <div class="rounded-full h-10 w-10 overflow-hidden">
-        <img
-          class="hw-full"
-          src="/public/me.png"
-          alt="User Avatar"
-        >
+        <img class="hw-full" src="/public/me.png" alt="User Avatar" />
       </div>
       <div class="flex flex-col">
         <span class="text-sm font-semibold">{{ me.name }}</span>

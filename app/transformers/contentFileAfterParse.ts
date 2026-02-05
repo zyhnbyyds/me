@@ -11,11 +11,14 @@ export function transformContentFileAfterParse(ctx: FileAfterParseHook) {
   content.readingTime = Math.ceil(readingTime(text, { wordsPerMinute }).minutes)
 
   Object.keys(meta).forEach((key) => {
-    if (['readingTime', 'title', 'description', 'image', 'tags', 'publishAt', 'updateAt'].includes(key)) {
+    if (
+      ['readingTime', 'title', 'description', 'image', 'tags', 'publishAt', 'updateAt'].includes(
+        key,
+      )
+    ) {
       if (key === 'publishAt' || key === 'updateAt') {
         content[key] = meta[key] ? new Date(meta[key]).toISOString() : null
-      }
-      else {
+      } else {
         content[key] = meta[key as keyof ContentMeta]
       }
     }

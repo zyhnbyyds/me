@@ -5,7 +5,12 @@ import consola from 'consola'
 
 export default defineEventHandler(async (event) => {
   const client = await serverSupabaseClient(event)
-  const { current = 1, size = 20, tid = '', content } = getQuery<PageQuery & { tid?: string, content?: string }>(event)
+  const {
+    current = 1,
+    size = 20,
+    tid = '',
+    content,
+  } = getQuery<PageQuery & { tid?: string; content?: string }>(event)
   const currentNumber = Number(current) || 1
   const sizeNumber = Number(size) || 20
 
@@ -13,11 +18,7 @@ export default defineEventHandler(async (event) => {
 
   let searchSingleResult: any = null
   if (tid) {
-    const { data, error } = await client
-      .from('qq_content')
-      .select('*')
-      .eq('tid', tid)
-      .single()
+    const { data, error } = await client.from('qq_content').select('*').eq('tid', tid).single()
 
     if (error) {
       consola.error(error)
@@ -47,14 +48,16 @@ export default defineEventHandler(async (event) => {
       total: 0,
     }
   }
-  const transformedData = [searchSingleResult, ...data].filter(item => item !== null).map((item) => {
-    return {
-      ...item,
-      commentlist: item.commentlist ? JSON.parse(item.commentlist) : null,
-      pic: item.pic ? JSON.parse(item.pic) : null,
-      video: item.video ? JSON.parse(item.video) : null,
-    } as QQContentItem
-  })
+  const transformedData = [searchSingleResult, ...data]
+    .filter((item) => item !== null)
+    .map((item) => {
+      return {
+        ...item,
+        commentlist: item.commentlist ? JSON.parse(item.commentlist) : null,
+        pic: item.pic ? JSON.parse(item.pic) : null,
+        video: item.video ? JSON.parse(item.video) : null,
+      } as QQContentItem
+    })
 
   return {
     data: transformedData,

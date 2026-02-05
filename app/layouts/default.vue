@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { menuList } from '~/constants'
 
 const scrollRef = ref<HTMLElement>()

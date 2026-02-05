@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import type { BucketItem } from 'minio'
 
 definePageMeta({
@@ -10,9 +10,13 @@ definePageMeta({
 
 const { $api } = useNuxtApp()
 
-const { data, status } = useAsyncData('gallery', async () => {
-  return await $api<BucketItem[]>('/api/gallery/list')
-}, { default: () => [] })
+const { data, status } = useAsyncData(
+  'gallery',
+  async () => {
+    return await $api<BucketItem[]>('/api/gallery/list')
+  },
+  { default: () => [] },
+)
 
 const activeName = ref<string | null>(null)
 
@@ -40,7 +44,12 @@ function hdPreviewImg(name?: string) {
       </template>
     </CHead>
     <ClientOnly>
-      <div v-if="status === 'success'" class="<lg:columns-3 <md:columns-2 <sm:columns-1" p-4 columns-4>
+      <div
+        v-if="status === 'success'"
+        class="<lg:columns-3 <md:columns-2 <sm:columns-1"
+        p-4
+        columns-4
+      >
         <div v-for="(item, index) in data" :key="index" mb3>
           <PreviewImg
             provider="minio"

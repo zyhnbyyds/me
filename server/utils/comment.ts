@@ -1,8 +1,22 @@
 import type { CommentItem } from '~~/shared/types/blog'
 
-export type CommentItemDataField = Omit<CommentItem, 'content' | 'toUser' | 'fromUser' | 'replyList'> & { replyList: CommentItemDataField[], key: string }
+export type CommentItemDataField = Omit<
+  CommentItem,
+  'content' | 'toUser' | 'fromUser' | 'replyList'
+> & { replyList: CommentItemDataField[]; key: string }
 export function transformStoreKeyToDataField(key: string): CommentItemDataField {
-  const [type = '', fileId = '', fromUserId = '0', _to, toUserId = '0', commentId = '0', _toComment, parentId = '0', depth = '1', timestamp = '0'] = key.split(':') as string[]
+  const [
+    type = '',
+    fileId = '',
+    fromUserId = '0',
+    _to,
+    toUserId = '0',
+    commentId = '0',
+    _toComment,
+    parentId = '0',
+    depth = '1',
+    timestamp = '0',
+  ] = key.split(':') as string[]
 
   return {
     type,
@@ -58,7 +72,10 @@ export function buildCommentTree(list: CommentItemDataField[], rootId: string) {
   return buildTree(rootId)
 }
 
-export function buildFlattenedTwoLevelTree(list: CommentItemDataField[], rootId: string): CommentItemDataField[] {
+export function buildFlattenedTwoLevelTree(
+  list: CommentItemDataField[],
+  rootId: string,
+): CommentItemDataField[] {
   const map = new Map<string, CommentItemDataField[]>()
 
   // 1. 构建 parentId -> children 的映射

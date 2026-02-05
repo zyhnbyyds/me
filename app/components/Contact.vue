@@ -1,9 +1,7 @@
-<script lang='ts' setup></script>
+<script lang="ts" setup></script>
 
 <template>
-  <div>
-    联系方式
-  </div>
+  <div>联系方式</div>
 </template>
 
 <style scoped></style>

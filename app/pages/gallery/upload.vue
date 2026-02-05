@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 definePageMeta({
   middleware: 'auth-middleware',
 })
@@ -41,8 +41,7 @@ function showFileTypeIcon(fileName: string): string {
 }
 
 onChange(async (fileList) => {
-  if (!fileList)
-    return
+  if (!fileList) return
 
   files.value = files.value.concat(Array.from(fileList))
   const formData = new FormData()
@@ -51,8 +50,7 @@ onChange(async (fileList) => {
   })
 })
 
-onCancel(() => {
-})
+onCancel(() => {})
 
 onKeyStroke('Escape', () => {
   if (loading.value) {
@@ -86,18 +84,17 @@ async function hdConfirmUpload() {
 <template>
   <div>
     <CHead title="上传" />
-    <div class="m-4 p-4 rounded-lg bg-hover-common flex flex-col cursor-pointer select-none transition-colors items-center justify-center" @click="open()">
-      <div class="text-2xl font-bold mb-4">
-        上传文件
-      </div>
-      <div class="text-sm mt-2">
-        支持(图片或者视频) 上传，支持批量上传，最大支持 50MB 的文件。
-      </div>
+    <div
+      class="m-4 p-4 rounded-lg bg-hover-common flex flex-col cursor-pointer select-none transition-colors items-center justify-center"
+      @click="open()"
+    >
+      <div class="text-2xl font-bold mb-4">上传文件</div>
+      <div class="text-sm mt-2">支持(图片或者视频) 上传，支持批量上传，最大支持 50MB 的文件。</div>
     </div>
 
     <div mx-5>
       <TransitionGroup name="fade" tag="div">
-        <div v-for="item, i in files" :key="item.name" class="group mb-1">
+        <div v-for="(item, i) in files" :key="item.name" class="group mb-1">
           <div class="p-2 rounded-lg bg-hover-common flex items-center justify-between">
             <span flex-center gap-1>
               <Icon text-4 :name="`${showFileTypeIcon(item.name)}`" class="mr-2" />
@@ -106,7 +103,10 @@ async function hdConfirmUpload() {
               </div>
             </span>
             <div class="hidden transition-all group-hover:inline-flex">
-              <span class="text-3 text-red-500 cursor-pointer hover:text-red-700" @click="files ? files.splice(i, 1) : null">
+              <span
+                class="text-3 text-red-500 cursor-pointer hover:text-red-700"
+                @click="files ? files.splice(i, 1) : null"
+              >
                 删除
               </span>
             </div>
@@ -123,11 +123,7 @@ async function hdConfirmUpload() {
     />
 
     <div v-if="files.length > 0" mt-5 text-center>
-      <Btn
-        @click="hdConfirmUpload"
-      >
-        确认上传
-      </Btn>
+      <Btn @click="hdConfirmUpload"> 确认上传 </Btn>
     </div>
   </div>
 </template>

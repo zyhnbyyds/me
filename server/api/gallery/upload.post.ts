@@ -21,15 +21,12 @@ export default defineEventHandler(async (event) => {
 
       const buffer = await value.arrayBuffer()
       const stream = Readable.from(Buffer.from(buffer))
-      consola.log(`Uploading file: ${value.name} to path: ${savePath}`, `${(value.size / (1024 * 1024)).toFixed(2)}MB`)
-
-      await oss.putObject(
-        'me-photos',
-        savePath,
-        stream,
-        value.size,
-        { 'Content-Type': value.type },
+      consola.log(
+        `Uploading file: ${value.name} to path: ${savePath}`,
+        `${(value.size / (1024 * 1024)).toFixed(2)}MB`,
       )
+
+      await oss.putObject('me-photos', savePath, stream, value.size, { 'Content-Type': value.type })
       consola.success(`File uploaded successfully: ${value.name} to path: ${savePath}`)
     }
   }

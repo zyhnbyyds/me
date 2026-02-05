@@ -1,9 +1,13 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import type { ImageProviders } from '@nuxt/image'
 import type { CSSProperties, Reactive } from 'vue'
 import { inject, nextTick, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
-const { src, active = false, provider = 'ipx' } = defineProps<{
+const {
+  src,
+  active = false,
+  provider = 'ipx',
+} = defineProps<{
   src: string
   active?: boolean
   provider?: keyof ImageProviders | 'minio'
@@ -26,28 +30,27 @@ const loading = ref(true)
 const bHeight = ref(0)
 
 onClickOutside(imgRef, async () => {
-  if (!previewInfo.visible || previewInfo.floating)
-
-    return
+  if (!previewInfo.visible || previewInfo.floating) return
   previewInfo.visible = false
 })
 
-watch(() => previewInfo.visible, (val) => {
-  if (!val) {
-    calculatePosition(true)
-  }
-  else {
-    calculatePosition()
-  }
-})
+watch(
+  () => previewInfo.visible,
+  (val) => {
+    if (!val) {
+      calculatePosition(true)
+    } else {
+      calculatePosition()
+    }
+  },
+)
 
 function handleImgLoad() {
   loading.value = false
 }
 
 async function calculatePosition(back = false) {
-  if (!imgRef.value || !active)
-    return
+  if (!imgRef.value || !active) return
 
   const centerX = wWidth.value / 2
   const centerY = wHeight.value / 2
@@ -69,7 +72,7 @@ async function calculatePosition(back = false) {
   }
 
   function calculateEnd() {
-    scale = Math.min(wWidth.value * 0.8 / w, wHeight.value * 0.8 / h)
+    scale = Math.min((wWidth.value * 0.8) / w, (wHeight.value * 0.8) / h)
     const translateX = centerX - w / 2
     const translateY = centerY - h / 2
 
@@ -85,8 +88,7 @@ async function calculatePosition(back = false) {
     calculateStart()
     await nextTick()
     calculateEnd()
-  }
-  else {
+  } else {
     calculateStart()
   }
 }
@@ -105,19 +107,42 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div :style="{ height: (active && previewInfo.floating) ? `${bHeight}px` : '' }" relative :class="loading ? 'loading-mask' : ''">
+  <div
+    :style="{ height: active && previewInfo.floating ? `${bHeight}px` : '' }"
+    relative
+    :class="loading ? 'loading-mask' : ''"
+  >
     <Teleport to="#previewImg" :disabled="!previewInfo.floating || !active">
       <NuxtImg
         ref="imgRef"
-        :style="{ ...(active && previewInfo.floating) ? previewRefStyle : {}, ...{ transitionDuration: `${previewInfo.duration}ms` } }"
+        :style="{
+          ...(active && previewInfo.floating ? previewRefStyle : {}),
+          ...{ transitionDuration: `${previewInfo.duration}ms` },
+        }"
         :src="src ?? ''"
         :alt="src ?? ''"
         loading="lazy"
-        :class="[(active && previewInfo.floating) ? 'absolute' : '']"
-        preload rounded-md w-full cursor-pointer transition-all object-cover object-center :provider="provider as any" @load="handleImgLoad" @click="hdClickPreview"
+        :class="[active && previewInfo.floating ? 'absolute' : '']"
+        preload
+        rounded-md
+        w-full
+        cursor-pointer
+        transition-all
+        object-cover
+        object-center
+        :provider="provider as any"
+        @load="handleImgLoad"
+        @click="hdClickPreview"
       />
     </Teleport>
-    <div v-show="(active && previewInfo.floating)" ref="boxRef" :style="{ height: `${bHeight}px` }" inline-flex w-full invisible />
+    <div
+      v-show="active && previewInfo.floating"
+      ref="boxRef"
+      :style="{ height: `${bHeight}px` }"
+      inline-flex
+      w-full
+      invisible
+    />
   </div>
 </template>
 

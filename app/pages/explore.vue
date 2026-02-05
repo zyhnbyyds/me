@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 export interface SearchResItem {
   keyword: string
   id: string
@@ -28,8 +28,7 @@ async function searchFn() {
 watchEffect(() => {
   if (searchIpt.value) {
     searchFn()
-  }
-  else {
+  } else {
     searchList.value = []
   }
 })

@@ -3,14 +3,17 @@ import { getUrl } from 'qface'
 import { computed } from 'vue'
 import { qqEmojiKeyToQFaceEmojiKeyMap } from '~/config/qqEmojiToQFaceImage'
 
-const props = withDefaults(defineProps<{
-  content: string
-  customClass?: string
-  emojiSize?: 'small' | 'medium' | 'large'
-}>(), { emojiSize: 'medium', customClass: '' })
+const props = withDefaults(
+  defineProps<{
+    content: string
+    customClass?: string
+    emojiSize?: 'small' | 'medium' | 'large'
+  }>(),
+  { emojiSize: 'medium', customClass: '' },
+)
 
 function parseContent(content: string) {
-  const result: Array<{ type: 'text' | 'emoji', value: string }> = []
+  const result: Array<{ type: 'text' | 'emoji'; value: string }> = []
   let lastIndex = 0
   const regex = /\[em\](.*?)\[\/em\]/g
   let match: RegExpExecArray | null

@@ -9,14 +9,15 @@ export default defineEventHandler(async (event) => {
 
   const commentStoreKeys = await storage.getKeys(`comments:${id}:`)
 
-  if (!commentStoreKeys || !commentStoreKeys.length)
-    return []
+  if (!commentStoreKeys || !commentStoreKeys.length) return []
 
   const commentStoreKeysData = commentStoreKeys.map(transformStoreKeyToDataField)
 
   const commentTree = buildFlattenedTwoLevelTree(commentStoreKeysData, '0')
 
-  async function extraCommentDataAddFn(keyWithDataList: CommentItemDataField[]): Promise<CommentItem[]> {
+  async function extraCommentDataAddFn(
+    keyWithDataList: CommentItemDataField[],
+  ): Promise<CommentItem[]> {
     const res = await Promise.all(
       keyWithDataList.map(async (itm) => {
         const comment = await storage.getItem<EmojiInfo[]>(itm.key)
@@ -36,7 +37,7 @@ export default defineEventHandler(async (event) => {
         return {
           ...transformedData,
           content: comment || [],
-          fromUser: fromUser ?? { name: '未知用户', id: 0, avatar_url: '' } as User,
+          fromUser: fromUser ?? ({ name: '未知用户', id: 0, avatar_url: '' } as User),
           toUser,
           replyList,
         } satisfies CommentItem

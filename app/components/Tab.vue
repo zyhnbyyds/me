@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 export interface TabItem {
   label: string
   value: string
@@ -16,11 +16,10 @@ const active = defineModel<string>()
 <template>
   <div class="flex">
     <div
-      v-for="item in list" :key="item.value"
+      v-for="item in list"
+      :key="item.value"
       class="tab-item text-15px lh-50px text-center border-b-0.5px border-common rounded-0 flex-1 h-50px cursor-pointer transition-colors relative"
-      :class="active === item.value
-        ? 'font-bold tab-item-active' : ''"
-
+      :class="active === item.value ? 'font-bold tab-item-active' : ''"
       @click="active = item.value"
     >
       {{ item.label }}

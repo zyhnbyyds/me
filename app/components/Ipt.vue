@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 const props = defineProps<{
   placeholder?: string
   maxLength?: number
@@ -15,23 +15,24 @@ const { focused } = useFocus(editableRef)
 const len = ref<number>(0)
 
 const showPlaceholder = computed(() => {
-  if (len.value > 0)
-    return ''
+  if (len.value > 0) return ''
 
   return props.placeholder || '请输入...'
 })
 
 onMounted(() => {
-  if (editableRef.value)
-    editableRef.value.innerHTML = iptVal.value
+  if (editableRef.value) editableRef.value.innerHTML = iptVal.value
 })
 
-watch(() => iptVal.value, (val) => {
-  calculateLength()
-  if (!val && editableRef.value) {
-    editableRef.value.innerHTML = ''
-  }
-})
+watch(
+  () => iptVal.value,
+  (val) => {
+    calculateLength()
+    if (!val && editableRef.value) {
+      editableRef.value.innerHTML = ''
+    }
+  },
+)
 
 async function update(e: Event) {
   if (e.target) {
@@ -51,8 +52,7 @@ async function calculateLength() {
     editableRef.value.childNodes.forEach((node) => {
       if (node.nodeName === 'IMG') {
         len.value += 1
-      }
-      else if (node.nodeName === '#text') {
+      } else if (node.nodeName === '#text') {
         len.value += (node.textContent || '').length
       }
     })
@@ -77,8 +77,7 @@ function insertImage(url: string) {
   img.className = 'emoji-sm'
 
   const selection = window.getSelection()
-  if (!selection || !selection.rangeCount || !editableRef.value)
-    return
+  if (!selection || !selection.rangeCount || !editableRef.value) return
 
   const range = selection.getRangeAt(0)
   range.deleteContents()
@@ -110,8 +109,7 @@ function handlePaste(event: ClipboardEvent) {
 
 function insertTextAtCursor(text: string) {
   const selection = window.getSelection()
-  if (!selection?.rangeCount)
-    return
+  if (!selection?.rangeCount) return
 
   const range = selection.getRangeAt(0)
   range.deleteContents()
@@ -126,8 +124,7 @@ function insertTextAtCursor(text: string) {
   selection.removeAllRanges()
   selection.addRange(range)
 
-  if (editableRef.value)
-    iptVal.value = editableRef.value.innerHTML
+  if (editableRef.value) iptVal.value = editableRef.value.innerHTML
 }
 </script>
 

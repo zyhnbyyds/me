@@ -1,4 +1,4 @@
-<script lang='ts' setup>
+<script lang="ts" setup>
 import type { SearchResItem } from '~/pages/explore.vue'
 
 export interface SearchIptProps {
@@ -28,10 +28,16 @@ function clickIptItem(e: SearchResItem) {
   <div ref="iptRef" h-10 relative @click="focused = true">
     <input
       v-model="value"
-      px-5 pl-10 rounded-full h-10 w-full dark:text-white dark:bg-dark-500
+      px-5
+      pl-10
+      rounded-full
+      h-10
+      w-full
+      dark:text-white
+      dark:bg-dark-500
       class="outline-1 outline-light-900 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
       :placeholder="props.placeholder"
-    >
+    />
     <div flex-center h-5 w-5 left-3 absolute class="top-1/2 -translate-y-50%">
       <Icon name="material-symbols:search" text-5 />
     </div>
@@ -48,8 +54,25 @@ function clickIptItem(e: SearchResItem) {
         >
           <div
             v-for="item in list"
-            v-show="list.length !== 0" :key="item.id"
-            text-3.5 lh-40px px-4 border-b border-common bg-hover-common-trans rounded-0 border-dashed h-40px w-full cursor-pointer text-nowrap text-ellipsis overflow-hidden hover:text-black hover:bg-light-200 @click="clickIptItem(item)"
+            v-show="list.length !== 0"
+            :key="item.id"
+            text-3.5
+            lh-40px
+            px-4
+            border-b
+            border-common
+            bg-hover-common-trans
+            rounded-0
+            border-dashed
+            h-40px
+            w-full
+            cursor-pointer
+            text-nowrap
+            text-ellipsis
+            overflow-hidden
+            hover:text-black
+            hover:bg-light-200
+            @click="clickIptItem(item)"
           >
             {{ item.keyword }}
           </div>
