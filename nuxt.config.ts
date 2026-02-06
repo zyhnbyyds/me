@@ -21,7 +21,30 @@ export default defineNuxtConfig({
   supabase: {
     redirect: false,
   },
+
+  build: {
+    analyze: true,
+  },
   compatibilityDate: '2025-07-17',
+
+  vite: {
+    optimizeDeps: {
+      // 避免对由模块声明的、pnpm 嵌套依赖的预构建解析失败警告
+      exclude: [
+        '@supabase/supabase-js',
+        'remark-gfm',
+        'remark-emoji',
+        'remark-mdc',
+        'remark-rehype',
+        'rehype-raw',
+        'parse5',
+        'unist-util-visit',
+        'unified',
+        'debug',
+      ],
+    },
+    build: {},
+  },
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
@@ -62,15 +85,13 @@ export default defineNuxtConfig({
       type: 'postgres',
       url: process.env.DATABASE_URL ?? '',
     },
+    experimental: { sqliteConnector: 'better-sqlite3' },
     renderer: {
       anchorLinks: {
         h1: false,
         h2: false,
         h3: false,
       },
-    },
-    experimental: {
-      sqliteConnector: 'native',
     },
   },
 

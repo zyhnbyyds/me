@@ -61,7 +61,7 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
                 <div
                   class="text-14px text-gray flex w-full bottom-0 left-0 justify-between absolute z-1"
                 >
-                  <span>{{ dayjs(blobItem.publishAt).fromNow() }}</span>
+                  <span>{{ dayjs(blobItem.updateAt).fromNow() }}</span>
 
                   <span>阅读需要{{ blobItem.readingTime }}分钟</span>
                 </div>
