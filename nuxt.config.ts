@@ -29,18 +29,8 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      // 避免对由模块声明的、pnpm 嵌套依赖的预构建解析失败警告
       exclude: [
-        '@supabase/supabase-js',
-        'remark-gfm',
-        'remark-emoji',
-        'remark-mdc',
-        'remark-rehype',
-        'rehype-raw',
-        'parse5',
-        'unist-util-visit',
-        'unified',
-        'debug',
+        '@nuxtjs/mdc',
       ],
     },
     build: {},
