@@ -43,7 +43,6 @@
     "consola": "3.4.2",
     "dayjs": "1.11.19",
     "husky": "9.1.7",
-    "minio": "8.0.6",
     "nuxt": "4.3.0",
     "nuxt-auth-utils": "0.5.28",
     "nuxt-typed-router": "4.0.2",

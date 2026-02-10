@@ -1,4 +1,3 @@
-/* eslint-disable node/prefer-global/process */
 import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
 export default defineNuxtConfig({
@@ -29,12 +28,12 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
-      exclude: [
-        '@nuxtjs/mdc',
-      ],
+      exclude: ['@nuxtjs/mdc'],
     },
     build: {},
   },
+
+  icon: {},
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
@@ -100,14 +99,6 @@ export default defineNuxtConfig({
         clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
         redirectURL: 'http://localhost:3002/auth/github',
       },
-    },
-    minio: {
-      endPoint: import.meta.env.OSS_ENDPOINT,
-      port: Number.parseInt(import.meta.env.OSS_PORT, 10) || 443,
-      useSSL: import.meta.env.OSS_USE_SSL === 'true',
-      accessKey: import.meta.env.OSS_ACCESS_KEY_ID,
-      secretKey: import.meta.env.OSS_SECRET_ACCESS_KEY,
-      pathStyle: true,
     },
     public: {
       showUploadBtnGithubUserId: import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID,

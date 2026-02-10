@@ -10,7 +10,7 @@ const {
 } = defineProps<{
   src: string
   active?: boolean
-  provider?: keyof ImageProviders | 'minio'
+  provider?: keyof ImageProviders
 }>()
 
 const emits = defineEmits<{
