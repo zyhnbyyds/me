@@ -33,7 +33,9 @@ export default defineNuxtConfig({
     build: {},
   },
 
-  icon: {},
+  icon: {
+    serverBundle: 'local',
+  },
 
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
