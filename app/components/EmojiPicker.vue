@@ -43,7 +43,7 @@ function hdImgUrl(name: string) {
             class="flex-center inline-flex h-10 w-10"
             @click="emits('select', hdImgUrl(item))"
           >
-            <img :src="hdImgUrl(item)" h-6.5 w-6.5 :alt="item" />
+            <NuxtImg :src="hdImgUrl(item)" h-6.5 w-6.5 :alt="item" />
           </div>
         </div>
       </div>

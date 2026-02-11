@@ -79,13 +79,11 @@ async function hdClickSend(val: EmojiInfo[]) {
         <ClientOnly>
           <ContentRenderer v-if="page" :value="page" />
 
-          <Separator mb-2 label="~封面图~" />
-
           <div py-5 flex-center>
             <NuxtImg
               v-if="page?.image"
               :quality="70"
-              class="border-1 border-common rounded-lg max-h-150 w-auto overflow-hidden"
+              class="w-full object-cover"
               :src="`/blog/${page?.image}`"
             />
           </div>
@@ -95,7 +93,7 @@ async function hdClickSend(val: EmojiInfo[]) {
         </ClientOnly>
       </div>
 
-      <Separator mx-5 mb-2 label="留下你的评论" />
+      <Separator mx-5 my-6 text-3 label="留下你的评论" />
 
       <div mx-5>
         <div text-3 font-bold mb-2 flex items-center justify-end>

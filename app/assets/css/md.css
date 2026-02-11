@@ -54,7 +54,7 @@
   -webkit-text-size-adjust: 100%;
   margin: 10px 16px;
   color: var(--fgColor-default);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.8;
   word-wrap: break-word;
   padding: 16px;
@@ -178,24 +178,27 @@
 
 /* 表格 */
 .markdown-body table {
+  width: 100%;
   margin: 1em 0;
   border-spacing: 0;
   border-collapse: collapse;
-  display: block;
-  width: max-content;
-  max-width: 100%;
-  overflow: auto;
   border: 1px solid var(--borderColor-default);
+}
+
+.markdown-body table tr {
+  display: flex;
 }
 
 .markdown-body table th {
   font-weight: 600;
+  flex: 1;
   background: var(--bgColor-muted);
   padding: 10px 15px;
   border: 1px solid var(--borderColor-default);
 }
 
 .markdown-body table td {
+  flex: 1;
   padding: 8px 15px;
   border: 1px solid var(--borderColor-default);
 }

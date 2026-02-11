@@ -40,9 +40,8 @@ function handleMenuChange(path: string) {
   >
     <li v-for="item in list" :key="item.path" class="w-a" @click="handleMenuChange(item.path)">
       <div
-        style="font-family: kaiti"
         :to="item.path"
-        class="text-5 mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center <md:mb-0"
+        class="mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center <md:mb-0"
         :class="item.path === active ? 'font-bold' : ''"
       >
         <div class="text-7 font-bold flex-center h-8 w-8">
@@ -51,7 +50,7 @@ function handleMenuChange(path: string) {
         </div>
         <span
           :class="{ hidden: isFold }"
-          class="ml-5 mr-4 w-a inline-block text-nowrap text-ellipsis overflow-hidden <lg:hidden"
+          class="ml-3 mr-4 w-a inline-block text-nowrap text-ellipsis overflow-hidden <lg:hidden"
         >
           {{ item.title }}
         </span>

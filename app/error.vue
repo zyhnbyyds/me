@@ -12,10 +12,10 @@ consola.log(props.error)
 <template>
   <div class="flex-center flex-col h-screen w-screen dark:text-white dark:bg-dark">
     <h1 text-10 font-bold mb-4>
-      {{ error?.statusCode }}
+      {{ error?.status }}
     </h1>
     <div text-gary-700 dark:text-gray-3 text-sm mb-4 max-w-lg>
-      {{ error }}
+      {{ error?.statusText }}
     </div>
     <NuxtLink to="/">
       <Btn label="Go back home" />

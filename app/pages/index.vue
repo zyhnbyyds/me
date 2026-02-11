@@ -46,7 +46,7 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
         <li v-for="blobItem in blobs ?? []" :key="blobItem.id" cursor-pointer>
           <div @click="goToBlogInfo(blobItem)">
             <div
-              class="p-2 border border-common rounded-lg bg-common bg-op30 flex flex-col h-60 w-full"
+              class="p-2 border border-common transition-all hover:shadow-lg rounded-lg bg-common bg-op30 flex flex-col w-full"
             >
               <NuxtImg
                 v-if="blobItem.image"
@@ -54,16 +54,30 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
                 class="border-1 border-common rounded-lg h-40 w-full object-cover"
                 :src="`/blog/${blobItem?.image}`"
               />
-              <div flex-1 relative style="font-family: kaiti">
-                <p mt2 class="text-14px text-nowrap text-ellipsis overflow-hidden">
-                  {{ blobItem.title }}
-                </p>
+              <!-- 标签 -->
+              <div class="flex-col-center mt-2 gap-2">
                 <div
-                  class="text-14px text-gray flex w-full bottom-0 left-0 justify-between absolute z-1"
+                  v-for="tag in blobItem.tags ?? []"
+                  :key="tag"
+                  class="text-12px bg-gray-200/50 rounded-full px-2 py-1 text-gray-800/70"
                 >
-                  <span>{{ dayjs(blobItem.updateAt).fromNow() }}</span>
-
-                  <span>阅读需要{{ blobItem.readingTime }}分钟</span>
+                  {{ tag }}
+                </div>
+              </div>
+              <div flex-1 relative>
+                <h2 mt2 class="text-14px font-bold">
+                  {{ blobItem.title }}
+                </h2>
+                <p mt2 class="text-13px text-gray-800/80">{{ blobItem.description }}</p>
+                <div class="text-14px mt-4 text-gray-800/70 flex w-full justify-between">
+                  <div flex-center gap-1>
+                    <Icon name="carbon:calendar" class="text-4" />
+                    <span text-3>{{ dayjs(blobItem.updateAt).fromNow() }}</span>
+                  </div>
+                  <div flex-center gap-1>
+                    <Icon name="mdi:clock-outline" class="text-4" />
+                    <span text-3>{{ blobItem.readingTime }}分钟</span>
+                  </div>
                 </div>
               </div>
             </div>

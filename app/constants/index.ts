@@ -31,7 +31,7 @@ export const menuList: MenuBarItem[] = [
   {
     title: '探索',
     icon: 'material-symbols:search-rounded',
-    aIcon: 'material-symbols:search-check-2',
+    aIcon: 'material-symbols:search-rounded',
     path: '/explore',
     key: 'explore',
   },

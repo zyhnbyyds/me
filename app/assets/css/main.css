@@ -1,40 +1,14 @@
 @import './transition.css';
 @import './common.css';
 
-/* 英文字体 Inter（只作用于：英文 + 数字 + 基本符号） */
-@font-face {
-  font-family: 'InterAuto';
-  src: url('/fonts/Inter-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  unicode-range:
-    U+0020-007F,
-    /* 基本拉丁字母 a-zA-Z 数字 0-9 */ U+00A0-00FF,
-    /* 拉丁补充 */ U+0131,
-    U+0152-0153,
-    U+02BB-02BC,
-    U+02C6,
-    U+02DA,
-    U+02DC,
-    U+2000-206F,
-    /* 通用标点 */ U+20AC,
-    /* € */ U+2122; /* ™ */
-}
-
-/* 中文字体：楷体（作用于：全部汉字） */
-@font-face {
-  font-family: 'KaitiAuto';
-  src: local('STKaiti'), local('Kaiti'), local('KaiTi'), local('楷体');
-  unicode-range: U+4E00-9FFF; /* 汉字区域 */
-}
-
 html,
 body,
 #__nuxt {
   height: 100%;
   width: 100%;
-  font-family: 'InterAuto', 'KaitiAuto', sans-serif;
-  font-weight: 500;
+  font-family:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 .page-container > div {

@@ -22,7 +22,7 @@ withDefaults(
       :style="{ borderTopWidth: `${height}px` }"
     />
     <slot name="content">
-      <span v-if="label" text-3.5 mx-5>{{ label }}</span>
+      <span v-if="label" text-3 mx-5 op-60>{{ label }}</span>
     </slot>
     <div
       border-t
