@@ -143,24 +143,24 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
 </script>
 
 <template>
-  <div class="p-4 hw-full flex flex-col">
+  <div class="<md:p-2 hw-full flex flex-col">
     <CHead title="日历">
       <template #right>
         <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-1 <md:gap-2">
             <button
               type="button"
-              class="rounded cursor-pointer transition-colors hover:bg-gray-200 dark:hover:bg-dark-300"
+              class="rounded p-2 cursor-pointer transition-colors hover:bg-gray-200 dark:hover:bg-dark-300 <md:min-h-11 <md:min-w-11"
               @click="decreaseMonth"
             >
               <Icon name="carbon:chevron-left" class="text-4" />
             </button>
-            <span class="text-center text-nowrap text-3.5">
+            <span class="text-center text-nowrap text-3.5 <md:text-15px min-w-20 <md:min-w-24">
               {{ year }} 年 {{ String(month).padStart(2, '0') }} 月
             </span>
             <button
               type="button"
-              class="rounded cursor-pointer transition-colors hover:bg-gray-200 dark:hover:bg-dark-300"
+              class="rounded p-2 cursor-pointer transition-colors hover:bg-gray-200 dark:hover:bg-dark-300 <md:min-h-11 <md:min-w-11"
               @click="addMonth"
             >
               <Icon name="carbon:chevron-right" class="text-4" />
@@ -169,25 +169,25 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
         </div>
       </template>
     </CHead>
-
-    <div class="grid grid-cols-7 gap-1 text-center">
-      <div
-        v-for="w in weekLabels"
-        :key="w"
-        class="rounded py-2 text-13px font-medium text-gray-600 dark:text-gray-400"
-      >
-        {{ w }}
+    <div class="p-4 <md:p-2">
+      <div class="grid grid-cols-7 gap-1 <md:gap-0.5 text-center">
+        <div
+          v-for="w in weekLabels"
+          :key="w"
+          class="rounded py-2 <md:py-1 text-13px <md:text-12px font-medium text-gray-600 dark:text-gray-400"
+        >
+          {{ w }}
+        </div>
       </div>
     </div>
-
     <div
-      class="grid grid-cols-7 gap-1 flex-1"
+      class="grid grid-cols-7 gap-1 <md:gap-0.5 flex-1 min-h-0"
       :class="days.length > 35 ? 'grid-rows-6' : 'grid-rows-5'"
     >
       <div
         v-for="item in days"
         :key="item.date"
-        class="min-h-24 rounded-md border border-light-700 p-2 transition-colors dark:border-dark-300"
+        class="min-h-24 <md:min-h-14 rounded-md border border-light-700 p-2 <md:p-1 transition-colors dark:border-dark-300"
         :class="[
           item.isToday
             ? 'bg-linear-to-rb from-blue-300 to-blue-400 text-white dark:from-blue-600 dark:to-blue-300'
@@ -196,27 +196,30 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
               : 'hover:bg-light-400 dark:hover:bg-dark-200 cursor-pointer bg-opacity-40 dark:bg-dark-400 dark:text-gray-100',
         ]"
       >
-        <div class="mb-1 flex items-center justify-between">
-          <span class="text-14px font-medium">{{ item.day }}</span>
-          <span v-if="item.isPrevMonth || item.isNextMonth" class="text-12px opacity-70">
+        <div class="mb-1 <md:mb-0.5 flex items-center justify-between">
+          <span class="text-14px <md:text-12px font-medium">{{ item.day }}</span>
+          <span
+            v-if="item.isPrevMonth || item.isNextMonth"
+            class="text-12px <md:text-11px opacity-70"
+          >
             {{ dayjs(item.date).format('M') }}月
           </span>
         </div>
-        <div class="space-y-1 overflow-hidden">
+        <div class="space-y-1 <md:space-y-0.5 overflow-hidden">
           <div
             v-for="ev in item.events.slice(0, 3)"
             :key="ev.id"
-            class="cursor-pointer truncate rounded px-1.5 py-0.5 text-left text-12px transition-colors"
+            class="cursor-pointer truncate rounded px-1.5 <md:px-1 py-0.5 text-left text-12px <md:text-11px transition-colors"
             :class="
               ev.source === 'blog'
-                ? 'bg-blue-500/30 dark:bg-blue-400/30 hover:bg-blue-500/40 dark:hover:bg-blue-400/40'
-                : 'bg-green-500/30 dark:bg-green-400/30 hover:bg-green-500/40 dark:hover:bg-green-400/40'
+                ? 'bg-blue-500/30 dark:bg-blue-400/30 hover:bg-blue-500/40 dark:hover:bg-blue-400/40 hover:bg-blue-100 dark:hover:bg-blue-900/20'
+                : 'bg-green-500/30 dark:bg-green-400/30 hover:bg-green-500/40 dark:hover:bg-green-400/40 hover:bg-green-100 dark:hover:bg-green-900/20'
             "
             @click.stop="openEventDetail(ev)"
           >
             {{ ev.source === 'blog' ? ev.title : (ev.content ?? ev.name ?? '说说')?.slice(0, 12) }}
           </div>
-          <div v-if="item.events.length > 3" class="text-11px opacity-70">
+          <div v-if="item.events.length > 3" class="text-11px <md:text-10px opacity-70">
             +{{ item.events.length - 3 }} 更多
           </div>
         </div>
@@ -226,7 +229,7 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
     <Modal v-model="modalVisible" :show-mask="true" :close-on-click-overlay="true" is-transition>
       <div
         v-if="selectedEvent"
-        class="overflow-auto absolute max-h-80% top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg max-w-50% bg-white p-6 shadow-xl dark:bg-dark-900 dark:text-gray-100 transition-colors"
+        class="overflow-auto absolute max-h-80% top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg max-w-50% <md:max-w-95% <md:w-95% bg-white p-6 pt-4 <md:p-4 shadow-xl dark:bg-dark-900 dark:text-gray-100 transition-colors"
       >
         <div
           class="mb-4 flex items-center justify-between border-b border-common dark:border-dark-300 pb-2"
@@ -249,7 +252,7 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
           <!-- 关闭按钮 -->
           <button
             type="button"
-            class="cursor-pointer hover:bg-common dark:hover:bg-dark-500 h-8 w-8 rounded-full flex-center transition-colors"
+            class="cursor-pointer hover:bg-common dark:hover:bg-dark-500 h-8 w-8 <md:h-10 <md:w-10 rounded-full flex-center transition-colors touch-manipulation"
             @click="modalVisible = false"
           >
             <Icon name="carbon:close" class="text-6" />
@@ -281,7 +284,7 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
           <div>
             <button
               type="button"
-              class="mt-4 rounded bg-blue-500 px-4 py-2 text-14px text-white hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+              class="mt-4 rounded bg-blue-500 px-4 py-2 <md:py-3 text-14px text-white hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors touch-manipulation"
               @click="goToDetail(selectedEvent)"
             >
               查看全文
@@ -295,7 +298,7 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
           </p>
           <button
             type="button"
-            class="mt-4 rounded bg-green-500 px-4 py-2 text-14px text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-600 transition-colors"
+            class="mt-4 rounded bg-green-500 px-4 py-2 <md:py-3 text-14px text-white hover:bg-green-600 dark:bg-green-700 dark:hover:bg-green-600 transition-colors touch-manipulation"
             @click="goToDetail(selectedEvent)"
           >
             查看详情
