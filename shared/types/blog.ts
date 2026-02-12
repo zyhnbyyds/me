@@ -82,6 +82,8 @@ export type PostCommentBody = Pick<
 > & {
   id: string
   comment: EmojiInfo[]
+  /** 回复时传入，被回复者的用户信息快照 */
+  toUser?: GithubUser | null
 }
 
 export interface ContentMeta {

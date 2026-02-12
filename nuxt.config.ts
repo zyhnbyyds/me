@@ -99,7 +99,7 @@ export default defineNuxtConfig({
       github: {
         clientId: import.meta.env.GITHUB_CLIENT_ID,
         clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
-        redirectURL: 'http://localhost:3002/auth/github',
+        redirectURL: 'http://localhost:3100/auth/github',
       },
     },
     public: {

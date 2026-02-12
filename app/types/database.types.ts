@@ -125,6 +125,45 @@ export interface Database {
         }
         Relationships: []
       }
+      blog_comment: {
+        Row: {
+          id: string
+          file_id: string
+          from_user_id: number
+          to_user_id: number
+          parent_id: string
+          depth: number
+          content: Json
+          from_user_snapshot: Json
+          to_user_snapshot: Json | null
+          created_at: string
+        }
+        Insert: {
+          id: string
+          file_id: string
+          from_user_id: number
+          to_user_id?: number
+          parent_id?: string
+          depth?: number
+          content: Json
+          from_user_snapshot: Json
+          to_user_snapshot?: Json | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          file_id?: string
+          from_user_id?: number
+          to_user_id?: number
+          parent_id?: string
+          depth?: number
+          content?: Json
+          from_user_snapshot?: Json
+          to_user_snapshot?: Json | null
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

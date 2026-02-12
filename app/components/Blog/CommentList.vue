@@ -57,6 +57,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     toUserId: comment.fromUserId,
     depth: comment.depth + 1,
     parentId: comment.commentId,
+    toUser: comment.fromUser,
   }
   loading.value = true
   const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', {

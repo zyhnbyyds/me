@@ -1,52 +1,92 @@
+import type { CommentItem } from '~~/shared/types/blog'
 import type { User } from '#auth-utils'
 import type { CommentItemDataField } from '~~/server/utils/comment'
-import type { CommentItem } from '~~/shared/types/blog'
-import { buildFlattenedTwoLevelTree, transformStoreKeyToDataField } from '~~/server/utils/comment'
+import { serverSupabaseClient } from '#supabase/server'
+import { buildFlattenedTwoLevelTree } from '~~/server/utils/comment'
+
+interface BlogCommentRow {
+  id: string
+  file_id: string
+  from_user_id: number
+  to_user_id: number
+  parent_id: string
+  depth: number
+  content: unknown
+  from_user_snapshot: User | null
+  to_user_snapshot: User | null
+  created_at: string
+}
+
+const unknownUser: User = { name: '未知用户', id: 0, avatar_url: '' } as User
+
+function enrichWithUserData(
+  nodes: CommentItemDataField[],
+  itemMap: Map<string, CommentItem>,
+): Array<CommentItem & { isClickReply?: boolean }> {
+  return nodes.map((node) => {
+    const full = itemMap.get(node.commentId)
+    const replyList = node.replyList.length > 0 ? enrichWithUserData(node.replyList, itemMap) : []
+    return {
+      ...node,
+      content: full?.content ?? [],
+      fromUser: full?.fromUser ?? unknownUser,
+      toUser: full?.toUser ?? null,
+      replyList,
+      isClickReply: false,
+    }
+  })
+}
 
 export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event)
-  const storage = useStorage('me')
+  if (!id) return []
 
-  const commentStoreKeys = await storage.getKeys(`comments:${id}:`)
+  const client = await serverSupabaseClient(event)
+  const { data: rows, error } = await client
+    .from('blog_comment')
+    .select('*')
+    .eq('file_id', id)
+    .order('created_at', { ascending: true })
 
-  if (!commentStoreKeys || !commentStoreKeys.length) return []
-
-  const commentStoreKeysData = commentStoreKeys.map(transformStoreKeyToDataField)
-
-  const commentTree = buildFlattenedTwoLevelTree(commentStoreKeysData, '0')
-
-  async function extraCommentDataAddFn(
-    keyWithDataList: CommentItemDataField[],
-  ): Promise<CommentItem[]> {
-    const res = await Promise.all(
-      keyWithDataList.map(async (itm) => {
-        const comment = await storage.getItem<EmojiInfo[]>(itm.key)
-        const transformedData = transformStoreKeyToDataField(itm.key)
-        const fromUser = await storage.getItem<User>(`user:${transformedData.fromUserId}`)
-
-        let toUser: User | null = null
-        if (transformedData.toUserId !== 0) {
-          toUser = await storage.getItem<User>(`user:${transformedData.toUserId}`)
-        }
-
-        let replyList: CommentItem[] = []
-        if (itm.replyList.length > 0) {
-          replyList = await extraCommentDataAddFn(itm.replyList)
-        }
-
-        return {
-          ...transformedData,
-          content: comment || [],
-          fromUser: fromUser ?? ({ name: '未知用户', id: 0, avatar_url: '' } as User),
-          toUser,
-          replyList,
-        } satisfies CommentItem
-      }),
-    )
-    return res
+  if (error) {
+    throw createError({ statusCode: 500, statusMessage: error.message })
   }
 
-  const comments = await extraCommentDataAddFn(commentTree)
+  if (!rows || rows.length === 0) return []
 
-  return comments
+  const itemMap = new Map<string, CommentItem>()
+  const dataFields: CommentItemDataField[] = []
+
+  for (const row of rows as BlogCommentRow[]) {
+    const item: CommentItem = {
+      type: 'comment',
+      fileId: row.file_id,
+      fromUserId: row.from_user_id,
+      toUserId: row.to_user_id,
+      commentId: row.id,
+      timestamp: new Date(row.created_at).getTime(),
+      content: (row.content as CommentItem['content']) || [],
+      fromUser: (row.from_user_snapshot as User) ?? unknownUser,
+      toUser: (row.to_user_snapshot as User) ?? null,
+      parentId: row.parent_id,
+      depth: row.depth,
+      replyList: [],
+    }
+    itemMap.set(row.id, item)
+    dataFields.push({
+      type: item.type,
+      fileId: item.fileId,
+      fromUserId: item.fromUserId,
+      toUserId: item.toUserId,
+      commentId: item.commentId,
+      timestamp: item.timestamp,
+      parentId: item.parentId,
+      depth: item.depth,
+      replyList: [],
+      key: item.commentId,
+    })
+  }
+
+  const tree = buildFlattenedTwoLevelTree(dataFields, '0')
+  return enrichWithUserData(tree, itemMap)
 })
