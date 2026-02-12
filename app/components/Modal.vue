@@ -51,7 +51,7 @@ onBeforeUnmount(() => {
       <div v-if="visible" inset-0 fixed z-1000>
         <div
           class="flex-center hw-full left-0 top-0 absolute z-60"
-          :class="showMask ? 'backdrop-blur-sm bg-black/40' : ''"
+          :class="showMask ? 'bg-black/40' : ''"
           @click="onOverlayClick"
         >
           <div @click.stop>

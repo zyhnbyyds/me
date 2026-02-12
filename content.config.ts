@@ -11,6 +11,7 @@ export default defineContentConfig({
         title: z.string(),
         description: z.string().optional(),
         image: z.string().optional(),
+        publishAt: z.string().optional(),
         updateAt: z.string().optional(),
         tags: z.array(z.string()).optional(),
       }),
