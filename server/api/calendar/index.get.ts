@@ -2,6 +2,17 @@ import type { BlogCollectionItem } from '@nuxt/content'
 import { serverSupabaseClient } from '#supabase/server'
 import dayjs from 'dayjs'
 
+interface QQCalendarRow {
+  tid: string
+  name: string
+  content: string
+  created_time: number
+  createtime?: string
+  pic?: unknown
+  video?: unknown
+  commentlist?: unknown
+}
+
 export interface CalendarEvent {
   id: string
   source: 'blog' | 'qq'
@@ -56,7 +67,7 @@ export default defineEventHandler(async (event) => {
         .gte('created_time', startTs)
         .lte('created_time', endTs)
         .order('created_time', { ascending: true })
-      return data ?? []
+      return (data ?? []) as QQCalendarRow[]
     })(),
   ])
 
@@ -77,9 +88,10 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  for (const row of qqResult as any[]) {
-    const ts = row.created_time ? row.created_time * 1000 : Date.now()
-    const date = dayjs.unix(row.created_time).format('YYYY-M-D')
+  for (const row of qqResult) {
+    const createdTime = row.created_time ?? Math.floor(Date.now() / 1000)
+    const ts = createdTime * 1000
+    const date = dayjs.unix(createdTime).format('YYYY-M-D')
     events.push({
       id: row.tid,
       source: 'qq',

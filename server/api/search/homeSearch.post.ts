@@ -1,5 +1,32 @@
 import type { HomeSearchBody } from '~~/server/types/search'
+import type { QQContentItem } from '~~/shared/types/qq'
+import type { BlogCollectionItem } from '@nuxt/content'
 import consola from 'consola'
+
+type HomeSearchResultItem = {
+  keyword: string
+  source: 'qq' | 'blog'
+  id: string
+  path: string
+}
+
+function mapToSearchResult(item: QQContentItem | BlogCollectionItem): HomeSearchResultItem {
+  if ('tid' in item) {
+    return {
+      keyword: item.content,
+      source: 'qq',
+      id: item.tid,
+      path: `/qq?tid=${item.tid}`,
+    }
+  }
+
+  return {
+    keyword: item.title,
+    source: 'blog',
+    id: item.id ?? '',
+    path: item.path,
+  }
+}
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<HomeSearchBody>(event)
@@ -10,24 +37,16 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const contentResult = await queryCollection(event, 'blog')
-      .where('title', 'LIKE', `%${keyword || ''}%`)
-      .all()
+    const contentResult = await queryCollection(event, 'blog').where('title', 'LIKE', `%${keyword}%`).all()
 
-    const qqResult = await $fetch('/api/qq/list', { query: { content: keyword } })
+    const qqResult = await $fetch<{ data: QQContentItem[] }>('/api/qq/list', { query: { content: keyword } })
 
-    const searchResults = [...qqResult.data, ...contentResult].map((item: any) => {
-      return {
-        keyword: item?.tid ? item.content : item.title,
-        source: item?.tid ? 'qq' : 'blog',
-        id: item?.tid ? item.tid : item.id,
-        path: item?.tid ? `/qq?tid=${item.tid}` : item.path,
-      }
-    })
+    const searchResults = [...qqResult.data, ...contentResult].map((item) => mapToSearchResult(item))
 
     return Result.success(searchResults)
   } catch (error) {
     consola.error(error)
-    Result.fail(500, error as string)
+    const message = error instanceof Error ? error.message : String(error)
+    return Result.fail(500, message)
   }
 })
