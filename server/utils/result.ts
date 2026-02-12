@@ -3,7 +3,7 @@ export class Result<T> {
   message: string
   data: T | null
 
-  constructor(code: number, message: string, data: T) {
+  constructor(code: number, message: string, data: T | null) {
     this.code = code
     this.message = message
     this.data = data

@@ -16,7 +16,7 @@ export interface QQContentItem {
   pic?: Pic[] | null
   tid: string
   uin?: number | null
-  video?: any[] | null
+  video?: unknown[] | null
   isSearchSingle?: boolean
 }
 

@@ -3,26 +3,36 @@ import { serverSupabaseClient } from '#supabase/server'
 import list from '~~/server/data/data.json'
 import { Result } from '~~/server/utils/result'
 
+type ImportRecord = {
+  tid: string
+  name: string | null
+  content: string | null
+  source_name: string | null
+  commentlist: QQContentComment[] | null
+  video: unknown[] | null
+  pic: Pic[] | null
+}
+
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient<any>(event)
-  let result: any
+  const client = await serverSupabaseClient(event)
   try {
-    result = await Promise.all(
+    const result = await Promise.all(
       list.map(async (item) => {
-        const record = {
+        const record: ImportRecord = {
           tid: item.tid,
           name: item.name ?? null,
           content: item.content ?? null,
           source_name: item.source_name ?? null,
           commentlist: (item.commentlist as QQContentComment[]) ?? null,
-          video: item.video ?? null,
+          video: (item.video as unknown[]) ?? null,
           pic: (item.pic as Pic[]) ?? null,
         }
         return await client.from('qq_content').update(record).eq('tid', item.tid).select()
       }),
     )
+    return Result.success(result)
   } catch (error) {
-    return Result.fail(500, error as string)
+    const message = error instanceof Error ? error.message : String(error)
+    return Result.fail(500, message)
   }
-  return Result.success(result)
 })

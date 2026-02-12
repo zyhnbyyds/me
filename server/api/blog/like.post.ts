@@ -12,15 +12,9 @@ export default defineEventHandler(async (event) => {
 
   await storage.setItem(likedKey, isLiked)
 
-  if (likes) {
-    if (isLiked) {
-      await storage.setItem(likesKey, likes + 1)
-    } else {
-      await storage.setItem(likesKey, likes - 1)
-    }
-  } else {
-    await storage.setItem(likesKey, 1)
-  }
+  const currentLikes = likes ?? 0
+  const nextLikes = isLiked ? currentLikes + 1 : Math.max(0, currentLikes - 1)
+  await storage.setItem(likesKey, nextLikes)
 
   return true
 })
