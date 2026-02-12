@@ -51,7 +51,7 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
               <NuxtImg
                 v-if="blobItem.image"
                 :quality="70"
-                class="border-1 border-common rounded-lg h-40 w-full object-cover"
+                class="border-1 border-common rounded-lg h-50 w-full object-cover"
                 :src="`/blog/${blobItem?.image}`"
               />
               <!-- 标签 -->
@@ -59,17 +59,21 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
                 <div
                   v-for="tag in blobItem.tags ?? []"
                   :key="tag"
-                  class="text-12px bg-gray-200/50 rounded-full px-2 py-1 text-gray-800/70"
+                  class="text-12px bg-gray-200/50 dark:bg-dark-400/50 rounded-full px-2 py-1 text-gray-800/70 dark:text-gray-100/80"
                 >
                   {{ tag }}
                 </div>
               </div>
               <div flex-1 relative>
-                <h2 mt2 class="text-14px font-bold">
+                <h2 mt2 class="text-14px font-bold text-gray-900 dark:text-gray-100">
                   {{ blobItem.title }}
                 </h2>
-                <p mt2 class="text-13px text-gray-800/80">{{ blobItem.description }}</p>
-                <div class="text-14px mt-4 text-gray-800/70 flex w-full justify-between">
+                <p mt2 class="text-13px text-gray-800/80 dark:text-gray-200/70">
+                  {{ blobItem.description }}
+                </p>
+                <div
+                  class="text-14px mt-4 text-gray-800/70 dark:text-gray-200/70 flex w-full justify-between"
+                >
                   <div flex-center gap-1>
                     <Icon name="carbon:calendar" class="text-4" />
                     <span text-3>{{ dayjs(blobItem.updateAt).fromNow() }}</span>

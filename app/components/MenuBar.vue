@@ -56,7 +56,7 @@ function handleMenuChange(path: string) {
         </span>
       </div>
     </li>
-    <li class="flex flex-center w-12 md:hidden">
+    <li class="flex-center w-12 md:hidden">
       <Transition name="slide-fade">
         <DarkToggle v-if="y <= 60" />
         <BackTop v-else v-model="y" show />

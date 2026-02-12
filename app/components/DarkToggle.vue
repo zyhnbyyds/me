@@ -3,7 +3,12 @@ const mode = useColorMode()
 </script>
 
 <template>
-  <div text-6 px-2 @click="mode.preference = mode.preference === 'dark' ? 'light' : 'dark'">
+  <div
+    text-6
+    flex-center
+    px-2
+    @click="mode.preference = mode.preference === 'dark' ? 'light' : 'dark'"
+  >
     <Icon name="streamline-emojis:first-quarter-moon" />
   </div>
 </template>
