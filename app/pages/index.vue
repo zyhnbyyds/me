@@ -9,14 +9,17 @@ dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
 const { push } = useRouter()
 
-const activeTab = ref(homeTabList[0]?.value)
+// 使用 URL 查询参数来保持 SSR 和客户端状态一致
+const route = useRoute()
+const activeTab = ref((route.query.tab as string) || homeTabList[0]?.value || 'newest')
 
 // 一次性加载所有content
 const { data: blobs, refresh } = useAsyncData(
   'blog',
   () => {
     // TODO: 优化查询，避免一次性加载所有数据, 目前数据不多
-    if (activeTab.value === 'recommend') {
+    const tab = activeTab.value
+    if (tab === 'recommend') {
       return queryCollection('blog').all()
     }
 
@@ -25,9 +28,14 @@ const { data: blobs, refresh } = useAsyncData(
   { default: () => [] },
 )
 
+// 监听标签变化，更新 URL 并刷新数据
 watch(
   () => activeTab.value,
-  () => {
+  (newTab) => {
+    // 只在客户端更新 URL 查询参数（不触发页面刷新）
+    if (import.meta.client) {
+      navigateTo({ query: { tab: newTab } }, { replace: true })
+    }
     refresh()
   },
 )
