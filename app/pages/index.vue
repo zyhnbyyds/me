@@ -14,8 +14,8 @@ const route = useRoute()
 const activeTab = ref((route.query.tab as string) || homeTabList[0]?.value || 'newest')
 
 // 一次性加载所有content
-const { data: blobs, refresh } = useAsyncData(
-  'blog',
+const { data: blobs, refresh } = await useAsyncData(
+  route.path,
   () => {
     // TODO: 优化查询，避免一次性加载所有数据, 目前数据不多
     const tab = activeTab.value
