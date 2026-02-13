@@ -15,14 +15,14 @@ interface Props {
   isFold?: boolean
 }
 const { isFold = false } = defineProps<Props>()
-const { path } = useRoute()
+const route = useRoute()
 
 const { y } = inject<{
   y: Ref<number>
 }>('scroll', { y: ref(0) })
 
 const active = computed(() => {
-  const splits = path.split('/')
+  const splits = route.path.split('/')
   if (splits[1] === 'blog') {
     return '/'
   }
