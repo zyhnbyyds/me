@@ -28,6 +28,8 @@ const { data: blobs, refresh } = await useAsyncData(
   { default: () => [] },
 )
 
+console.log(blobs.value, 'blobs')
+
 // 监听标签变化，更新 URL 并刷新数据
 watch(
   () => activeTab.value,
