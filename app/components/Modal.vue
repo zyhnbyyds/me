@@ -37,11 +37,15 @@ function onEsc(e: KeyboardEvent) {
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', onEsc)
+  if (import.meta.client) {
+    window.addEventListener('keydown', onEsc)
+  }
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', onEsc)
+  if (import.meta.client) {
+    window.removeEventListener('keydown', onEsc)
+  }
 })
 </script>
 
