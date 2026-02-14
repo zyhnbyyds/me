@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     'nuxt-typed-router',
     '@nuxtjs/supabase',
+    '@formkit/auto-animate/nuxt',
   ],
 
   ssr: true,
@@ -25,16 +26,12 @@ export default defineNuxtConfig({
         lang: 'zh-CN',
       },
       meta: [
-        { name: 'description', content: 'NuxtBase, 一个现代化的博客网站，分享技术文章和见解' },
-        { name: 'keywords', content: 'Nuxt, Vue, 前端开发, 博客, YuhangZhang' },
-        { name: 'author', content: 'YuhangZhang' },
+        { name: 'description', content: '张宇解的博客,一个现代化的博客网站,分享技术文章和见解' },
+        { name: 'keywords', content: '张宇解,博客,前端开发,技术文章,见解' },
+        { name: 'author', content: '张宇解,zyhnbyyds,张宇行' },
         { name: 'robots', content: 'index, follow' },
         { name: 'googlebot', content: 'index, follow' },
-        { name: 'bingbot', content: 'index, follow' },
         { name: 'theme-color', content: '#ffffff' },
-        { name: 'msapplication-TileColor', content: '#ffffff' },
-        { name: 'msapplication-TileImage', content: '/mstile-150x150.png' },
-        { name: 'format-detection', content: 'telephone=no' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -69,6 +66,9 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    experimental: {
+      tasks: true,
+    },
     storage: {
       me: {
         driver: 'redis',
@@ -76,6 +76,9 @@ export default defineNuxtConfig({
         host: import.meta.env.REDIS_HOST,
         password: import.meta.env.REDIS_PASSWORD,
       },
+    },
+    scheduledTasks: {
+      '* * * * *': 'health',
     },
   },
 

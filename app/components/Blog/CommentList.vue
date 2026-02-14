@@ -94,7 +94,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
 
 <template>
   <div>
-    <div v-for="(comment, i) in comments" :key="i" class="group">
+    <div v-for="(comment, i) in comments" v-auto-animate :key="i" class="group">
       <div
         text-3.2
         p-2

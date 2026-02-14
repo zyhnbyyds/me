@@ -59,12 +59,14 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
           cursor-pointer
           class="group border border-common transition-all hover:shadow-lg bg-common bg-op60 rounded-lg overflow-hidden"
         >
-          <NuxtImg
+          <img
             v-if="blobItem.image"
-            :quality="70"
-            class="border-1 group-hover:scale-101 transition-all duration-300 border-common rounded-t-lg h-46 w-full object-cover"
-            :src="`/blog/${blobItem?.image}`"
+            class="p-1 rounded-3 group-hover:scale-101 transition-all duration-300 border-common h-46 w-full object-cover"
+            :src="`/blog/${blobItem.image}`"
+            :alt="blobItem.title ?? '博客配图'"
+            loading="lazy"
           />
+
           <div p-3>
             <h2 mt2 class="text-14px font-bold text-gray-900 dark:text-gray-100">
               {{ blobItem.title }}

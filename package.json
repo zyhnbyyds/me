@@ -15,6 +15,7 @@
     "start:generate": "npx serve .output/public"
   },
   "devDependencies": {
+    "@formkit/auto-animate": "^0.9.0",
     "@iconify-json/carbon": "1.2.18",
     "@iconify-json/hugeicons": "1.2.23",
     "@iconify-json/line-md": "1.2.14",
