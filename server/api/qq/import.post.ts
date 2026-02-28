@@ -27,7 +27,15 @@ export default defineEventHandler(async (event) => {
           video: (item.video as unknown[]) ?? null,
           pic: (item.pic as Pic[]) ?? null,
         }
-        return await client.from('qq_content').update(record).eq('tid', item.tid).select()
+        return await client
+          .from('qq_content')
+          .update({
+            commentlist: JSON.stringify(record.commentlist),
+            pic: JSON.stringify(record.pic),
+            video: JSON.stringify(record.video),
+          })
+          .eq('tid', item.tid)
+          .select()
       }),
     )
     return Result.success(result)

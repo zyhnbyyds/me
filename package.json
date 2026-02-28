@@ -5,6 +5,14 @@
     "build": "nuxi build --loglevel=info",
     "dev": "nuxi dev --port 3100",
     "start": "node .output/server/index.mjs",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:reset": "prisma migrate reset",
+    "prisma:studio": "prisma studio",
+    "prisma:push": "prisma db push",
+    "prisma:pull": "prisma db pull",
+    "prisma:seed": "prisma db seed",
+    "prisma:deploy": "prisma db deploy",
     "typecheck": "vue-tsc --noEmit",
     "lint": "oxlint .",
     "format": "oxfmt .",
@@ -32,6 +40,8 @@
     "@nuxtjs/color-mode": "4.0.0",
     "@nuxtjs/supabase": "2.0.3",
     "@pinia/nuxt": "0.11.3",
+    "@prisma/adapter-mariadb": "^7.4.0",
+    "@prisma/client": "^7.4.0",
     "@types/video.js": "7.3.58",
     "@unocss/eslint-config": "66.6.0",
     "@unocss/nuxt": "66.6.0",
@@ -43,6 +53,7 @@
     "better-sqlite3": "12.6.2",
     "consola": "3.4.2",
     "dayjs": "1.11.19",
+    "dotenv": "^17.3.1",
     "husky": "9.1.7",
     "nuxt": "4.3.0",
     "nuxt-auth-utils": "0.5.28",
@@ -51,6 +62,7 @@
     "oxlint": "1.43.0",
     "pg": "8.18.0",
     "pinia": "3.0.4",
+    "prisma": "^7.4.0",
     "qface": "1.4.1",
     "reading-time": "1.5.0",
     "typescript": "5.9.3",
@@ -65,7 +77,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "better-sqlite3",
-      "sqlite3"
+      "sqlite3",
+      "prisma"
     ],
     "overrides": {
       "@supabase/ssr": "0.8.0",

@@ -7,3 +7,5 @@ dist
 .idea/
 
 .data/content/contents.sqlite
+
+/app/generated/prisma

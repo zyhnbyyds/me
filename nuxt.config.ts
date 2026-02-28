@@ -102,10 +102,6 @@ export default defineNuxtConfig({
         },
       },
     },
-    database: {
-      type: 'postgres',
-      url: process.env.DATABASE_URL ?? '',
-    },
     experimental: { sqliteConnector: 'better-sqlite3' },
     renderer: {
       anchorLinks: {

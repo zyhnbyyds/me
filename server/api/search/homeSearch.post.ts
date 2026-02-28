@@ -2,6 +2,7 @@ import type { HomeSearchBody } from '~~/server/types/search'
 import type { QQContentItem } from '~~/shared/types/qq'
 import type { BlogCollectionItem } from '@nuxt/content'
 import consola from 'consola'
+import { queryCollection } from '@nuxt/content/server'
 
 type HomeSearchResultItem = {
   keyword: string
@@ -37,11 +38,17 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const contentResult = await queryCollection(event, 'blog').where('title', 'LIKE', `%${keyword}%`).all()
+    const contentResult = await queryCollection(event, 'blog')
+      .where('title', 'LIKE', `%${keyword}%`)
+      .all()
 
-    const qqResult = await $fetch<{ data: QQContentItem[] }>('/api/qq/list', { query: { content: keyword } })
+    const qqResult = await $fetch<{ data: QQContentItem[] }>('/api/qq/list', {
+      query: { content: keyword },
+    })
 
-    const searchResults = [...qqResult.data, ...contentResult].map((item) => mapToSearchResult(item))
+    const searchResults = [...qqResult.data, ...contentResult].map((item) =>
+      mapToSearchResult(item),
+    )
 
     return Result.success(searchResults)
   } catch (error) {

@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client"
+  output   = "./client"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model blog_comment {
+  id                 String   @id @db.VarChar(64)
+  file_id            String   @db.VarChar(64)
+  from_user_id       BigInt
+  to_user_id         BigInt   @default(0)
+  parent_id          String   @default("0") @db.VarChar(64)
+  depth              Int      @default(1)
+  content            Json
+  from_user_snapshot Json
+  to_user_snapshot   Json?
+  created_at         DateTime @default(now()) @db.Timestamp(0)
+
+  @@index([created_at], map: "idx_blog_comment_created_at")
+  @@index([file_id], map: "idx_blog_comment_file_id")
+  @@index([parent_id], map: "idx_blog_comment_parent_id")
+}
+
+model qq_content {
+  tid              String   @id @db.VarChar(64)
+  uin              BigInt?
+  name             String?  @db.VarChar(64)
+  content          String?  @db.Text
+  created_time     BigInt?
+  create_time_str  String?  @db.VarChar(32)
+  create_time_str2 String?  @db.VarChar(32)
+  lastmodify       BigInt?
+  source_name      String?  @db.VarChar(128)
+  source_url       String?  @db.Text
+  source_appid     String?  @db.VarChar(64)
+  conlist          String?  @db.Text
+  commentlist      String?  @db.Text
+  video            String?  @db.Text
+  lbs              String?  @db.Text
+  pic              String?  @db.Text
+  cmtnum           Int?
+  fwdnum           Int?
+  rt_sum           Int?
+  videototal       Int?
+  secret           Boolean?
+  iseditable       Boolean?
+  issigin          Boolean?
+  certified        Boolean?
+  editmask         Int?
+  has_more_con     Boolean?
+  right            Int?
+  ugc_right        Int?
+  pic_template     String?  @db.Text
+  t1_source        Int?     @db.SmallInt
+  t1_subtype       Int?     @db.SmallInt
+  t1_termtype      Int?     @db.SmallInt
+  t2_source        Int?     @db.SmallInt
+  t2_subtype       Int?     @db.SmallInt
+  t2_termtype      Int?     @db.SmallInt
+  wbid             BigInt?
+  createtime       String?  @db.VarChar(20)
+}
