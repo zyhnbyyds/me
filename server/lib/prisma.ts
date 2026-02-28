@@ -1,13 +1,10 @@
 import { PrismaClient } from '../../prisma/client/client'
 import { PrismaMariaDb } from '@prisma/adapter-mariadb'
-import 'dotenv/config'
+
+const config = useRuntimeConfig()
 
 const adapter = new PrismaMariaDb({
-  host: import.meta.env.DATABASE_HOST,
-  user: import.meta.env.DATABASE_USER,
-  password: import.meta.env.DATABASE_PASSWORD,
-  database: import.meta.env.DATABASE_NAME,
-  port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
+  ...config.database,
   connectionLimit: 5,
 })
 

@@ -123,6 +123,13 @@ export default defineNuxtConfig({
         redirectURL: 'http://localhost:3100/auth/github',
       },
     },
+    database: {
+      host: import.meta.env.DATABASE_HOST,
+      user: import.meta.env.DATABASE_USER,
+      password: import.meta.env.DATABASE_PASSWORD,
+      database: import.meta.env.DATABASE_NAME,
+      port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
+    },
     public: {
       showUploadBtnGithubUserId: import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID,
     },

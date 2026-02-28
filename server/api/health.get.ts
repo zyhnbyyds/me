@@ -29,25 +29,6 @@ export default defineEventHandler(async (event) => {
     checks.db = 'error'
   }
 
-  console.log(
-    {
-      host: import.meta.env.DATABASE_HOST,
-      user: import.meta.env.DATABASE_USER,
-      password: import.meta.env.DATABASE_PASSWORD,
-      database: import.meta.env.DATABASE_NAME,
-      port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
-      connectionLimit: 5,
-    },
-    {
-      host: process.env.DATABASE_HOST,
-      user: process.env.DATABASE_USER,
-      password: process.env.DATABASE_PASSWORD,
-      database: process.env.DATABASE_NAME,
-      port: parseInt(process.env.DATABASE_PORT || '3306'),
-      connectionLimit: 5,
-    },
-  )
-
   const ok = checks.redis === 'ok' && checks.db === 'ok'
 
   setResponseStatus(event, ok ? 200 : 503)
