@@ -1,7 +1,7 @@
 import type { Pic, QQContentComment } from '~~/shared/types/qq'
-import { serverSupabaseClient } from '#supabase/server'
 import list from '~~/server/data/data.json'
 import { Result } from '~~/server/utils/result'
+import { prisma } from '~~/server/lib/prisma'
 
 type ImportRecord = {
   tid: string
@@ -13,8 +13,7 @@ type ImportRecord = {
   pic: Pic[] | null
 }
 
-export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
+export default defineEventHandler(async () => {
   try {
     const result = await Promise.all(
       list.map(async (item) => {
@@ -27,17 +26,27 @@ export default defineEventHandler(async (event) => {
           video: (item.video as unknown[]) ?? null,
           pic: (item.pic as Pic[]) ?? null,
         }
-        return await client
-          .from('qq_content')
-          .update({
-            commentlist: JSON.stringify(record.commentlist),
-            pic: JSON.stringify(record.pic),
-            video: JSON.stringify(record.video),
-          })
-          .eq('tid', item.tid)
-          .select()
+
+        return prisma.qq_content.upsert({
+          where: { tid: record.tid },
+          update: {
+            commentlist: record.commentlist ? JSON.stringify(record.commentlist) : null,
+            pic: record.pic ? JSON.stringify(record.pic) : null,
+            video: record.video ? JSON.stringify(record.video) : null,
+          },
+          create: {
+            tid: record.tid,
+            name: record.name,
+            content: record.content,
+            source_name: record.source_name,
+            commentlist: record.commentlist ? JSON.stringify(record.commentlist) : null,
+            pic: record.pic ? JSON.stringify(record.pic) : null,
+            video: record.video ? JSON.stringify(record.video) : null,
+          },
+        })
       }),
     )
+
     return Result.success(result)
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)

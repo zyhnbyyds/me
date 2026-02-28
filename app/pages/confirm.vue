@@ -1,18 +1,15 @@
 <script setup lang="ts">
-const user = useSupabaseUser()
+definePageMeta({
+  layout: 'empty',
+  title: 'Confirm',
+})
 
-watch(
-  user,
-  () => {
-    if (user.value) {
-      // Redirect to protected page
-      return navigateTo('/')
-    }
-  },
-  { immediate: true },
-)
+onMounted(() => {
+  // 兼容旧的邮箱登录回调：统一跳转到首页或登录页
+  navigateTo('/')
+})
 </script>
 
 <template>
-  <div>Waiting for login...</div>
+  <div class="flex h-screen w-screen items-center justify-center text-gray-700">正在跳转...</div>
 </template>

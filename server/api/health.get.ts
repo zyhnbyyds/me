@@ -1,13 +1,15 @@
 /**
  * 健康检查接口，供负载均衡 / 容器编排 / 监控 探测使用
  * GET /api/health
- * 包含 Redis、Supabase 状态检查
+ * 检查 Redis 与数据库连通性
  */
+import { prisma } from '~~/server/lib/prisma'
+
 export default defineEventHandler(async (event) => {
   const timestamp = new Date().toISOString()
-  const checks: { redis: 'ok' | 'error'; supabase: 'ok' | 'error' } = {
+  const checks: { redis: 'ok' | 'error'; db: 'ok' | 'error' } = {
     redis: 'error',
-    supabase: 'error',
+    db: 'error',
   }
 
   // Redis 状态检查（使用项目配置的 useStorage('me')）
@@ -19,17 +21,15 @@ export default defineEventHandler(async (event) => {
     checks.redis = 'error'
   }
 
-  // Supabase 状态检查
+  // 数据库（Prisma）状态检查
   try {
-    const { serverSupabaseClient } = await import('#supabase/server')
-    const client = await serverSupabaseClient(event)
-    await client.auth.getSession()
-    checks.supabase = 'ok'
+    await prisma.$queryRaw`SELECT 1`
+    checks.db = 'ok'
   } catch {
-    checks.supabase = 'error'
+    checks.db = 'error'
   }
 
-  const ok = checks.redis === 'ok' && checks.supabase === 'ok'
+  const ok = checks.redis === 'ok' && checks.db === 'ok'
 
   setResponseStatus(event, ok ? 200 : 503)
 
@@ -37,6 +37,6 @@ export default defineEventHandler(async (event) => {
     status: ok ? 'ok' : 'degraded',
     timestamp,
     redis: checks.redis,
-    supabase: checks.supabase,
+    db: checks.db,
   }
 })

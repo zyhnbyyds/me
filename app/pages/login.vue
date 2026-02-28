@@ -5,29 +5,20 @@ definePageMeta({
   description: 'Login page',
 })
 
-const supabase = useSupabaseClient()
-const email = ref('')
+const router = useRouter()
 
-async function signInWithOtp() {
-  const { error } = await supabase.auth.signInWithOtp({
-    email: email.value,
-    options: {
-      emailRedirectTo: 'http://localhost:3100/confirm',
-    },
-  })
-  if (error) useRouter().push('/error')
+function signInWithGithub() {
+  router.push('/auth/github')
 }
 </script>
 
 <template>
   <div bg-light-300 flex-center h-screen hw-full min-w-sm>
     <Card text-center w-sm title="Login">
-      <div>
-        <input v-model="email" border-1 border-red type="email" />
-      </div>
+      <div class="mb-4 text-sm text-gray-600">当前仅支持使用 GitHub 登录。</div>
 
       <template #footer>
-        <Btn m-2 inline-block @click="signInWithOtp"> Sign In with E-Mail </Btn>
+        <Btn m-2 inline-block @click="signInWithGithub"> 使用 GitHub 登录 </Btn>
       </template>
     </Card>
   </div>

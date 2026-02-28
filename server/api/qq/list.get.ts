@@ -1,7 +1,7 @@
 import type { PageQuery } from '~~/shared/types/page'
 import type { QQContentItem } from '~~/shared/types/qq'
-import { serverSupabaseClient } from '#supabase/server'
 import consola from 'consola'
+import { prisma } from '~~/server/lib/prisma'
 
 interface QQContentRow {
   commentlist: string | QQContentItem['commentlist']
@@ -20,8 +20,11 @@ function parseJSONField<T>(value: string | T | null | undefined): T | null {
   }
 }
 
+function normalizeBigInt<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? Number(v) : v))) as T
+}
+
 export default defineEventHandler(async (event) => {
-  const client = await serverSupabaseClient(event)
   const {
     current = 1,
     size = 20,
@@ -35,56 +38,74 @@ export default defineEventHandler(async (event) => {
 
   let searchSingleResult: QQContentItem | null = null
   if (tid) {
-    const { data, error } = await client.from('qq_content').select('*').eq('tid', tid).single()
-
-    if (error) {
-      consola.error(error)
-      throw createError({ statusCode: 500, statusMessage: error.message })
+    try {
+      const row = await prisma.qq_content.findUnique({ where: { tid } })
+      if (row) {
+        const normalized = normalizeBigInt(row) as unknown as QQContentRow
+        searchSingleResult = {
+          ...(normalized as unknown as Record<string, unknown>),
+          commentlist: parseJSONField<QQContentItem['commentlist']>(normalized.commentlist),
+          pic: parseJSONField<QQContentItem['pic']>(normalized.pic),
+          video: parseJSONField<QQContentItem['video']>(normalized.video),
+          isSearchSingle: true,
+        } as QQContentItem
+      }
+    } catch (e) {
+      consola.error(e)
+      throw createError({ statusCode: 500, statusMessage: '查询失败' })
     }
-
-    searchSingleResult = {
-      ...(data as QQContentRow),
-      commentlist: parseJSONField<QQContentItem['commentlist']>((data as QQContentRow).commentlist),
-      pic: parseJSONField<QQContentItem['pic']>((data as QQContentRow).pic),
-      video: parseJSONField<QQContentItem['video']>((data as QQContentRow).video),
-      isSearchSingle: true,
-    } as QQContentItem
-    searchSingleResult.isSearchSingle = true
   }
 
-  const { data, error, count } = await client
-    .from('qq_content')
-    .select('*', { count: 'exact' })
-    .like('content', `%${content || ''}%`)
-    .neq('tid', tid)
-    .order('created_time', { ascending: false })
-    .range(offset, offset + sizeNumber - 1)
+  const keyword = (content ?? '').trim()
 
-  if (error) {
-    consola.error(error)
-    throw createError({ statusCode: 500, statusMessage: error.message })
-  }
+  const where = {
+    ...(keyword
+      ? {
+          content: {
+            contains: keyword,
+          },
+        }
+      : {}),
+    ...(tid
+      ? {
+          tid: {
+            not: tid,
+          },
+        }
+      : {}),
+  } as const
 
-  if (!data || data.length === 0) {
+  try {
+    const [rows, total] = await Promise.all([
+      prisma.qq_content.findMany({
+        where,
+        orderBy: { created_time: 'desc' },
+        skip: offset,
+        take: sizeNumber,
+      }),
+      prisma.qq_content.count({ where }),
+    ])
+
+    const normalizedRows = normalizeBigInt(rows) as unknown as QQContentRow[]
+
+    const transformedData = [searchSingleResult, ...normalizedRows]
+      .filter((item) => item !== null)
+      .map((item) => {
+        const row = item as QQContentRow
+        return {
+          ...(row as unknown as Record<string, unknown>),
+          commentlist: parseJSONField<QQContentItem['commentlist']>(row.commentlist),
+          pic: parseJSONField<QQContentItem['pic']>(row.pic),
+          video: parseJSONField<QQContentItem['video']>(row.video),
+        } as QQContentItem
+      })
+
     return {
-      data: [],
-      total: 0,
+      data: transformedData,
+      total,
     }
-  }
-  const transformedData = [searchSingleResult, ...data]
-    .filter((item) => item !== null)
-    .map((item) => {
-      const row = item as QQContentRow
-      return {
-        ...item,
-        commentlist: parseJSONField<QQContentItem['commentlist']>(row.commentlist),
-        pic: parseJSONField<QQContentItem['pic']>(row.pic),
-        video: parseJSONField<QQContentItem['video']>(row.video),
-      } as QQContentItem
-    })
-
-  return {
-    data: transformedData,
-    total: count,
+  } catch (e) {
+    consola.error(e)
+    throw createError({ statusCode: 500, statusMessage: '查询失败' })
   }
 })

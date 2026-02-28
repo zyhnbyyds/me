@@ -1,8 +1,8 @@
 import type { CommentItem } from '~~/shared/types/blog'
 import type { User } from '#auth-utils'
 import type { CommentItemDataField } from '~~/server/utils/comment'
-import { serverSupabaseClient } from '#supabase/server'
 import { buildFlattenedTwoLevelTree } from '~~/server/utils/comment'
+import { prisma } from '~~/server/lib/prisma'
 
 interface BlogCommentRow {
   id: string
@@ -41,15 +41,18 @@ export default defineEventHandler(async (event) => {
   const { id } = getQuery<{ id: string }>(event)
   if (!id) return []
 
-  const client = await serverSupabaseClient(event)
-  const { data: rows, error } = await client
-    .from('blog_comment')
-    .select('*')
-    .eq('file_id', id)
-    .order('created_at', { ascending: true })
-
-  if (error) {
-    throw createError({ statusCode: 500, statusMessage: error.message })
+  let rows: BlogCommentRow[] = []
+  try {
+    const result = await prisma.blog_comment.findMany({
+      where: { file_id: id },
+      orderBy: { created_at: 'asc' },
+    })
+    rows = JSON.parse(
+      JSON.stringify(result, (_k, v) => (typeof v === 'bigint' ? Number(v) : v)),
+    ) as BlogCommentRow[]
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    throw createError({ statusCode: 500, statusMessage: message })
   }
 
   if (!rows || rows.length === 0) return []

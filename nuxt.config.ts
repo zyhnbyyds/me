@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/icon',
     'nuxt-typed-router',
-    '@nuxtjs/supabase',
     '@formkit/auto-animate/nuxt',
   ],
 
@@ -39,10 +38,6 @@ export default defineNuxtConfig({
         { rel: 'author', href: 'https://github.com/zyhnbyyds' },
       ],
     },
-  },
-
-  supabase: {
-    redirect: false,
   },
 
   build: {

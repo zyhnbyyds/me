@@ -1,7 +1,7 @@
 import type { BlogCollectionItem } from '@nuxt/content'
-import { serverSupabaseClient } from '#supabase/server'
 import dayjs from 'dayjs'
 import { queryCollection } from '@nuxt/content/server'
+import { prisma } from '~~/server/lib/prisma'
 
 interface QQCalendarRow {
   tid: string
@@ -61,14 +61,18 @@ export default defineEventHandler(async (event) => {
       .where('publishAt', 'BETWEEN', [startStr, endStr])
       .all() as Promise<BlogCollectionItem[]>,
     (async () => {
-      const client = await serverSupabaseClient(event)
-      const { data } = await client
-        .from('qq_content')
-        .select('*')
-        .gte('created_time', startTs)
-        .lte('created_time', endTs)
-        .order('created_time', { ascending: true })
-      return (data ?? []) as QQCalendarRow[]
+      const rows = await prisma.qq_content.findMany({
+        where: {
+          created_time: {
+            gte: BigInt(startTs),
+            lte: BigInt(endTs),
+          },
+        },
+        orderBy: { created_time: 'asc' },
+      })
+      return JSON.parse(
+        JSON.stringify(rows, (_k, v) => (typeof v === 'bigint' ? Number(v) : v)),
+      ) as QQCalendarRow[]
     })(),
   ])
 

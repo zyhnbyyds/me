@@ -38,7 +38,6 @@
     "@nuxt/icon": "2.2.1",
     "@nuxt/image": "npm:@nuxt/image-nightly@2.0.1-20260123-155459-93de8a9",
     "@nuxtjs/color-mode": "4.0.0",
-    "@nuxtjs/supabase": "2.0.3",
     "@pinia/nuxt": "0.11.3",
     "@prisma/adapter-mariadb": "^7.4.0",
     "@prisma/client": "^7.4.0",
@@ -79,10 +78,6 @@
       "better-sqlite3",
       "sqlite3",
       "prisma"
-    ],
-    "overrides": {
-      "@supabase/ssr": "0.8.0",
-      "@supabase/supabase-js": "2.86.0"
-    }
+    ]
   }
 }
