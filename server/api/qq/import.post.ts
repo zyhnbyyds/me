@@ -2,22 +2,14 @@ import type { Pic, QQContentComment } from '~~/shared/types/qq'
 import list from '~~/server/data/data.json'
 import { Result } from '~~/server/utils/result'
 import { prisma } from '~~/server/lib/prisma'
-
-type ImportRecord = {
-  tid: string
-  name: string | null
-  content: string | null
-  source_name: string | null
-  commentlist: QQContentComment[] | null
-  video: unknown[] | null
-  pic: Pic[] | null
-}
+import {} from '../../../prisma/client/commonInputTypes'
 
 export default defineEventHandler(async () => {
   try {
     const result = await Promise.all(
       list.map(async (item) => {
-        const record: ImportRecord = {
+        const record = {
+          ...item,
           tid: item.tid,
           name: item.name ?? null,
           content: item.content ?? null,
@@ -35,6 +27,9 @@ export default defineEventHandler(async () => {
             video: record.video ? JSON.stringify(record.video) : null,
           },
           create: {
+            created_time: record.created_time,
+            createtime: record.createTime,
+            cmtnum: record.cmtnum,
             tid: record.tid,
             name: record.name,
             content: record.content,

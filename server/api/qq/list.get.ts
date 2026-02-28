@@ -1,13 +1,15 @@
 import type { PageQuery } from '~~/shared/types/page'
-import type { QQContentItem } from '~~/shared/types/qq'
 import consola from 'consola'
 import { prisma } from '~~/server/lib/prisma'
 
-interface QQContentRow {
-  commentlist: string | QQContentItem['commentlist']
-  pic: string | QQContentItem['pic']
-  video: string | QQContentItem['video']
-  [key: string]: unknown
+type QQContentRow = Record<string, unknown> & {
+  // 数据库里这些字段是 TEXT，可能是 JSON 字符串
+  commentlist?: string | unknown
+  pic?: string | unknown
+  video?: string | unknown
+  conlist?: string | unknown
+  lbs?: string | unknown
+  pic_template?: string | unknown
 }
 
 function parseJSONField<T>(value: string | T | null | undefined): T | null {
@@ -24,6 +26,18 @@ function normalizeBigInt<T>(value: T): T {
   return JSON.parse(JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? Number(v) : v))) as T
 }
 
+function transformRow(row: QQContentRow): QQContentRow {
+  return {
+    ...row,
+    commentlist: parseJSONField(row.commentlist),
+    pic: parseJSONField(row.pic),
+    video: parseJSONField(row.video),
+    conlist: parseJSONField(row.conlist),
+    lbs: parseJSONField(row.lbs),
+    pic_template: parseJSONField(row.pic_template),
+  }
+}
+
 export default defineEventHandler(async (event) => {
   const {
     current = 1,
@@ -36,19 +50,16 @@ export default defineEventHandler(async (event) => {
 
   const offset = (currentNumber - 1) * sizeNumber
 
-  let searchSingleResult: QQContentItem | null = null
+  let searchSingleResult: QQContentRow | null = null
   if (tid) {
     try {
       const row = await prisma.qq_content.findUnique({ where: { tid } })
       if (row) {
         const normalized = normalizeBigInt(row) as unknown as QQContentRow
         searchSingleResult = {
-          ...(normalized as unknown as Record<string, unknown>),
-          commentlist: parseJSONField<QQContentItem['commentlist']>(normalized.commentlist),
-          pic: parseJSONField<QQContentItem['pic']>(normalized.pic),
-          video: parseJSONField<QQContentItem['video']>(normalized.video),
+          ...transformRow(normalized),
           isSearchSingle: true,
-        } as QQContentItem
+        }
       }
     } catch (e) {
       consola.error(e)
@@ -91,13 +102,7 @@ export default defineEventHandler(async (event) => {
     const transformedData = [searchSingleResult, ...normalizedRows]
       .filter((item) => item !== null)
       .map((item) => {
-        const row = item as QQContentRow
-        return {
-          ...(row as unknown as Record<string, unknown>),
-          commentlist: parseJSONField<QQContentItem['commentlist']>(row.commentlist),
-          pic: parseJSONField<QQContentItem['pic']>(row.pic),
-          video: parseJSONField<QQContentItem['video']>(row.video),
-        } as QQContentItem
+        return transformRow(item as QQContentRow)
       })
 
     return {
