@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly REDIS_DB: string
   readonly GITHUB_CLIENT_ID: string
   readonly GITHUB_CLIENT_SECRET: string
+  readonly SUPER_ADMIN_GITHUB_USER_ID: string
 
   DATABASE_HOST: string
   DATABASE_USER: string

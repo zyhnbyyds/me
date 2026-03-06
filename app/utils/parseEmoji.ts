@@ -23,7 +23,10 @@ export function parseEmojiContent(html: string): EmojiInfo[] {
       }
     } else if (node.nodeType === Node.ELEMENT_NODE) {
       const el = node as HTMLElement
-      if (el.tagName === 'IMG' && el.getAttribute('src')?.startsWith('/emojis/')) {
+      if (
+        el.tagName === 'IMG' &&
+        el.getAttribute('src')?.startsWith('/emojis/')
+      ) {
         const src = el.getAttribute('src')!
         const filename = src.split('/').pop()!
         result.push({

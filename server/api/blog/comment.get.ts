@@ -25,7 +25,10 @@ function enrichWithUserData(
 ): Array<CommentItem & { isClickReply?: boolean }> {
   return nodes.map((node) => {
     const full = itemMap.get(node.commentId)
-    const replyList = node.replyList.length > 0 ? enrichWithUserData(node.replyList, itemMap) : []
+    const replyList =
+      node.replyList.length > 0
+        ? enrichWithUserData(node.replyList, itemMap)
+        : []
     return {
       ...node,
       content: full?.content ?? [],
@@ -48,7 +51,9 @@ export default defineEventHandler(async (event) => {
       orderBy: { created_at: 'asc' },
     })
     rows = JSON.parse(
-      JSON.stringify(result, (_k, v) => (typeof v === 'bigint' ? Number(v) : v)),
+      JSON.stringify(result, (_k, v) =>
+        typeof v === 'bigint' ? Number(v) : v,
+      ),
     ) as BlogCommentRow[]
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)

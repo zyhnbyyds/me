@@ -16,7 +16,11 @@ export default defineTask({
       logger.info('health check', response)
       return { result: response }
     } catch (e: unknown) {
-      const err = e as { status?: number; statusCode?: number; message?: string }
+      const err = e as {
+        status?: number
+        statusCode?: number
+        message?: string
+      }
       const status = err?.status ?? err?.statusCode ?? 0
       logger.warn('health check failed', status, err?.message ?? e)
       return { result: null, error: status || String(e) }

@@ -24,6 +24,32 @@ model blog_comment {
   @@index([parent_id], map: "idx_blog_comment_parent_id")
 }
 
+model blog_like {
+  id         String   @id @db.VarChar(64)
+  file_id    String   @db.VarChar(64)
+  user_id    BigInt
+  created_at DateTime @default(now()) @db.Timestamp(0)
+
+  @@unique([file_id, user_id], map: "uq_blog_like_file_user")
+  @@index([file_id], map: "idx_blog_like_file_id")
+  @@index([user_id], map: "idx_blog_like_user_id")
+  @@index([created_at], map: "idx_blog_like_created_at")
+}
+
+model blog_view {
+  id         String   @id @db.VarChar(64)
+  file_id    String   @db.VarChar(64)
+  viewer_id  String   @db.VarChar(64)
+  user_id    BigInt?
+  created_at DateTime @default(now()) @db.Timestamp(0)
+
+  @@unique([file_id, viewer_id], map: "uq_blog_view_file_viewer")
+  @@index([file_id], map: "idx_blog_view_file_id")
+  @@index([viewer_id], map: "idx_blog_view_viewer_id")
+  @@index([user_id], map: "idx_blog_view_user_id")
+  @@index([created_at], map: "idx_blog_view_created_at")
+}
+
 model qq_content {
   tid              String   @id @db.VarChar(64)
   uin              BigInt?

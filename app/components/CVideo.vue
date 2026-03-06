@@ -47,7 +47,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <video :id="videoId" class="video-js vjs-default-skin max-h-90vh max-w-90vw" />
+  <video
+    :id="videoId"
+    class="video-js vjs-default-skin max-h-90vh max-w-90vw"
+  />
 </template>
 
 <style scoped></style>

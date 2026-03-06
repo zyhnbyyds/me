@@ -11,7 +11,9 @@ const { push } = useRouter()
 
 // 使用 URL 查询参数来保持 SSR 和客户端状态一致
 const route = useRoute()
-const activeTab = ref((route.query.tab as string) || homeTabList[0]?.value || 'newest')
+const activeTab = ref(
+  (route.query.tab as string) || homeTabList[0]?.value || 'newest',
+)
 
 // 一次性加载所有content
 const { data: blobs, refresh } = await useAsyncData(
@@ -47,9 +49,13 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
 </script>
 
 <template>
-  <div>
-    <Tab v-model="activeTab" blur-common w-full top-0 sticky z-9999 :list="homeTabList" />
-    <div class="p-4 pb-30 min-h-[calc(100vh-50px)]">
+  <div h-full>
+    <Tab
+      v-model="activeTab"
+      class="blur-common w-full top-0 sticky z-9999"
+      :list="homeTabList"
+    />
+    <div class="p-4 pb-30 h-[calc(100%-50px)] overflow-auto scrollbar">
       <ul columns-3 class="<lg:columns-2 <md:columns-1" gap-x-4>
         <li
           @click="goToBlogInfo(blobItem)"
@@ -68,7 +74,10 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
           />
 
           <div p-3>
-            <h2 mt2 class="text-14px font-bold text-gray-900 dark:text-gray-100">
+            <h2
+              mt2
+              class="text-14px font-bold text-gray-900 dark:text-gray-100"
+            >
               {{ blobItem.title }}
             </h2>
             <!-- 标签 -->
@@ -89,7 +98,9 @@ async function goToBlogInfo(blobItem: BlogCollectionItem) {
             >
               <div flex-center gap-1>
                 <Icon name="carbon:calendar" class="text-4" />
-                <span text-3>{{ dayjs(blobItem.updateAt).format('YYYY-MM-DD') }}</span>
+                <span text-3>{{
+                  dayjs(blobItem.updateAt).format('YYYY-MM-DD')
+                }}</span>
               </div>
               <div flex-center gap-1>
                 <Icon name="mdi:clock-outline" class="text-4" />

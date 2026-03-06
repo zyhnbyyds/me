@@ -31,7 +31,11 @@ export interface CalendarEvent {
 }
 
 export default defineEventHandler(async (event) => {
-  const { year, month, day } = getQuery<{ year?: string; month?: string; day?: string }>(event)
+  const { year, month, day } = getQuery<{
+    year?: string
+    month?: string
+    day?: string
+  }>(event)
 
   const y = Number.parseInt(year ?? String(dayjs().year()), 10)
   const m = month ? Number.parseInt(month, 10) : null
@@ -71,7 +75,9 @@ export default defineEventHandler(async (event) => {
         orderBy: { created_time: 'asc' },
       })
       return JSON.parse(
-        JSON.stringify(rows, (_k, v) => (typeof v === 'bigint' ? Number(v) : v)),
+        JSON.stringify(rows, (_k, v) =>
+          typeof v === 'bigint' ? Number(v) : v,
+        ),
       ) as QQCalendarRow[]
     })(),
   ])

@@ -13,12 +13,10 @@ definePageMeta({
 })
 
 const scrollRef = ref<HTMLElement>()
-const { height } = useElementBounding(scrollRef)
-const { height: windowHeight } = useWindowSize()
+const { y, arrivedState } = useScroll(scrollRef)
 const qQContentList = ref<QQContentItem[]>([])
 const totalNum = ref(0)
 
-const { y } = inject<{ y: Ref<number> }>('scroll', { y: ref(0) })
 const page = ref({
   current: 1,
   size: 20,
@@ -30,7 +28,10 @@ const modalVideoVisible = ref(false)
 
 async function getQQContentList(loadMore: boolean = false) {
   load(true)
-  const { data, total } = await $fetch<{ data: QQContentItem[]; total: number }>('/api/qq/list', {
+  const { data, total } = await $fetch<{
+    data: QQContentItem[]
+    total: number
+  }>('/api/qq/list', {
     method: 'GET',
     params: {
       current: page.value.current,
@@ -68,8 +69,12 @@ getQQContentList()
 watch(
   () => y.value,
   async () => {
-    if (height.value - y.value - windowHeight.value < 2000) {
-      if (loading.value || page.value.current + 1 > Math.ceil(totalNum.value / page.value.size))
+    if (!import.meta.client) return
+    if (arrivedState.bottom) {
+      if (
+        loading.value ||
+        page.value.current + 1 > Math.ceil(totalNum.value / page.value.size)
+      )
         return
       page.value.current += 1
 
@@ -81,9 +86,15 @@ watch(
 </script>
 
 <template>
-  <div ref="scrollRef">
+  <div h-full>
     <CHead title="QQ空间" />
-    <ul>
+    <ul
+      ref="scrollRef"
+      relative
+      overflow-auto
+      class="scrollbar h-[calc(100vh-60px)]"
+      w-full
+    >
       <li
         v-for="item in qQContentList ?? []"
         v-show="!(item.video && item.video.length > 0)"
@@ -92,12 +103,20 @@ watch(
         class="border-b-0.5px border-common"
       >
         <div class="p-4 flex gap-2 w-full">
-          <NuxtImg src="/me.png" alt="Avatar" :quality="10" class="rounded-full h-8 w-8" />
+          <NuxtImg
+            src="/me.png"
+            alt="Avatar"
+            :quality="10"
+            class="rounded-full h-8 w-8"
+          />
           <div flex-1>
             <p class="text-sm font-semibold flex gap-2 items-center">
               <span>{{ item.name }}</span>
               <span class="text-12px text-gray"
-                >· {{ dayjs(item.created_time * 1000).format('YYYY-MM-DD HH:mm:ss') }}</span
+                >·
+                {{
+                  dayjs(item.created_time * 1000).format('YYYY-MM-DD HH:mm:ss')
+                }}</span
               >
             </p>
 
@@ -108,22 +127,31 @@ watch(
                 v-for="(itm, idx) in item.pic"
                 :key="idx"
                 :class="
-                  item.pic.length === 1 ? calculateImageSize(itm.height, itm.width) : 'h-50 w-50'
+                  item.pic.length === 1
+                    ? calculateImageSize(itm.height, itm.width)
+                    : 'h-50 w-50'
                 "
                 inline-block
                 overflow-hidden
               >
                 <!-- @vue-expect-error -->
                 <PreviewImg
-                  v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length === 1"
-                  :active="activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`"
+                  v-if="
+                    !(itm.is_video && itm.is_video === 1) &&
+                    item.pic.length === 1
+                  "
+                  :active="
+                    activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`
+                  "
                   :src="`/qq/images/image_${item.tid}_${idx}.jpg`"
                   provider="ipx"
                   @select="(src) => (activePreview = src)"
                 />
                 <!-- @vue-expect-error -->
                 <CImg
-                  v-if="!(itm.is_video && itm.is_video === 1) && item.pic.length > 1"
+                  v-if="
+                    !(itm.is_video && itm.is_video === 1) && item.pic.length > 1
+                  "
                   :quality="70"
                   :url="`/qq/images/image_${item.tid}_${idx}.jpg`"
                   @click="
@@ -153,7 +181,11 @@ watch(
         </div>
       </li>
 
-      <Modal v-model="modalVisible" :is-transition="true" :close-on-click-overlay="true">
+      <Modal
+        v-model="modalVisible"
+        :is-transition="true"
+        :close-on-click-overlay="true"
+      >
         <div h-screen w-screen>
           <CImg
             :quality="70"
@@ -164,16 +196,25 @@ watch(
         </div>
       </Modal>
 
-      <Modal v-model="modalVideoVisible" :close-on-click-overlay="true" is-transition>
+      <Modal
+        v-model="modalVideoVisible"
+        :close-on-click-overlay="true"
+        is-transition
+      >
         <CVideo
-          :video-id="activePreview.replace('/qq/videos/', '').replace('.mp4', '')"
+          :video-id="
+            activePreview.replace('/qq/videos/', '').replace('.mp4', '')
+          "
           :src="activePreview"
         />
       </Modal>
+      <li>
+        <Loading :loading="loading">
+          <div class="h-30" />
+        </Loading>
+      </li>
     </ul>
-    <Loading :loading="loading">
-      <div class="h-30" />
-    </Loading>
+    <BackTop absolute class="<md:hidden" right-6 bottom-6 v-model="y" />
   </div>
 </template>
 

@@ -1,21 +1,5 @@
 <script lang="ts" setup>
 import { menuList } from '~/constants'
-
-const scrollRef = ref<HTMLElement>()
-
-const { y, x } = useScroll(scrollRef, {
-  behavior: 'auto',
-})
-
-const scrollHeight = computed(() => scrollRef.value?.scrollHeight ?? 0)
-const scrollTop = computed(() => scrollRef.value?.scrollTop ?? 0)
-
-provide('scroll', {
-  y,
-  x,
-  scrollHeight,
-  scrollTop,
-})
 </script>
 
 <template>
@@ -25,7 +9,14 @@ provide('scroll', {
       <div class="px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0">
         <div class="rounded-full flex-center inline-flex h-14 w-14 <md:hidden">
           <ClientOnly>
-            <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
+            <NuxtImg
+              src="/me.png"
+              :quality="30"
+              rounded-full
+              h-10
+              w-10
+              alt="me-face"
+            />
           </ClientOnly>
         </div>
 
@@ -35,19 +26,13 @@ provide('scroll', {
       </div>
     </header>
 
-    <div ref="scrollRef" class="scroll-container flex h-full w-80% overflow-auto <lg:flex-1">
+    <div class="flex h-full w-80% <lg:flex-1">
       <div class="page-container w-80% relative <lg:w-full">
         <slot />
       </div>
-
-      <BackTop v-model="y" class="bottom-4 right-4 fixed <md:hidden" />
+      <div flex-1 h-full id="default-right"></div>
     </div>
   </div>
 </template>
 
-<style scoped>
-.scroll-container {
-  scrollbar-color: lightgray transparent;
-  scrollbar-gutter: stable;
-}
-</style>
+<style scoped></style>

@@ -15,12 +15,15 @@ const searchIpt = ref('')
 const searchList = ref<SearchResItem[]>([])
 
 async function searchFn() {
-  const { data } = await $fetch<Result<SearchResItem[]>>('/api/search/homeSearch', {
-    method: 'POST',
-    body: {
-      keyword: searchIpt.value,
+  const { data } = await $fetch<Result<SearchResItem[]>>(
+    '/api/search/homeSearch',
+    {
+      method: 'POST',
+      body: {
+        keyword: searchIpt.value,
+      },
     },
-  })
+  )
 
   searchList.value = data ?? []
 }
@@ -66,11 +69,10 @@ function goToItem(item: SearchResItem) {
     <div
       class="mt-4 h-[calc(100vh-100px)] rounded-lg w-full overflow-hidden backdrop-blur-lg dark:bg-dark-500/60"
     >
-      <div v-show="searchList.length > 0" v-auto-animate class="h-full overflow-y-auto">
-        <button
+      <ul v-show="searchList.length > 0" class="h-full overflow-y-auto">
+        <li
           v-for="item in searchList"
           :key="item.id"
-          type="button"
           text-3.5
           lh-40px
           px-4
@@ -92,8 +94,8 @@ function goToItem(item: SearchResItem) {
           @click="goToItem(item)"
         >
           {{ item.keyword }}
-        </button>
-      </div>
+        </li>
+      </ul>
     </div>
   </div>
 </template>

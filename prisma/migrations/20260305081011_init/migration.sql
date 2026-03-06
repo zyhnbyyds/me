@@ -18,6 +18,36 @@ CREATE TABLE `blog_comment` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `blog_like` (
+    `id` VARCHAR(64) NOT NULL,
+    `file_id` VARCHAR(64) NOT NULL,
+    `user_id` BIGINT NOT NULL,
+    `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `idx_blog_like_file_id`(`file_id`),
+    INDEX `idx_blog_like_user_id`(`user_id`),
+    INDEX `idx_blog_like_created_at`(`created_at`),
+    UNIQUE INDEX `uq_blog_like_file_user`(`file_id`, `user_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `blog_view` (
+    `id` VARCHAR(64) NOT NULL,
+    `file_id` VARCHAR(64) NOT NULL,
+    `viewer_id` VARCHAR(64) NOT NULL,
+    `user_id` BIGINT NULL,
+    `created_at` TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
+
+    INDEX `idx_blog_view_file_id`(`file_id`),
+    INDEX `idx_blog_view_viewer_id`(`viewer_id`),
+    INDEX `idx_blog_view_user_id`(`user_id`),
+    INDEX `idx_blog_view_created_at`(`created_at`),
+    UNIQUE INDEX `uq_blog_view_file_viewer`(`file_id`, `viewer_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `qq_content` (
     `tid` VARCHAR(64) NOT NULL,
     `uin` BIGINT NULL,

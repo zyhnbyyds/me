@@ -23,7 +23,9 @@ function parseJSONField<T>(value: string | T | null | undefined): T | null {
 }
 
 function normalizeBigInt<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? Number(v) : v))) as T
+  return JSON.parse(
+    JSON.stringify(value, (_k, v) => (typeof v === 'bigint' ? Number(v) : v)),
+  ) as T
 }
 
 function transformRow(row: QQContentRow): QQContentRow {

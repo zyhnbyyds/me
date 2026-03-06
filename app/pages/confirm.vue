@@ -11,5 +11,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex h-screen w-screen items-center justify-center text-gray-700">正在跳转...</div>
+  <div class="flex h-screen w-screen items-center justify-center text-gray-700">
+    正在跳转...
+  </div>
 </template>

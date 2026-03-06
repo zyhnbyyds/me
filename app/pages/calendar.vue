@@ -25,10 +25,11 @@ const eventsMap = ref<Record<string, CalendarEvent[]>>({})
 const modalVisible = ref(false)
 const selectedEvent = ref<CalendarEvent | null>(null)
 
-const { data: eventsData, refresh } = await useFetch<{ events: CalendarEvent[] }>(
-  () => `/api/calendar?year=${year.value}&month=${month.value}`,
-  { watch: [year, month] },
-)
+const { data: eventsData, refresh } = await useFetch<{
+  events: CalendarEvent[]
+}>(() => `/api/calendar?year=${year.value}&month=${month.value}`, {
+  watch: [year, month],
+})
 
 watch(
   eventsData,
@@ -155,7 +156,9 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
             >
               <Icon name="carbon:chevron-left" class="text-4" />
             </button>
-            <span class="text-center text-nowrap text-3.5 <md:text-15px min-w-20 <md:min-w-24">
+            <span
+              class="text-center text-nowrap text-3.5 <md:text-15px min-w-20 <md:min-w-24"
+            >
               {{ year }} 年 {{ String(month).padStart(2, '0') }} 月
             </span>
             <button
@@ -197,7 +200,9 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
         ]"
       >
         <div class="mb-1 <md:mb-0.5 flex items-center justify-between">
-          <span class="text-14px <md:text-12px font-medium">{{ item.day }}</span>
+          <span class="text-14px <md:text-12px font-medium">{{
+            item.day
+          }}</span>
           <span
             v-if="item.isPrevMonth || item.isNextMonth"
             class="text-12px <md:text-11px opacity-70"
@@ -217,16 +222,28 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
             "
             @click.stop="openEventDetail(ev)"
           >
-            {{ ev.source === 'blog' ? ev.title : (ev.content ?? ev.name ?? '说说')?.slice(0, 12) }}
+            {{
+              ev.source === 'blog'
+                ? ev.title
+                : (ev.content ?? ev.name ?? '说说')?.slice(0, 12)
+            }}
           </div>
-          <div v-if="item.events.length > 3" class="text-11px <md:text-10px opacity-70">
+          <div
+            v-if="item.events.length > 3"
+            class="text-11px <md:text-10px opacity-70"
+          >
             +{{ item.events.length - 3 }} 更多
           </div>
         </div>
       </div>
     </div>
 
-    <Modal v-model="modalVisible" :show-mask="true" :close-on-click-overlay="true" is-transition>
+    <Modal
+      v-model="modalVisible"
+      :show-mask="true"
+      :close-on-click-overlay="true"
+      is-transition
+    >
       <div
         v-if="selectedEvent"
         class="overflow-auto absolute max-h-80% top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-lg max-w-50% <md:max-w-95% <md:w-95% bg-white p-6 pt-4 <md:p-4 shadow-xl dark:bg-dark-900 dark:text-gray-100 transition-colors"
@@ -261,7 +278,10 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
 
         <template v-if="selectedEvent.source === 'blog'">
           <h2 class="text-16px font-bold">{{ selectedEvent.title }}</h2>
-          <div v-if="selectedEvent.tags?.length" class="mt-2 flex flex-wrap gap-2">
+          <div
+            v-if="selectedEvent.tags?.length"
+            class="mt-2 flex flex-wrap gap-2"
+          >
             <span
               v-for="tag in selectedEvent.tags"
               :key="tag"

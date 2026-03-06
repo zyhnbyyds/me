@@ -1,21 +1,35 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { BlogCollectionItem } from '@nuxt/content'
 import type Comment from './Comment.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
+import ConfirmModal from '../ConfirmModal.vue'
 
 const props = defineProps<{
   blog?: BlogCollectionItem | null
+  superAdminUserId?: number
+}>()
+
+const emit = defineEmits<{
+  (e: 'deleted', deletedCount: number): void
 }>()
 
 const replyContent = ref('')
 const comments = defineModel<ReplyCommentItem[]>('comments', { default: [] })
 const loading = defineModel('loading', { default: false })
 const commentsIptRefList = ref<InstanceType<typeof Comment>[]>()
-const placeholder = ref('说点什么再走~')
+const placeholder = ref('说点什么再走嘛')
+
+const showConfirm = ref(false)
+const pendingDeleteComment = ref<ReplyCommentItem | null>(null)
 
 const { loggedIn, user } = useUserSession()
+
+const isSuperAdmin = computed(() => {
+  if (!user.value?.id || !props.superAdminUserId) return false
+  return user.value.id === props.superAdminUserId
+})
 
 function formatDate(timestamp: number) {
   dayjs.extend(relativeTime)
@@ -23,7 +37,24 @@ function formatDate(timestamp: number) {
   return dayjs(new Date(timestamp)).fromNow().replaceAll(' ', '')
 }
 
-function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }, isReply = false) {
+function removeCommentById(
+  list: ReplyCommentItem[],
+  commentId: string,
+): ReplyCommentItem[] {
+  return list
+    .filter((item) => item.commentId !== commentId)
+    .map((item) => ({
+      ...item,
+      replyList: item.replyList?.length
+        ? removeCommentById(item.replyList, commentId)
+        : [],
+    }))
+}
+
+function hdClickReply(
+  replay: ReplyCommentItem & { isClickReply: boolean },
+  isReply = false,
+) {
   if (isReply) {
     placeholder.value = `回复${replay.fromUser.name}`
   }
@@ -46,8 +77,44 @@ function hdClickReply(replay: ReplyCommentItem & { isClickReply: boolean }, isRe
   })
 }
 
+async function hdDeleteComment(comment: ReplyCommentItem) {
+  if (!props.blog || !isSuperAdmin.value || !import.meta.client) return
+  pendingDeleteComment.value = comment
+  showConfirm.value = true
+}
+
+async function confirmDelete() {
+  if (!props.blog || !pendingDeleteComment.value) return
+  loading.value = true
+  try {
+    const id = props.blog.path.replaceAll('/', '_')
+    const res = await $fetch<{ ok: boolean; deleted: number }>(
+      '/api/blog/comment',
+      {
+        method: 'delete',
+        body: { id, commentId: pendingDeleteComment.value.commentId },
+      },
+    )
+    comments.value = removeCommentById(
+      comments.value,
+      pendingDeleteComment.value.commentId,
+    )
+    emit('deleted', res.deleted || 1)
+  } finally {
+    loading.value = false
+    showConfirm.value = false
+    pendingDeleteComment.value = null
+  }
+}
+
+function cancelDelete() {
+  showConfirm.value = false
+  pendingDeleteComment.value = null
+}
+
 async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
-  if (!props.blog || !loggedIn.value || !user.value || !replyContent.value) return
+  if (!props.blog || !loggedIn.value || !user.value || !replyContent.value)
+    return
   comment.isClickReply = false
   const id = props.blog.path.replaceAll('/', '_')
   const body: PostCommentBody = {
@@ -60,35 +127,40 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
     toUser: comment.fromUser,
   }
   loading.value = true
-  const [flag, commentId] = await $fetch<[boolean, string]>('/api/blog/comment', {
-    method: 'post',
-    body,
-  })
-  if (!flag) return
-  const toAddComment = {
-    fileId: id,
-    type: 'comment',
-    fromUserId: user.value.id,
-    toUserId: comment.fromUserId,
-    timestamp: Date.now(),
-    content: val,
-    fromUser: user.value,
-    toUser: comment.fromUser,
-    parentId: comment?.commentId ?? '0',
-    isClickReply: false,
-    depth: comment.depth + 1,
-    replyList: [],
-    commentId,
+  try {
+    const [flag, commentId] = await $fetch<[boolean, string]>(
+      '/api/blog/comment',
+      {
+        method: 'post',
+        body,
+      },
+    )
+    if (!flag) return
+    const toAddComment = {
+      fileId: id,
+      type: 'comment',
+      fromUserId: user.value.id,
+      toUserId: comment.fromUserId,
+      timestamp: Date.now(),
+      content: val,
+      fromUser: user.value,
+      toUser: comment.fromUser,
+      parentId: comment?.commentId ?? '0',
+      isClickReply: false,
+      depth: comment.depth + 1,
+      replyList: [],
+      commentId,
+    }
+    comment.isClickReply = false
+    if (comment.depth === 1) {
+      comment.replyList = comment.replyList ? [...comment.replyList] : []
+      comment.replyList.push(toAddComment)
+    } else if (comment.depth >= 2) {
+      comments.value.push(toAddComment)
+    }
+  } finally {
+    loading.value = false
   }
-  comment.isClickReply = false
-  if (comment.depth === 1) {
-    comment.replyList = comment.replyList ? [...comment.replyList] : []
-    comment.replyList.push(toAddComment)
-  } else if (comment.depth >= 2) {
-    comments.value.push(toAddComment)
-  }
-
-  loading.value = false
 }
 </script>
 
@@ -112,11 +184,15 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
             <span font-bold mr-1
               >{{ comment.fromUser.name }}
               {{
-                comment.depth === 1 ? '' : `回复 ${comment.toUser && comment.toUser.name} `
+                comment.depth === 1
+                  ? ''
+                  : `回复 ${comment.toUser && comment.toUser.name} `
               }}</span
             >
             <span class="text-[#536471] text-op-80">
-              <span v-if="comment.depth === 1">@{{ comment.fromUser.login }}</span>
+              <span v-if="comment.depth === 1"
+                >@{{ comment.fromUser.login }}</span
+              >
               <span> · </span>
               <span text-3>{{ formatDate(comment.timestamp) }}</span>
             </span>
@@ -129,14 +205,22 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
           </div>
           <div text-3.5 text-dark-600 mt-2 break-all dark:text-light600>
             <span v-for="(item, idx) in comment.content" :key="`${idx}item`">
-              <img v-if="item.type === 'emoji'" :src="`/emojis/${item.value}`" class="emoji-sm" />
+              <img
+                v-if="item.type === 'emoji'"
+                :src="`/emojis/${item.value}`"
+                class="emoji-sm"
+              />
               <span v-else>{{ item.value }}</span>
             </span>
           </div>
 
           <footer py-2 flex items-start>
             <span
-              :class="comment.isClickReply ? 'text-blue-5' : 'text-[#536471] dark:text-light5'"
+              :class="
+                comment.isClickReply
+                  ? 'text-blue-5'
+                  : 'text-[#536471] dark:text-light5'
+              "
               hover:dark:bg-dark-2
               mr-2
               px-1.2
@@ -154,6 +238,15 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
               <Icon name="carbon:add-comment" text-4 text-op-80 mr1 />
               <span text-3>回复</span>
             </span>
+
+            <span
+              v-if="isSuperAdmin"
+              text-3
+              class="text-red-500 cursor-pointer select-none rounded-md px-1.2 py-0.7 hover:bg-red-50 dark:hover:bg-red-900/20"
+              @click="hdDeleteComment(comment)"
+            >
+              删除
+            </span>
           </footer>
           <BlogComment
             v-if="comment.isClickReply"
@@ -169,7 +262,8 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
             <BlogCommentList
               v-model:comments="comment.replyList"
               :blog="blog"
-              @send="hdClickSend"
+              :super-admin-user-id="superAdminUserId"
+              @deleted="emit('deleted', $event)"
             />
           </div>
         </div>
@@ -178,6 +272,13 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
       <Separator m-2 />
     </div>
   </div>
+  <ConfirmModal
+    :visible="showConfirm"
+    title="删除评论"
+    message="确定要删除这条评论吗？"
+    @confirm="confirmDelete"
+    @cancel="cancelDelete"
+  />
 </template>
 
 <style scoped>

@@ -24,7 +24,12 @@ const { height: wHeight, width: wWidth } = useWindowSize()
 const previewRefStyle = ref<CSSProperties | null>(null)
 const previewInfo = inject<Reactive<any>>('previewInfo', reactive<any>({}))
 const { x, y, height, width } = useElementBounding(imgRef)
-const { x: boxX, y: boxY, height: boxHeight, width: boxWidth } = useElementBounding(boxRef)
+const {
+  x: boxX,
+  y: boxY,
+  height: boxHeight,
+  width: boxWidth,
+} = useElementBounding(boxRef)
 const loading = ref(true)
 
 const bHeight = ref(0)

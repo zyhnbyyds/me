@@ -11,7 +11,9 @@ type HomeSearchResultItem = {
   path: string
 }
 
-function mapToSearchResult(item: QQContentItem | BlogCollectionItem): HomeSearchResultItem {
+function mapToSearchResult(
+  item: QQContentItem | BlogCollectionItem,
+): HomeSearchResultItem {
   if ('tid' in item) {
     return {
       keyword: item.content,

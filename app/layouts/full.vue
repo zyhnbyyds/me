@@ -19,7 +19,14 @@ provide('scroll', {
           class="rounded-full flex-center inline-flex h-14 w-14 transition-all"
           hover="bg-hover-common-trans"
         >
-          <NuxtImg src="/me.png" :quality="30" rounded-full h-10 w-10 alt="me-face" />
+          <NuxtImg
+            src="/me.png"
+            :quality="30"
+            rounded-full
+            h-10
+            w-10
+            alt="me-face"
+          />
         </div>
 
         <div class="pt-4px h-[calc(100%-52px)]">
@@ -27,7 +34,10 @@ provide('scroll', {
         </div>
       </div>
     </header>
-    <div ref="scrollRef" class="scroll-container flex flex-1 h-full overflow-auto">
+    <div
+      ref="scrollRef"
+      class="scroll-container flex flex-1 h-full overflow-auto"
+    >
       <div class="border-r-0.5px border-common h-full w-full relative">
         <slot />
       </div>

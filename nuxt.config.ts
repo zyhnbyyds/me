@@ -25,7 +25,10 @@ export default defineNuxtConfig({
         lang: 'zh-CN',
       },
       meta: [
-        { name: 'description', content: '张宇解的博客,一个现代化的博客网站,分享技术文章和见解' },
+        {
+          name: 'description',
+          content: '张宇解的博客,一个现代化的博客网站,分享技术文章和见解',
+        },
         { name: 'keywords', content: '张宇解,博客,前端开发,技术文章,见解' },
         { name: 'author', content: '张宇解,zyhnbyyds,张宇行' },
         { name: 'robots', content: 'index, follow' },
@@ -82,7 +85,11 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
-  css: ['~/assets/css/md.css', '~/assets/css/main.css', 'vue-boom/dist/index.css'],
+  css: [
+    '~/assets/css/md.css',
+    '~/assets/css/main.css',
+    'vue-boom/dist/index.css',
+  ],
 
   content: {
     build: {
@@ -131,7 +138,9 @@ export default defineNuxtConfig({
       port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
     },
     public: {
-      showUploadBtnGithubUserId: import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID,
+      showUploadBtnGithubUserId: import.meta.env
+        .GALLERY_SHOW_UPLOAD_BTN_USER_ID,
+      superAdminGithubUserId: import.meta.env.SUPER_ADMIN_GITHUB_USER_ID,
     },
   },
 })

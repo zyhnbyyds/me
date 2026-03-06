@@ -21,7 +21,8 @@ export default defineEventHandler(async (event) => {
         depth,
         content: comment as unknown as Prisma.InputJsonValue,
         from_user_snapshot: user as unknown as Prisma.InputJsonValue,
-        to_user_snapshot: (body.toUser ?? null) as unknown as Prisma.InputJsonValue,
+        to_user_snapshot: (body.toUser ??
+          null) as unknown as Prisma.InputJsonValue,
       },
     })
   } catch (error) {

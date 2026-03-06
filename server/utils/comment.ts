@@ -4,7 +4,9 @@ export type CommentItemDataField = Omit<
   CommentItem,
   'content' | 'toUser' | 'fromUser' | 'replyList'
 > & { replyList: CommentItemDataField[]; key: string }
-export function transformStoreKeyToDataField(key: string): CommentItemDataField {
+export function transformStoreKeyToDataField(
+  key: string,
+): CommentItemDataField {
   const [
     type = '',
     fileId = '',
@@ -32,7 +34,9 @@ export function transformStoreKeyToDataField(key: string): CommentItemDataField 
   }
 }
 
-export function transformDataFieldToStoreKey(data: CommentItemDataField): string {
+export function transformDataFieldToStoreKey(
+  data: CommentItemDataField,
+): string {
   return [
     data.type,
     data.fileId,
@@ -108,7 +112,10 @@ export function buildFlattenedTwoLevelTree(
   return sortByTimestamp(roots)
 }
 
-export function sortByTimestamp(list: CommentItemDataField[], isRevert = false) {
+export function sortByTimestamp(
+  list: CommentItemDataField[],
+  isRevert = false,
+) {
   const sorted = list.sort((a, b) => {
     if (a.replyList.length !== 0) {
       a.replyList = sortByTimestamp(a.replyList, true)

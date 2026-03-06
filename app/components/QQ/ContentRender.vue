@@ -21,7 +21,10 @@ function parseContent(content: string) {
   // eslint-disable-next-line no-cond-assign
   while ((match = regex.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      result.push({ type: 'text', value: content.slice(lastIndex, match.index) })
+      result.push({
+        type: 'text',
+        value: content.slice(lastIndex, match.index),
+      })
     }
     result.push({ type: 'emoji', value: match[1] ?? '' })
     lastIndex = regex.lastIndex
@@ -36,7 +39,10 @@ const parsedContent = computed(() => parseContent(props.content))
 </script>
 
 <template>
-  <p class="text-sm leading-25px mt-2 inline whitespace-pre-wrap" :class="props.customClass">
+  <p
+    class="text-sm leading-25px mt-2 inline whitespace-pre-wrap"
+    :class="props.customClass"
+  >
     <template v-for="(item, idx) in parsedContent" :key="idx">
       <template v-if="item.type === 'text'">
         {{ item.value }}

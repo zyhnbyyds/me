@@ -22,7 +22,9 @@ export default defineEventHandler(async () => {
         return prisma.qq_content.upsert({
           where: { tid: record.tid },
           update: {
-            commentlist: record.commentlist ? JSON.stringify(record.commentlist) : null,
+            commentlist: record.commentlist
+              ? JSON.stringify(record.commentlist)
+              : null,
             pic: record.pic ? JSON.stringify(record.pic) : null,
             video: record.video ? JSON.stringify(record.video) : null,
           },
@@ -34,7 +36,9 @@ export default defineEventHandler(async () => {
             name: record.name,
             content: record.content,
             source_name: record.source_name,
-            commentlist: record.commentlist ? JSON.stringify(record.commentlist) : null,
+            commentlist: record.commentlist
+              ? JSON.stringify(record.commentlist)
+              : null,
             pic: record.pic ? JSON.stringify(record.pic) : null,
             video: record.video ? JSON.stringify(record.video) : null,
           },

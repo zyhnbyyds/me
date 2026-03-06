@@ -7,8 +7,8 @@ body,
   height: 100%;
   width: 100%;
   font-family:
-    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 .page-container > div {
@@ -18,4 +18,9 @@ body,
 /* dark */
 .dark .page-container > div {
   border-right: 0.5px solid rgb(31 31 31);
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(200 200 200) transparent;
 }

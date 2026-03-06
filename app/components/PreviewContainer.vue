@@ -37,7 +37,9 @@ function hdStopPreview() {
     <div
       id="previewImg"
       class="preview-img"
-      :class="previewInfo.floating ? 'fixed left-0 top-0 z-50 h-full w-full' : ''"
+      :class="
+        previewInfo.floating ? 'fixed left-0 top-0 z-50 h-full w-full' : ''
+      "
       @click="hdStopPreview"
     />
     <Transition name="fade">

@@ -12,9 +12,15 @@ export function transformContentFileAfterParse(ctx: FileAfterParseHook) {
 
   Object.keys(meta).forEach((key) => {
     if (
-      ['readingTime', 'title', 'description', 'image', 'tags', 'publishAt', 'updateAt'].includes(
-        key,
-      )
+      [
+        'readingTime',
+        'title',
+        'description',
+        'image',
+        'tags',
+        'publishAt',
+        'updateAt',
+      ].includes(key)
     ) {
       if (key === 'publishAt' || key === 'updateAt') {
         content[key] = meta[key] ? new Date(meta[key]).toISOString() : null

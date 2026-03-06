@@ -10,7 +10,9 @@ consola.log(props.error)
 </script>
 
 <template>
-  <div class="flex-center flex-col h-screen w-screen dark:text-white dark:bg-dark">
+  <div
+    class="flex-center flex-col h-screen w-screen dark:text-white dark:bg-dark"
+  >
     <h1 text-10 font-bold mb-4>
       {{ error?.status }}
     </h1>

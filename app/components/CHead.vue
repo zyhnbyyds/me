@@ -5,7 +5,18 @@ defineProps<{
 </script>
 
 <template>
-  <header text-5 px-4 blur-common flex-col-center h-50px w-full top-0 justify-between sticky z-20>
+  <header
+    text-5
+    px-4
+    blur-common
+    flex-col-center
+    h-50px
+    w-full
+    top-0
+    justify-between
+    sticky
+    z-20
+  >
     <div flex-col-center w-full justify-between>
       <div flex-col-center gap-4 w-full relative>
         <div

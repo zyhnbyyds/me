@@ -19,7 +19,10 @@ export default defineConfig({
     ['text-common', 'text-[rgb(15,20,25)] dark:text-[rgb(231,234,235)]'],
     ['flex-col-center', 'flex items-center'],
     ['flex-row-center', 'flex justify-center'],
-    ['blur-common', 'backdrop-blur-md bg-[rgba(255,255,255,0.9)] dark:bg-[rgba(0,0,0,0.8)]'],
+    [
+      'blur-common',
+      'backdrop-blur-md bg-[rgba(255,255,255,0.9)] dark:bg-[rgba(0,0,0,0.8)]',
+    ],
     ['bg-common', 'bg-light-300 dark:bg-dark-300'],
     [
       'bg-hover-common',
