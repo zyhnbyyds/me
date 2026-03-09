@@ -1,4 +1,4 @@
-﻿import { assertSuperAdmin, normalizeBlogId } from '~~/server/utils/blog'
+import { assertSuperAdmin, normalizeBlogId } from '~~/server/utils/blog'
 import { prisma } from '~~/server/lib/prisma'
 
 export default defineEventHandler(async (event) => {

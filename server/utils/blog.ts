@@ -1,4 +1,4 @@
-﻿import { ulid } from 'ulid'
+import { ulid } from 'ulid'
 import type { H3Event } from 'h3'
 
 const VIEWER_COOKIE = 'blog_viewer_id'

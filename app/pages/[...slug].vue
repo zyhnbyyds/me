@@ -1,6 +1,5 @@
 ﻿<script lang="ts" setup>
 const route = useRoute()
-const { $api } = useNuxtApp()
 const config = useRuntimeConfig()
 
 const commentIpt = ref('')
@@ -21,7 +20,7 @@ const { data: comments, refresh: refreshComments } = useAsyncData<
   () => `blog-comment:${blogId.value || 'empty'}`,
   () => {
     if (!blogId.value) return Promise.resolve([])
-    return $api('/api/blog/comment', {
+    return $fetch('/api/blog/comment', {
       method: 'get',
       query: { id: blogId.value },
     })
@@ -41,7 +40,7 @@ const { data: ops, refresh: refreshOps } = useAsyncData<BlogOps>(
         comments: 0,
       })
     }
-    return $api('/api/blog/ops', {
+    return $fetch('/api/blog/ops', {
       method: 'get',
       query: { id: blogId.value },
     })
