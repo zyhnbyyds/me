@@ -1,116 +1,448 @@
-<script lang="ts" setup>
-import type { BlogCollectionItem } from '@nuxt/content'
+﻿<script lang="ts" setup>
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { homeTabList } from '~/constants'
 import 'dayjs/locale/zh-cn'
 
 dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
+
 const { push } = useRouter()
 
-// 使用 URL 查询参数来保持 SSR 和客户端状态一致
-const route = useRoute()
-const activeTab = ref(
-  (route.query.tab as string) || homeTabList[0]?.value || 'newest',
+interface FeedMedia {
+  type: 'image' | 'video'
+  src: string
+  poster?: string
+}
+
+interface FeedItem {
+  id: string
+  type: 'blog' | 'qq'
+  title: string
+  description: string
+  content?: string
+  image?: string
+  date: number
+  tags: string[]
+  path: string
+  readingTime?: number
+  qqData?: Record<string, unknown>
+  media?: FeedMedia
+}
+
+// ─── Feed ─────────────────────────────────────────────────
+const keyword = ref('')
+const searchInput = ref('')
+const page = ref(1)
+const pageSize = 20
+const activeDate = ref('')
+
+const { data: feedResult, refresh } = await useAsyncData(
+  'home-feed',
+  () =>
+    $fetch<{ data: FeedItem[]; total: number }>('/api/feed/list', {
+      params: {
+        current: page.value,
+        size: pageSize,
+        keyword: keyword.value || undefined,
+        date: activeDate.value || undefined,
+      },
+    }),
+  { default: () => ({ data: [], total: 0 }) },
 )
 
-// 一次性加载所有content
-const { data: blobs, refresh } = await useAsyncData(
-  route.path,
-  () => {
-    // TODO: 优化查询，避免一次性加载所有数据, 目前数据不多
-    const tab = activeTab.value
-    if (tab === 'recommend') {
-      return queryCollection('blog').all()
-    }
+const feedList = computed(() => feedResult.value?.data ?? [])
+const totalCount = computed(() => feedResult.value?.total ?? 0)
+const hasMore = computed(() => page.value * pageSize < totalCount.value)
 
-    return queryCollection('blog').order('updateAt', 'DESC').all()
-  },
-  { default: () => [] },
-)
-
-// 监听标签变化，更新 URL 并刷新数据
-watch(
-  () => activeTab.value,
-  (newTab) => {
-    // 只在客户端更新 URL 查询参数（不触发页面刷新）
-    if (import.meta.client) {
-      navigateTo({ query: { tab: newTab } }, { replace: true })
-    }
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+function handleSearch() {
+  if (searchTimer) clearTimeout(searchTimer)
+  searchTimer = setTimeout(() => {
+    keyword.value = searchInput.value.trim()
+    activeDate.value = ''
+    page.value = 1
     refresh()
+  }, 400)
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function getQQPrimaryMedia(item: FeedItem): FeedMedia | undefined {
+  if (item.type !== 'qq' || !isRecord(item.qqData)) return undefined
+  const pics = item.qqData.pic
+  if (!Array.isArray(pics) || pics.length === 0) return undefined
+
+  const firstPicIndex = pics.findIndex((pic) => isRecord(pic))
+  if (firstPicIndex < 0) return undefined
+
+  const firstPic = pics[firstPicIndex]
+  if (!isRecord(firstPic)) return undefined
+
+  const isVideo = Number(firstPic.is_video ?? 0) === 1
+  if (isVideo) {
+    return {
+      type: 'video',
+      src: `/qq/videos/video_${item.id}_${firstPicIndex}.mp4`,
+      poster: `/qq/images/image_${item.id}_${firstPicIndex}.jpg`,
+    }
+  }
+
+  return {
+    type: 'image',
+    src: `/qq/images/image_${item.id}_${firstPicIndex}.jpg`,
+  }
+}
+
+function enrichFeedItem(item: FeedItem): FeedItem {
+  if (item.type === 'blog') {
+    return {
+      ...item,
+      media: item.image
+        ? {
+            type: 'image',
+            src: item.image,
+          }
+        : undefined,
+    }
+  }
+
+  return {
+    ...item,
+    media: getQQPrimaryMedia(item),
+  }
+}
+
+const feedItems = ref<FeedItem[]>([])
+watch(
+  feedList,
+  (val) => {
+    const enriched = val.map(enrichFeedItem)
+    if (page.value === 1) {
+      feedItems.value = enriched
+    } else {
+      feedItems.value = [...feedItems.value, ...enriched]
+    }
+  },
+  { immediate: true },
+)
+
+async function loadMore() {
+  if (!hasMore.value) return
+  page.value++
+  await refresh()
+}
+
+const scrollRef = ref<HTMLElement>()
+const { y, arrivedState } = useScroll(scrollRef)
+const showSearch = ref(true)
+
+watch(y, (currentY, previousY) => {
+  if (currentY <= 8) {
+    showSearch.value = true
+    return
+  }
+
+  // 下滑隐藏搜索框，上滑显示
+  if (currentY > previousY) {
+    showSearch.value = false
+  } else if (currentY < previousY) {
+    showSearch.value = true
+  }
+})
+
+watch(
+  () => arrivedState.bottom,
+  (isBottom) => {
+    if (isBottom && hasMore.value) loadMore()
   },
 )
 
-async function goToBlogInfo(blobItem: BlogCollectionItem) {
-  push(blobItem.path)
-  await $fetch('/api/blog/look', { method: 'post', body: blobItem })
+// ─── 瀑布流布局 ────────────────────────────────────────────
+const containerRef = ref<HTMLElement>()
+const cardRefs = ref<(HTMLElement | null)[]>([])
+const containerHeight = ref(0)
+const cardPositions = ref<
+  Array<{ top: number; left: number; width: number; colIndex: number }>
+>([])
+const cardAnimationDelays = ref<number[]>([])
+const windowWidth = ref(0)
+
+const columnCount = computed(() => {
+  const width = windowWidth.value
+  if (width < 640) return 1
+  if (width < 1024) return 2
+  if (width < 1400) return 3
+  return 4
+})
+
+const isMobile = computed(() => windowWidth.value < 640)
+
+function calculateLayout() {
+  if (!containerRef.value || cardRefs.value.length === 0) return
+
+  const gap = isMobile.value ? 12 : 20
+  const padding = isMobile.value ? 8 : 20
+  const containerWidth = containerRef.value.clientWidth
+  const cols = columnCount.value
+  const colWidth = (containerWidth - padding * 2 - gap * (cols - 1)) / cols
+
+  const columnHeights = Array(cols).fill(padding)
+  const positions: Array<{
+    top: number
+    left: number
+    width: number
+    colIndex: number
+  }> = []
+
+  for (let i = 0; i < cardRefs.value.length; i++) {
+    const card = cardRefs.value[i]
+    if (!card) continue
+
+    const minColIndex = columnHeights.indexOf(Math.min(...columnHeights))
+    const height = card.offsetHeight
+
+    positions.push({
+      top: columnHeights[minColIndex],
+      left: padding + minColIndex * (colWidth + gap),
+      width: colWidth,
+      colIndex: minColIndex,
+    })
+
+    columnHeights[minColIndex] += height + gap
+  }
+
+  cardPositions.value = positions
+  containerHeight.value = Math.max(...columnHeights)
+
+  // 计算每个卡片的延迟，限制最大延迟到 300ms 以加快首屏显示速度
+  cardAnimationDelays.value = feedItems.value.map((_, i) =>
+    Math.min(i * 20, 300),
+  )
+}
+
+let resizeObserver: ResizeObserver | null = null
+
+function setupResizeObserver() {
+  if (!import.meta.client) return
+
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+  }
+
+  resizeObserver = new ResizeObserver(() => {
+    calculateLayout()
+  })
+
+  cardRefs.value.forEach((card) => {
+    if (card) resizeObserver!.observe(card)
+  })
+}
+
+watch(feedItems, () => {
+  if (import.meta.client) {
+    nextTick(() => {
+      setupResizeObserver()
+      calculateLayout()
+    })
+  }
+})
+
+watch(columnCount, () => {
+  nextTick(() => {
+    calculateLayout()
+  })
+})
+
+const handleWindowResize = () => {
+  windowWidth.value = window.innerWidth
+  calculateLayout()
+}
+
+onMounted(() => {
+  windowWidth.value = window.innerWidth
+  nextTick(() => {
+    calculateLayout()
+  })
+  window.addEventListener('resize', handleWindowResize)
+})
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
+  window.removeEventListener('resize', handleWindowResize)
+})
+
+async function goToDetail(item: FeedItem) {
+  if (item.type === 'blog') {
+    await $fetch('/api/blog/look', {
+      method: 'post',
+      body: { path: item.path },
+    })
+  }
+  push(item.path)
 }
 </script>
 
 <template>
-  <div h-full>
-    <Tab
-      v-model="activeTab"
-      class="blur-common w-full top-0 sticky z-9999"
-      :list="homeTabList"
-    />
-    <div class="p-4 pb-30 h-[calc(100%-50px)] overflow-auto scrollbar">
-      <ul columns-3 class="<lg:columns-2 <md:columns-1" gap-x-4>
-        <li
-          @click="goToBlogInfo(blobItem)"
-          v-for="blobItem in blobs ?? []"
-          :key="blobItem.id"
-          mb-4
-          cursor-pointer
-          class="group border border-common transition-all hover:shadow-lg bg-common bg-op60 rounded-lg overflow-hidden"
-        >
-          <img
-            v-if="blobItem.image"
-            class="p-1 rounded-3 group-hover:scale-101 transition-all duration-300 border-common h-46 w-full object-cover"
-            :src="`/blog/${blobItem.image}`"
-            :alt="blobItem.title ?? '博客配图'"
-            loading="lazy"
-          />
+  <div class="h-full flex relative overflow-hidden bg-gray-50 dark:bg-dark-950">
+    <!-- 左侧主内容 -->
+    <div class="flex-1 flex flex-col h-full min-w-0">
+      <div
+        class="absolute left-10 top-5 z-1000 w-1/3 <md:left-4 <md:top-3 <md:w-[calc(100%-32px)] transition-all duration-250 ease-out"
+        :class="
+          showSearch
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-3 pointer-events-none'
+        "
+      >
+        <Icon
+          name="carbon:search"
+          class="absolute left-2.5 top-1/2 -translate-y-1/2 text-3.5 text-gray-400"
+        />
+        <input
+          v-model="searchInput"
+          type="text"
+          placeholder="搜索..."
+          class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-gray-100 dark:bg-dark-700 border border-gray-200 dark:border-dark-500 text-12px text-gray-700 dark:text-gray-200 outline-none transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 placeholder-gray-400"
+          @input="handleSearch"
+        />
+      </div>
 
-          <div p-3>
-            <h2
-              mt2
-              class="text-14px font-bold text-gray-900 dark:text-gray-100"
-            >
-              {{ blobItem.title }}
-            </h2>
-            <!-- 标签 -->
-            <div class="flex flex-wrap mt-2 gap-2">
-              <div
-                v-for="tag in blobItem.tags ?? []"
-                :key="tag"
-                class="text-12px text-nowrap bg-gray-200/50 dark:bg-dark-200/80 rounded-full px-2 py-1 text-gray-800/70 dark:text-gray-100/80"
-              >
-                {{ tag }}
-              </div>
-            </div>
-            <p mt2 class="text-13px text-gray-800/80 dark:text-gray-200/70">
-              {{ blobItem.description }}
-            </p>
+      <!-- Feed 列表 -->
+      <div
+        ref="scrollRef"
+        class="flex-1 overflow-y-auto overflow-x-hidden scrollbar pb-20 pt6 <sm:pt4"
+      >
+        <div class="px-6 <sm:px-2.5 py-6 <sm:py-0.5 max-w-full">
+          <div
+            v-if="feedItems.length === 0"
+            class="flex flex-col items-center justify-center py-20 text-gray-400"
+          >
+            <Icon name="carbon:document-blank" class="text-12 mb-3" />
+            <span class="text-sm">暂无内容</span>
+          </div>
+
+          <div
+            ref="containerRef"
+            class="relative w-full mx-auto"
+            :style="{ height: `${containerHeight}px`, maxWidth: '1600px' }"
+          >
             <div
-              class="text-14px mt-4 text-gray-800/70 dark:text-gray-200/70 flex w-full justify-between"
+              v-for="(item, index) in feedItems"
+              :key="item.id"
+              :ref="(el) => (cardRefs[index] = el as any)"
+              class="absolute w-full"
+              :style="{
+                top: `${cardPositions[index]?.top ?? 0}px`,
+                left: `${cardPositions[index]?.left ?? 0}px`,
+                width: `${cardPositions[index]?.width ?? 0}px`,
+                transition: `opacity 0.35s ease-out ${cardAnimationDelays[index] ?? 0}ms`,
+                opacity: cardPositions[index] ? 1 : 0,
+                willChange: 'opacity',
+              }"
             >
-              <div flex-center gap-1>
-                <Icon name="carbon:calendar" class="text-4" />
-                <span text-3>{{
-                  dayjs(blobItem.updateAt).format('YYYY-MM-DD')
-                }}</span>
-              </div>
-              <div flex-center gap-1>
-                <Icon name="mdi:clock-outline" class="text-4" />
-                <span text-3>{{ blobItem.readingTime }}分钟</span>
+              <div
+                class="group relative h-full flex flex-col bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-dark-600 shadow-sm hover:shadow-lg overflow-hidden cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1"
+                @click="goToDetail(item)"
+              >
+                <!-- 类型标识 -->
+                <div
+                  class="absolute top-1.5 left-2 z-10 px-2 py-0.5 rounded-full text-10px font-medium"
+                  :class="
+                    item.type === 'blog'
+                      ? 'bg-blue-500/80 text-white'
+                      : 'bg-emerald-500/80 text-white'
+                  "
+                >
+                  {{ item.type === 'blog' ? '博客' : '动态' }}
+                </div>
+
+                <div
+                  v-if="item.media"
+                  class="w-full relative aspect-video overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-dark-700 dark:to-dark-600"
+                >
+                  <img
+                    v-if="item.media.type === 'image'"
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    :src="item.media.src"
+                    :alt="item.title"
+                    style="will-change: transform"
+                  />
+                  <video
+                    v-else
+                    controls
+                    preload="metadata"
+                    class="w-full h-full object-cover"
+                    :src="item.media.src"
+                    :poster="item.media.poster"
+                    @click.stop
+                  />
+                </div>
+
+                <!-- 内容区 -->
+                <div class="p-4 <sm:p-3 flex flex-col flex-1 gap-3 min-h-0">
+                  <h2
+                    v-if="item.type === 'blog'"
+                    class="text-base font-bold text-gray-800 dark:text-gray-100 leading-tight line-clamp-2 transition-colors"
+                  >
+                    {{ item.title }}
+                  </h2>
+
+                  <QQContentRender
+                    v-if="item.type === 'qq'"
+                    :content="item.description || item.title || ''"
+                    custom-class="text-14px text-gray-700 dark:text-gray-200 line-clamp-4 leading-relaxed"
+                    emoji-size="small"
+                  />
+
+                  <p
+                    v-if="item.type === 'blog' && item.description"
+                    class="text-13px text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed"
+                  >
+                    {{ item.description }}
+                  </p>
+
+                  <div
+                    v-if="item.tags?.length"
+                    class="flex flex-wrap gap-1.5 mt-1 mb-auto"
+                  >
+                    <span
+                      v-for="tag in item.tags"
+                      :key="tag"
+                      class="inline-flex items-center px-2 py-0.5 rounded-md text-11px font-medium bg-gray-100 dark:bg-dark-600 text-gray-600 dark:text-gray-300"
+                    >
+                      # {{ tag }}
+                    </span>
+                  </div>
+
+                  <div
+                    class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-dark-600 text-12px text-gray-500 dark:text-gray-400"
+                  >
+                    <span class="text-11px">{{
+                      dayjs(item.date).format('YYYY-MM-DD')
+                    }}</span>
+                    <span v-if="item.type === 'blog'" class="text-11px"
+                      >{{ item.readingTime ?? 5 }} min</span
+                    >
+                    <span
+                      v-else
+                      class="text-11px font-medium text-emerald-500/70"
+                      >QQ空间</span
+                    >
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </li>
-      </ul>
+
+          <Loading :loading="hasMore" />
+        </div>
+      </div>
     </div>
+
+    <BackTop class="absolute right-3 bottom-3" v-model="y" />
   </div>
 </template>
 

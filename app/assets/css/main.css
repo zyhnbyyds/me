@@ -24,3 +24,39 @@ body,
   scrollbar-width: thin;
   scrollbar-color: rgb(200 200 200) transparent;
 }
+
+/* 全局页面进入动效 */
+.page-enter-active {
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.page-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+
+/* 全局图片懒加载淡入 */
+img {
+  transition: opacity 0.3s ease;
+}
+
+/* 菜单项悬停动效 */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 滚动条 dark mode */
+.dark .scrollbar {
+  scrollbar-color: rgb(60 60 70) transparent;
+}

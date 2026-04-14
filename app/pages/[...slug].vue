@@ -100,6 +100,26 @@ useSeoMeta({
 
 const { y } = useScroll(blobPageRef)
 
+// 当前激活的 TOC 锚点
+const activeHeadingId = ref('')
+
+function updateActiveHeading() {
+  if (!import.meta.client || !blobPageRef.value) return
+  const headings = blobPageRef.value.querySelectorAll(
+    'h1[id], h2[id], h3[id], h4[id]',
+  )
+  let current = ''
+  for (const el of headings) {
+    const rect = el.getBoundingClientRect()
+    if (rect.top <= 80) {
+      current = el.id
+    }
+  }
+  activeHeadingId.value = current
+}
+
+useEventListener(blobPageRef, 'scroll', updateActiveHeading, { passive: true })
+
 watch(
   blogId,
   async (id) => {
@@ -114,11 +134,15 @@ function jumpToHeading(id: string) {
   if (!import.meta.client) return
   const target = document.getElementById(id)
   if (!target) return
-  const headerHeight = 56 // 如有变化可调整
+  const headerHeight = 56
   const rect = target.getBoundingClientRect()
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+  const scrollTop =
+    blobPageRef.value?.scrollTop ??
+    window.pageYOffset ??
+    document.documentElement.scrollTop
   const top = rect.top + scrollTop - headerHeight
   blobPageRef.value?.scrollTo({ top, behavior: 'smooth' })
+  activeHeadingId.value = id
 }
 
 async function hdClickSend(val: EmojiInfo[]) {
@@ -199,80 +223,50 @@ async function hdCommentDeleted(_deletedCount: number) {
       <CHead :title="page?.title" />
 
       <Teleport to="#default-right">
-        <div class="<lg:hidden relative h-full overflow-hidden">
+        <div class="<lg:hidden relative h-full overflow-hidden flex flex-col">
+          <!-- TOC 目录 -->
           <div
             v-if="tocItems.length > 0"
-            px-8
+            px-6
             py-4
-            class="h-[calc(100%-80px)] overflow-auto"
+            class="flex-1 min-h-0 overflow-auto toc-scroll"
           >
-            <div class="toc-title" mb-2 text-3.5 font-bold>目录</div>
-            <div class="flex flex-col gap-1">
+            <div
+              class="toc-title mb-3 text-3 font-semibold tracking-wider uppercase opacity-50"
+            >
+              目录
+            </div>
+            <div class="flex flex-col gap-0.5">
               <button
                 v-for="item in tocItems"
                 :key="item.id"
                 type="button"
-                class="text-left op-70 hover:op-100 hover:bg-common text-3 py-1 transition-all rounded-sm"
-                :style="{ paddingLeft: `${item.level * 16 + 8}px` }"
+                class="toc-item text-left text-3 py-1.5 px-2 rounded-md transition-all duration-200 border-l-2"
+                :style="{ paddingLeft: `${item.level * 12 + 8}px` }"
+                :class="
+                  activeHeadingId === item.id
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 opacity-100 font-medium'
+                    : 'border-transparent opacity-55 hover:opacity-90 hover:bg-gray-100 dark:hover:bg-dark-300'
+                "
                 @click="jumpToHeading(item.id)"
               >
                 {{ item.text }}
               </button>
             </div>
           </div>
-          <div
-            px-5
-            py-3
-            flex-center
-            gap-5
-            text-4
-            h-20
-            absolute
-            bottom-0
-            left-0
-            w-full
-          >
-            <button
-              class="flex items-center gap-1 rounded-md px-2 py-1 transition-all"
-              :class="
-                ops?.liked
-                  ? 'text-red-500 bg-red-50 dark:bg-red-900/20'
-                  : 'bg-hover-common-trans'
-              "
-              :disabled="likeLoading"
-              @click="hdToggleLike"
-            >
-              <Icon :name="ops?.liked ? 'mdi:heart' : 'mdi:heart-outline'" />
-              <span>{{ ops?.likes ?? 0 }}</span>
-            </button>
-
-            <div class="flex items-center gap-1 text-[#536471]">
-              <Icon name="mdi:eye-outline" />
-              <span>{{ ops?.looks ?? 0 }}</span>
-            </div>
-
-            <div class="flex items-center gap-1 text-[#536471]">
-              <Icon name="carbon:chat" />
-              <span>{{ ops?.comments ?? 0 }}</span>
-            </div>
-          </div>
         </div>
       </Teleport>
 
+      <!-- 文章内容区 -->
       <div class="markdown-body">
         <ClientOnly>
-          <ContentRenderer v-if="page" :value="page" />
-
-          <div py-5 flex-center>
-            <NuxtImg
-              v-if="page?.image"
-              :quality="70"
-              class="w-full object-cover"
-              :src="`/blog/${page?.image}`"
-            />
-          </div>
+          <Transition name="content-fade" appear>
+            <div v-if="page">
+              <ContentRenderer :value="page" />
+            </div>
+          </Transition>
           <template #fallback>
-            <Loading mt20 :loading="true" />
+            <SkeletonBlog :lines="10" show-title show-image />
           </template>
         </ClientOnly>
       </div>
@@ -345,5 +339,40 @@ async function hdCommentDeleted(_deletedCount: number) {
 .chat-ipt > img {
   height: 20px !important;
   width: 20px !important;
+}
+
+.toc-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.toc-scroll:hover {
+  scrollbar-color: rgb(200 200 200) transparent;
+}
+
+/* 心跳动效 */
+.heart-pop-enter-active {
+  animation: heart-beat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes heart-beat {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 文章内容淡入 */
+.content-fade-enter-active {
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+.content-fade-enter-from {
+  opacity: 0;
+  transform: translateY(16px);
 }
 </style>

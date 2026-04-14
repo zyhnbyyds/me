@@ -9,3 +9,5 @@ dist
 .data/content/contents.sqlite
 
 /app/generated/prisma
+.agents
+.claude

@@ -19,6 +19,8 @@ const { text = 'Loading...' } = defineProps<{
         inset-0
         justify-center
         absolute
+        left-0
+        top-0
       >
         <div
           class="text-5 text-transparent font-bold font-italic animate-pulse from-purple-500 to-pink-500 bg-linear-to-r bg-clip-text"

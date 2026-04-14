@@ -55,4 +55,8 @@ export const homeTabList: TabItem[] = [
     label: '最新',
     value: 'newest',
   },
+  {
+    label: '动态',
+    value: 'qq',
+  },
 ]
