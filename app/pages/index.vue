@@ -7,6 +7,7 @@ dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
 
 const { push } = useRouter()
+const pageSize = 20
 
 interface FeedMedia {
   type: 'image' | 'video'
@@ -29,13 +30,42 @@ interface FeedItem {
   media?: FeedMedia
 }
 
-// ─── Feed ─────────────────────────────────────────────────
+interface CardPosition {
+  top: number
+  left: number
+  width: number
+  colIndex: number
+}
+
+// ─── 状态 ─────────────────────────────────────────────────
 const keyword = ref('')
 const searchInput = ref('')
 const page = ref(1)
-const pageSize = 20
 const activeDate = ref('')
+const showSearch = ref(true)
+const feedItems = ref<FeedItem[]>([])
 
+const scrollRef = ref<HTMLElement>()
+const containerRef = ref<HTMLElement>()
+const cardRefs = ref<(HTMLElement | null)[]>([])
+
+const containerHeight = ref(0)
+const cardPositions = ref<CardPosition[]>([])
+const cardAnimationDelays = ref<number[]>([])
+
+let searchTimer: ReturnType<typeof setTimeout> | null = null
+let layoutFrame: number | null = null
+let resizeObserver: ResizeObserver | null = null
+
+// ─── VueUse ───────────────────────────────────────────────
+const { y, restoreScrollPosition } = useRouteScrollRestore(scrollRef, {
+  key: '/',
+})
+const { arrivedState } = useScroll(scrollRef)
+const { width: pageWidth } = useWindowSize()
+const { width: containerWidth } = useElementSize(containerRef)
+
+// ─── 数据 ─────────────────────────────────────────────────
 const { data: feedResult, refresh } = await useAsyncData(
   'home-feed',
   () =>
@@ -50,19 +80,51 @@ const { data: feedResult, refresh } = await useAsyncData(
   { default: () => ({ data: [], total: 0 }) },
 )
 
+// ─── 计算属性 ─────────────────────────────────────────────
 const feedList = computed(() => feedResult.value?.data ?? [])
 const totalCount = computed(() => feedResult.value?.total ?? 0)
 const hasMore = computed(() => page.value * pageSize < totalCount.value)
+const layoutWidth = computed(() => pageWidth.value || containerWidth.value)
 
-let searchTimer: ReturnType<typeof setTimeout> | null = null
-function handleSearch() {
+const layoutMetrics = computed(() => {
+  const width = layoutWidth.value
+
+  if (width < 640) {
+    return {
+      columns: 1,
+      gap: 12,
+      padding: 8,
+    }
+  }
+
+  if (width < 1024) {
+    return {
+      columns: 2,
+      gap: 16,
+      padding: 12,
+    }
+  }
+
+  if (width < 1400) {
+    return {
+      columns: 3,
+      gap: 20,
+      padding: 16,
+    }
+  }
+
+  return {
+    columns: 4,
+    gap: 20,
+    padding: 20,
+  }
+})
+
+const columnCount = computed(() => layoutMetrics.value.columns)
+
+// ─── 工具函数 ─────────────────────────────────────────────
+function resetSearchTimer() {
   if (searchTimer) clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {
-    keyword.value = searchInput.value.trim()
-    activeDate.value = ''
-    page.value = 1
-    refresh()
-  }, 400)
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -114,19 +176,23 @@ function enrichFeedItem(item: FeedItem): FeedItem {
   }
 }
 
-const feedItems = ref<FeedItem[]>([])
-watch(
-  feedList,
-  (val) => {
-    const enriched = val.map(enrichFeedItem)
-    if (page.value === 1) {
-      feedItems.value = enriched
-    } else {
-      feedItems.value = [...feedItems.value, ...enriched]
-    }
-  },
-  { immediate: true },
-)
+function resetLayoutFrame() {
+  if (layoutFrame !== null) {
+    cancelAnimationFrame(layoutFrame)
+    layoutFrame = null
+  }
+}
+
+// ─── 业务函数 ─────────────────────────────────────────────
+function handleSearch() {
+  resetSearchTimer()
+  searchTimer = setTimeout(() => {
+    keyword.value = searchInput.value.trim()
+    activeDate.value = ''
+    page.value = 1
+    refresh()
+  }, 400)
+}
 
 async function loadMore() {
   if (!hasMore.value) return
@@ -134,67 +200,42 @@ async function loadMore() {
   await refresh()
 }
 
-const scrollRef = ref<HTMLElement>()
-const { y, arrivedState } = useScroll(scrollRef)
-const showSearch = ref(true)
+const scheduleLayout = useDebounceFn(() => {
+  resetLayoutFrame()
 
-watch(y, (currentY, previousY) => {
-  if (currentY <= 8) {
-    showSearch.value = true
+  layoutFrame = window.requestAnimationFrame(() => {
+    layoutFrame = null
+    calculateLayout()
+  })
+}, 16)
+
+function calculateLayout() {
+  if (
+    !containerRef.value ||
+    cardRefs.value.length === 0 ||
+    !containerWidth.value
+  ) {
+    cardPositions.value = []
+    containerHeight.value = 0
+    cardAnimationDelays.value = []
     return
   }
 
-  // 下滑隐藏搜索框，上滑显示
-  if (currentY > previousY) {
-    showSearch.value = false
-  } else if (currentY < previousY) {
-    showSearch.value = true
-  }
-})
-
-watch(
-  () => arrivedState.bottom,
-  (isBottom) => {
-    if (isBottom && hasMore.value) loadMore()
-  },
-)
-
-// ─── 瀑布流布局 ────────────────────────────────────────────
-const containerRef = ref<HTMLElement>()
-const cardRefs = ref<(HTMLElement | null)[]>([])
-const containerHeight = ref(0)
-const cardPositions = ref<
-  Array<{ top: number; left: number; width: number; colIndex: number }>
->([])
-const cardAnimationDelays = ref<number[]>([])
-const windowWidth = ref(0)
-
-const columnCount = computed(() => {
-  const width = windowWidth.value
-  if (width < 640) return 1
-  if (width < 1024) return 2
-  if (width < 1400) return 3
-  return 4
-})
-
-const isMobile = computed(() => windowWidth.value < 640)
-
-function calculateLayout() {
-  if (!containerRef.value || cardRefs.value.length === 0) return
-
-  const gap = isMobile.value ? 12 : 20
-  const padding = isMobile.value ? 8 : 20
-  const containerWidth = containerRef.value.clientWidth
+  const { gap, padding } = layoutMetrics.value
   const cols = columnCount.value
-  const colWidth = (containerWidth - padding * 2 - gap * (cols - 1)) / cols
+  const availableWidth = containerWidth.value - padding * 2 - gap * (cols - 1)
+
+  if (availableWidth <= 0) {
+    cardPositions.value = []
+    containerHeight.value = 0
+    cardAnimationDelays.value = []
+    return
+  }
+
+  const colWidth = availableWidth / cols
 
   const columnHeights = Array(cols).fill(padding)
-  const positions: Array<{
-    top: number
-    left: number
-    width: number
-    colIndex: number
-  }> = []
+  const positions: CardPosition[] = []
 
   for (let i = 0; i < cardRefs.value.length; i++) {
     const card = cardRefs.value[i]
@@ -222,8 +263,6 @@ function calculateLayout() {
   )
 }
 
-let resizeObserver: ResizeObserver | null = null
-
 function setupResizeObserver() {
   if (!import.meta.client) return
 
@@ -232,46 +271,15 @@ function setupResizeObserver() {
   }
 
   resizeObserver = new ResizeObserver(() => {
-    calculateLayout()
+    scheduleLayout()
   })
+
+  if (containerRef.value) resizeObserver.observe(containerRef.value)
 
   cardRefs.value.forEach((card) => {
     if (card) resizeObserver!.observe(card)
   })
 }
-
-watch(feedItems, () => {
-  if (import.meta.client) {
-    nextTick(() => {
-      setupResizeObserver()
-      calculateLayout()
-    })
-  }
-})
-
-watch(columnCount, () => {
-  nextTick(() => {
-    calculateLayout()
-  })
-})
-
-const handleWindowResize = () => {
-  windowWidth.value = window.innerWidth
-  calculateLayout()
-}
-
-onMounted(() => {
-  windowWidth.value = window.innerWidth
-  nextTick(() => {
-    calculateLayout()
-  })
-  window.addEventListener('resize', handleWindowResize)
-})
-
-onBeforeUnmount(() => {
-  resizeObserver?.disconnect()
-  window.removeEventListener('resize', handleWindowResize)
-})
 
 async function goToDetail(item: FeedItem) {
   if (item.type === 'blog') {
@@ -282,14 +290,79 @@ async function goToDetail(item: FeedItem) {
   }
   push(item.path)
 }
+
+// ─── Watch ────────────────────────────────────────────────
+watch(
+  feedList,
+  (value) => {
+    const enriched = value.map(enrichFeedItem)
+    feedItems.value =
+      page.value === 1 ? enriched : [...feedItems.value, ...enriched]
+  },
+  { immediate: true },
+)
+
+watch(y, (currentY, previousY) => {
+  if (currentY <= 8) {
+    showSearch.value = true
+    return
+  }
+
+  if (currentY > previousY) {
+    showSearch.value = false
+  } else if (currentY < previousY) {
+    showSearch.value = true
+  }
+})
+
+watch(
+  () => arrivedState.bottom,
+  (isBottom) => {
+    if (isBottom && hasMore.value) loadMore()
+  },
+)
+
+watch(feedItems, () => {
+  cardRefs.value = cardRefs.value.slice(0, feedItems.value.length)
+
+  if (import.meta.client) {
+    nextTick(() => {
+      setupResizeObserver()
+      scheduleLayout()
+    })
+  }
+})
+
+watch([columnCount, pageWidth, containerWidth], () => {
+  nextTick(() => {
+    scheduleLayout()
+  })
+})
+
+// ─── 生命周期 ─────────────────────────────────────────────
+onMounted(() => {
+  nextTick(() => {
+    setupResizeObserver()
+    scheduleLayout()
+    restoreScrollPosition()
+  })
+})
+
+onBeforeUnmount(() => {
+  resetSearchTimer()
+  resetLayoutFrame()
+  resizeObserver?.disconnect()
+})
 </script>
 
 <template>
-  <div class="h-full flex relative overflow-hidden bg-gray-50 dark:bg-dark-950">
+  <div
+    class="h-full flex w-80% <md:w-full relative overflow-hidden bg-gray-50 dark:bg-dark-950"
+  >
     <!-- 左侧主内容 -->
     <div class="flex-1 flex flex-col h-full min-w-0">
       <div
-        class="absolute left-10 top-5 z-1000 w-1/3 <md:left-4 <md:top-3 <md:w-[calc(100%-32px)] transition-all duration-250 ease-out"
+        class="absolute left-10 top-3 z-1000 w-1/3 <md:left-4 <md:top-3 <md:w-[calc(100%-32px)] transition-all duration-250 ease-out"
         :class="
           showSearch
             ? 'opacity-100 translate-y-0 pointer-events-auto'
@@ -304,7 +377,7 @@ async function goToDetail(item: FeedItem) {
           v-model="searchInput"
           type="text"
           placeholder="搜索..."
-          class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-gray-100 dark:bg-dark-700 border border-gray-200 dark:border-dark-500 text-12px text-gray-700 dark:text-gray-200 outline-none transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 placeholder-gray-400"
+          class="w-full pl-8 pr-3 py-2 rounded-lg bg-gray-100 dark:bg-dark-700 border border-gray-300 dark:border-dark-500 text-13px text-gray-700 dark:text-gray-200 outline-none transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 placeholder-gray-400"
           @input="handleSearch"
         />
       </div>
@@ -314,7 +387,7 @@ async function goToDetail(item: FeedItem) {
         ref="scrollRef"
         class="flex-1 overflow-y-auto overflow-x-hidden scrollbar pb-20 pt6 <sm:pt4"
       >
-        <div class="px-6 <sm:px-2.5 py-6 <sm:py-0.5 max-w-full">
+        <div class="px-4 <sm:px-2.5 py-4 <sm:py-0.5 max-w-full">
           <div
             v-if="feedItems.length === 0"
             class="flex flex-col items-center justify-center py-20 text-gray-400"
@@ -362,9 +435,10 @@ async function goToDetail(item: FeedItem) {
                   v-if="item.media"
                   class="w-full relative aspect-video overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-dark-700 dark:to-dark-600"
                 >
-                  <img
+                  <NuxtImg
                     v-if="item.media.type === 'image'"
                     loading="lazy"
+                    quality="60"
                     class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     :src="item.media.src"
                     :alt="item.title"

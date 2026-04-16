@@ -1,4 +1,8 @@
 ﻿<script lang="ts" setup>
+definePageMeta({
+  keepalive: false,
+})
+
 const route = useRoute()
 const config = useRuntimeConfig()
 
@@ -6,11 +10,13 @@ const commentIpt = ref('')
 const blobPageRef = ref<HTMLElement>()
 
 const [loading, load] = useToggle(false)
-const likeLoading = ref(false)
 
-const { data: page } = useAsyncData(decodeURIComponent(route.path), () => {
-  return queryCollection('blog').path(decodeURIComponent(route.path)).first()
-})
+const { data: page, pending } = useAsyncData(
+  decodeURIComponent(route.path),
+  () => {
+    return queryCollection('blog').path(decodeURIComponent(route.path)).first()
+  },
+)
 
 const blogId = computed(() => page.value?.path?.replaceAll('/', '_') ?? '')
 
@@ -98,7 +104,7 @@ useSeoMeta({
   ogImage: page.value?.image,
 })
 
-const { y } = useScroll(blobPageRef)
+const { y, restoreScrollPosition } = useRouteScrollRestore(blobPageRef)
 
 // 当前激活的 TOC 锚点
 const activeHeadingId = ref('')
@@ -187,86 +193,26 @@ async function hdClickSend(val: EmojiInfo[]) {
     load(false)
   }
 }
-
-async function hdToggleLike() {
-  if (!blogId.value || likeLoading.value) return
-  if (!loggedIn.value) {
-    openInPopup('/auth/github')
-    return
-  }
-
-  const nextLiked = !ops.value?.liked
-  likeLoading.value = true
-  try {
-    await $fetch('/api/blog/like', {
-      method: 'post',
-      body: { id: blogId.value, isLiked: nextLiked },
-    })
-
-    if (ops.value) {
-      ops.value.liked = nextLiked
-      ops.value.likes = Math.max(0, ops.value.likes + (nextLiked ? 1 : -1))
-    }
-  } finally {
-    likeLoading.value = false
-  }
-}
-
 async function hdCommentDeleted(_deletedCount: number) {
   await Promise.all([refreshComments(), refreshOps()])
 }
 </script>
 
 <template>
-  <div h-full relative>
-    <div h-full w-full overflow-auto ref="blobPageRef" class="scrollbar">
+  <div h-screen w-full flex>
+    <div
+      class="h-full w-80% relative overflow-auto scrollbar"
+      ref="blobPageRef"
+    >
       <CHead :title="page?.title" />
-
-      <Teleport to="#default-right">
-        <div class="<lg:hidden relative h-full overflow-hidden flex flex-col">
-          <!-- TOC 目录 -->
-          <div
-            v-if="tocItems.length > 0"
-            px-6
-            py-4
-            class="flex-1 min-h-0 overflow-auto toc-scroll"
-          >
-            <div
-              class="toc-title mb-3 text-3 font-semibold tracking-wider uppercase opacity-50"
-            >
-              目录
-            </div>
-            <div class="flex flex-col gap-0.5">
-              <button
-                v-for="item in tocItems"
-                :key="item.id"
-                type="button"
-                class="toc-item text-left text-3 py-1.5 px-2 rounded-md transition-all duration-200 border-l-2"
-                :style="{ paddingLeft: `${item.level * 12 + 8}px` }"
-                :class="
-                  activeHeadingId === item.id
-                    ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 opacity-100 font-medium'
-                    : 'border-transparent opacity-55 hover:opacity-90 hover:bg-gray-100 dark:hover:bg-dark-300'
-                "
-                @click="jumpToHeading(item.id)"
-              >
-                {{ item.text }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </Teleport>
-
       <!-- 文章内容区 -->
       <div class="markdown-body">
         <ClientOnly>
-          <Transition name="content-fade" appear>
-            <div v-if="page">
-              <ContentRenderer :value="page" />
-            </div>
-          </Transition>
+          <ContentRenderer :value="page ?? {}" />
+          <Loading :loading="pending" />
+
           <template #fallback>
-            <SkeletonBlog :lines="10" show-title show-image />
+            <Loading :loading="pending" />
           </template>
         </ClientOnly>
       </div>
@@ -329,9 +275,44 @@ async function hdCommentDeleted(_deletedCount: number) {
         />
       </div>
 
-      <BackTop class="<md:hidden" v-model="y" absolute right-6 bottom-6 />
       <footer h-80 />
     </div>
+    <div
+      class="<lg:hidden sticky top-10 right-0 flex-1 h-full overflow-hidden flex flex-col"
+    >
+      <!-- TOC 目录 -->
+      <div
+        v-if="tocItems.length > 0"
+        px-6
+        py-4
+        class="flex-1 min-h-0 overflow-auto toc-scroll"
+      >
+        <div
+          class="toc-title mb-3 text-3 font-semibold tracking-wider uppercase opacity-50"
+        >
+          目录
+        </div>
+        <div class="flex flex-col gap-0.5">
+          <button
+            v-for="item in tocItems"
+            :key="item.id"
+            type="button"
+            class="toc-item text-left text-3 py-1.5 px-2 rounded-md transition-all duration-200 border-l-2"
+            :style="{ paddingLeft: `${item.level * 12 + 8}px` }"
+            :class="
+              activeHeadingId === item.id
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 opacity-100 font-medium'
+                : 'border-transparent opacity-55 hover:opacity-90 hover:bg-gray-100 dark:hover:bg-dark-300'
+            "
+            @click="jumpToHeading(item.id)"
+          >
+            {{ item.text }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <BackTop class="<md:hidden" v-model="y" fixed right-6 bottom-6 />
   </div>
 </template>
 

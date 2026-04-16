@@ -59,8 +59,6 @@
   word-wrap: break-word;
   padding: 16px;
   background: var(--bgColor-default);
-  border: 1px solid var(--borderColor-default);
-  border-radius: 4px;
 }
 
 /* 标题样式 */

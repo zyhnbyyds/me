@@ -9,11 +9,14 @@ dayjs.extend(relativeTime)
 definePageMeta({
   title: 'QQ空间',
   description: 'QQ空间说说列表， 数据来自我的QQ空间',
-  keepalive: false,
+  keepalive: true,
 })
 
 const scrollRef = ref<HTMLElement>()
-const { y, arrivedState } = useScroll(scrollRef)
+const { y, restoreScrollPosition } = useRouteScrollRestore(scrollRef, {
+  key: 'qq',
+})
+const { arrivedState } = useScroll(scrollRef)
 const qQContentList = ref<QQContentItem[]>([])
 const totalNum = ref(0)
 
@@ -65,6 +68,15 @@ function handlePlay(src: string) {
 }
 
 getQQContentList()
+
+watch(
+  qQContentList,
+  async () => {
+    await nextTick()
+    restoreScrollPosition()
+  },
+  { flush: 'post' },
+)
 
 watch(
   () => y.value,

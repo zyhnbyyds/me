@@ -5,7 +5,7 @@ import { menuList } from '~/constants'
 <template>
   <div class="text-common flex hw-full overflow-hidden">
     <header
-      class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto z-9999"
+      class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto z-9997"
     >
       <div flex-1 />
       <div class="px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0">
@@ -28,11 +28,10 @@ import { menuList } from '~/constants'
       </div>
     </header>
 
-    <div class="flex h-full w-80% <lg:flex-1 relative z-10">
-      <div class="page-container w-80% relative <lg:w-full">
+    <div class="flex h-full flex-1 relative z-10">
+      <div class="page-container relative w-full">
         <slot />
       </div>
-      <div flex-1 h-full class="<lg:hidden" id="default-right"></div>
     </div>
   </div>
 </template>

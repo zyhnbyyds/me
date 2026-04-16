@@ -36,7 +36,7 @@ function handleMenuChange(path: string) {
 
 <template>
   <ul
-    class="left-1/2 z-9999 <md:px-3 <md:py-1 <md:rounded-full <md:bg-white/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-dark/60 <md:-translate-x-1/2"
+    class="left-1/2 z-10 <md:px-3 <md:py-1 <md:rounded-full <md:bg-white/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-dark/60 <md:-translate-x-1/2"
   >
     <li
       v-for="item in list"

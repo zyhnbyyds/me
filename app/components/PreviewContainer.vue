@@ -38,7 +38,7 @@ function hdStopPreview() {
       id="previewImg"
       class="preview-img"
       :class="
-        previewInfo.floating ? 'fixed left-0 top-0 z-50 h-full w-full' : ''
+        previewInfo.floating ? 'fixed left-0 top-0 z-9999 h-full w-full' : ''
       "
       @click="hdStopPreview"
     />
@@ -52,7 +52,7 @@ function hdStopPreview() {
         left-0
         top-0
         fixed
-        z-45
+        z-9998
         overflow-hidden
         :style="{ transitionDuration: `${previewInfo.duration}ms` }"
       />
