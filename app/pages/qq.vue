@@ -28,6 +28,9 @@ const [loading, load] = useToggle()
 const activePreview = ref('')
 const modalVisible = ref(false)
 const modalVideoVisible = ref(false)
+const route = useRoute()
+
+console.log(1);
 
 async function getQQContentList(loadMore: boolean = false) {
   load(true)
@@ -39,7 +42,7 @@ async function getQQContentList(loadMore: boolean = false) {
     params: {
       current: page.value.current,
       size: page.value.size,
-      tid: useRoute().query.tid || '',
+      tid: route.query.tid || '',
     },
   })
   totalNum.value = total
@@ -67,7 +70,9 @@ function handlePlay(src: string) {
   modalVideoVisible.value = true
 }
 
-getQQContentList()
+onActivated(() => {
+  getQQContentList()
+})
 
 watch(
   qQContentList,
@@ -111,7 +116,7 @@ watch(
         v-for="item in qQContentList ?? []"
         v-show="!(item.video && item.video.length > 0)"
         :key="item.tid"
-        :class="[item.isSearchSingle ? 'animate-fade-in animate-count-3' : '']"
+        :class="[item.isSearchSingle ? 'animate-fade-in animate-count-1' : '']"
         class="border-b-0.5px border-common"
       >
         <div class="p-4 flex gap-2 w-full">

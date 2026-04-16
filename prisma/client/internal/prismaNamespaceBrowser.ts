@@ -55,6 +55,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   blog_comment: 'blog_comment',
+  blog_like: 'blog_like',
+  blog_view: 'blog_view',
   qq_content: 'qq_content',
 } as const
 
@@ -89,6 +91,27 @@ export const Blog_commentScalarFieldEnum = {
 
 export type Blog_commentScalarFieldEnum =
   (typeof Blog_commentScalarFieldEnum)[keyof typeof Blog_commentScalarFieldEnum]
+
+export const Blog_likeScalarFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  user_id: 'user_id',
+  created_at: 'created_at',
+} as const
+
+export type Blog_likeScalarFieldEnum =
+  (typeof Blog_likeScalarFieldEnum)[keyof typeof Blog_likeScalarFieldEnum]
+
+export const Blog_viewScalarFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  viewer_id: 'viewer_id',
+  user_id: 'user_id',
+  created_at: 'created_at',
+} as const
+
+export type Blog_viewScalarFieldEnum =
+  (typeof Blog_viewScalarFieldEnum)[keyof typeof Blog_viewScalarFieldEnum]
 
 export const Qq_contentScalarFieldEnum = {
   tid: 'tid',
@@ -186,6 +209,23 @@ export const blog_commentOrderByRelevanceFieldEnum = {
 
 export type blog_commentOrderByRelevanceFieldEnum =
   (typeof blog_commentOrderByRelevanceFieldEnum)[keyof typeof blog_commentOrderByRelevanceFieldEnum]
+
+export const blog_likeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+} as const
+
+export type blog_likeOrderByRelevanceFieldEnum =
+  (typeof blog_likeOrderByRelevanceFieldEnum)[keyof typeof blog_likeOrderByRelevanceFieldEnum]
+
+export const blog_viewOrderByRelevanceFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  viewer_id: 'viewer_id',
+} as const
+
+export type blog_viewOrderByRelevanceFieldEnum =
+  (typeof blog_viewOrderByRelevanceFieldEnum)[keyof typeof blog_viewOrderByRelevanceFieldEnum]
 
 export const qq_contentOrderByRelevanceFieldEnum = {
   tid: 'tid',

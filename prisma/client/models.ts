@@ -8,5 +8,7 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/blog_comment.js'
+export type * from './models/blog_like.js'
+export type * from './models/blog_view.js'
 export type * from './models/qq_content.js'
 export type * from './commonInputTypes.js'

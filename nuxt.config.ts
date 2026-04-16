@@ -88,7 +88,6 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/md.css',
     '~/assets/css/main.css',
-    'vue-boom/dist/index.css',
   ],
 
   content: {
@@ -115,11 +114,7 @@ export default defineNuxtConfig({
   },
 
   devtools: {
-    enabled: true,
-
-    timeline: {
-      enabled: true,
-    },
+    enabled: false,
   },
 
   runtimeConfig: {

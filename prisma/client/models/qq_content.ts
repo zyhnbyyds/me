@@ -486,7 +486,7 @@ export type Qq_contentGroupByOutputType = {
   _max: Qq_contentMaxAggregateOutputType | null
 }
 
-type GetQq_contentGroupByPayload<T extends qq_contentGroupByArgs> =
+export type GetQq_contentGroupByPayload<T extends qq_contentGroupByArgs> =
   Prisma.PrismaPromise<
     Array<
       Prisma.PickEnumerable<Qq_contentGroupByOutputType, T['by']> & {
@@ -1346,14 +1346,6 @@ export type qq_contentSumOrderByAggregateInput = {
   t2_subtype?: Prisma.SortOrder
   t2_termtype?: Prisma.SortOrder
   wbid?: Prisma.SortOrder
-}
-
-export type NullableBigIntFieldUpdateOperationsInput = {
-  set?: bigint | number | null
-  increment?: bigint | number
-  decrement?: bigint | number
-  multiply?: bigint | number
-  divide?: bigint | number
 }
 
 export type NullableStringFieldUpdateOperationsInput = {
@@ -2304,6 +2296,11 @@ export type qq_contentFindManyArgs<
    * Skip the first `n` qq_contents.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   *
+   * Filter by unique combinations of qq_contents.
+   */
   distinct?:
     | Prisma.Qq_contentScalarFieldEnum
     | Prisma.Qq_contentScalarFieldEnum[]

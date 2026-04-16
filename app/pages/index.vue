@@ -6,6 +6,12 @@ import 'dayjs/locale/zh-cn'
 dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
 
+definePageMeta({
+  title: '首页',
+  description: '博客和QQ空间动态的聚合页',
+  keepalive: true,
+})
+
 const { push } = useRouter()
 const pageSize = 20
 
@@ -444,14 +450,25 @@ onBeforeUnmount(() => {
                     :alt="item.title"
                     style="will-change: transform"
                   />
+                  <NuxtImg
+                    v-else-if="item.media.poster"
+                    loading="lazy"
+                    quality="60"
+                    class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                    :src="item.media.poster"
+                    :alt="item.title"
+                    style="will-change: transform"
+                  />
                   <video
                     v-else
-                    controls
                     preload="metadata"
-                    class="w-full h-full object-cover"
+                    muted
+                    playsinline
+                    class="w-full h-full object-cover pointer-events-none"
                     :src="item.media.src"
-                    :poster="item.media.poster"
-                    @click.stop
+                    @loadedmetadata="
+                      ($event.target as HTMLVideoElement).currentTime = 0
+                    "
                   />
                 </div>
 

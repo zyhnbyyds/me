@@ -27,7 +27,9 @@ export * from './enums.js'
  * Type-safe database client for TypeScript
  * @example
  * ```
- * const prisma = new PrismaClient()
+ * const prisma = new PrismaClient({
+ *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
+ * })
  * // Fetch zero or more Blog_comments
  * const blog_comments = await prisma.blog_comment.findMany()
  * ```
@@ -49,6 +51,16 @@ export { Prisma }
  *
  */
 export type blog_comment = Prisma.blog_commentModel
+/**
+ * Model blog_like
+ *
+ */
+export type blog_like = Prisma.blog_likeModel
+/**
+ * Model blog_view
+ *
+ */
+export type blog_view = Prisma.blog_viewModel
 /**
  * Model qq_content
  *

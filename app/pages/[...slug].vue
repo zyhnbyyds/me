@@ -206,7 +206,7 @@ async function hdCommentDeleted(_deletedCount: number) {
     >
       <CHead :title="page?.title" />
       <!-- 文章内容区 -->
-      <div class="markdown-body">
+      <div class="markdown-body" min-h50>
         <ClientOnly>
           <ContentRenderer :value="page ?? {}" />
           <Loading :loading="pending" />

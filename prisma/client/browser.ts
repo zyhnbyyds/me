@@ -22,6 +22,16 @@ export * from './enums.js'
  */
 export type blog_comment = Prisma.blog_commentModel
 /**
+ * Model blog_like
+ *
+ */
+export type blog_like = Prisma.blog_likeModel
+/**
+ * Model blog_view
+ *
+ */
+export type blog_view = Prisma.blog_viewModel
+/**
  * Model qq_content
  *
  */

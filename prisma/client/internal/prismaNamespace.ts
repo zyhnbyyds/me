@@ -93,12 +93,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.4.0
- * Query Engine version: ab56fe763f921d033a6c195e7ddeb3e255bdbb57
+ * Prisma Client JS version: 7.7.0
+ * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
  */
 export const prismaVersion: PrismaVersion = {
-  client: '7.4.0',
-  engine: 'ab56fe763f921d033a6c195e7ddeb3e255bdbb57',
+  client: '7.7.0',
+  engine: '75cbdc1eb7150937890ad5465d861175c6624711',
 }
 
 /**
@@ -413,6 +413,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never
 
 export const ModelName = {
   blog_comment: 'blog_comment',
+  blog_like: 'blog_like',
+  blog_view: 'blog_view',
   qq_content: 'qq_content',
 } as const
 
@@ -435,7 +437,7 @@ export type TypeMap<
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: 'blog_comment' | 'qq_content'
+    modelProps: 'blog_comment' | 'blog_like' | 'blog_view' | 'qq_content'
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -503,6 +505,142 @@ export type TypeMap<
           args: Prisma.blog_commentCountArgs<ExtArgs>
           result:
             | runtime.Types.Utils.Optional<Prisma.Blog_commentCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    blog_like: {
+      payload: Prisma.$blog_likePayload<ExtArgs>
+      fields: Prisma.blog_likeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.blog_likeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.blog_likeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        findFirst: {
+          args: Prisma.blog_likeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.blog_likeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        findMany: {
+          args: Prisma.blog_likeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>[]
+        }
+        create: {
+          args: Prisma.blog_likeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        createMany: {
+          args: Prisma.blog_likeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.blog_likeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        update: {
+          args: Prisma.blog_likeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        deleteMany: {
+          args: Prisma.blog_likeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.blog_likeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.blog_likeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_likePayload>
+        }
+        aggregate: {
+          args: Prisma.Blog_likeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlog_like>
+        }
+        groupBy: {
+          args: Prisma.blog_likeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Blog_likeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.blog_likeCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.Blog_likeCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    blog_view: {
+      payload: Prisma.$blog_viewPayload<ExtArgs>
+      fields: Prisma.blog_viewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.blog_viewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.blog_viewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        findFirst: {
+          args: Prisma.blog_viewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.blog_viewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        findMany: {
+          args: Prisma.blog_viewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>[]
+        }
+        create: {
+          args: Prisma.blog_viewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        createMany: {
+          args: Prisma.blog_viewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.blog_viewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        update: {
+          args: Prisma.blog_viewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        deleteMany: {
+          args: Prisma.blog_viewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.blog_viewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.blog_viewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$blog_viewPayload>
+        }
+        aggregate: {
+          args: Prisma.Blog_viewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBlog_view>
+        }
+        groupBy: {
+          args: Prisma.blog_viewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Blog_viewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.blog_viewCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.Blog_viewCountAggregateOutputType>
             | number
         }
       }
@@ -630,6 +768,27 @@ export const Blog_commentScalarFieldEnum = {
 export type Blog_commentScalarFieldEnum =
   (typeof Blog_commentScalarFieldEnum)[keyof typeof Blog_commentScalarFieldEnum]
 
+export const Blog_likeScalarFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  user_id: 'user_id',
+  created_at: 'created_at',
+} as const
+
+export type Blog_likeScalarFieldEnum =
+  (typeof Blog_likeScalarFieldEnum)[keyof typeof Blog_likeScalarFieldEnum]
+
+export const Blog_viewScalarFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  viewer_id: 'viewer_id',
+  user_id: 'user_id',
+  created_at: 'created_at',
+} as const
+
+export type Blog_viewScalarFieldEnum =
+  (typeof Blog_viewScalarFieldEnum)[keyof typeof Blog_viewScalarFieldEnum]
+
 export const Qq_contentScalarFieldEnum = {
   tid: 'tid',
   uin: 'uin',
@@ -726,6 +885,23 @@ export const blog_commentOrderByRelevanceFieldEnum = {
 
 export type blog_commentOrderByRelevanceFieldEnum =
   (typeof blog_commentOrderByRelevanceFieldEnum)[keyof typeof blog_commentOrderByRelevanceFieldEnum]
+
+export const blog_likeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+} as const
+
+export type blog_likeOrderByRelevanceFieldEnum =
+  (typeof blog_likeOrderByRelevanceFieldEnum)[keyof typeof blog_likeOrderByRelevanceFieldEnum]
+
+export const blog_viewOrderByRelevanceFieldEnum = {
+  id: 'id',
+  file_id: 'file_id',
+  viewer_id: 'viewer_id',
+} as const
+
+export type blog_viewOrderByRelevanceFieldEnum =
+  (typeof blog_viewOrderByRelevanceFieldEnum)[keyof typeof blog_viewOrderByRelevanceFieldEnum]
 
 export const qq_contentOrderByRelevanceFieldEnum = {
   tid: 'tid',
@@ -920,6 +1096,8 @@ export type PrismaClientOptions = (
 }
 export type GlobalOmitConfig = {
   blog_comment?: Prisma.blog_commentOmit
+  blog_like?: Prisma.blog_likeOmit
+  blog_view?: Prisma.blog_viewOmit
   qq_content?: Prisma.qq_contentOmit
 }
 
