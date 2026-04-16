@@ -85,10 +85,7 @@ export default defineNuxtConfig({
     classSuffix: '',
   },
 
-  css: [
-    '~/assets/css/md.css',
-    '~/assets/css/main.css',
-  ],
+  css: ['~/assets/css/md.css', '~/assets/css/main.css'],
 
   content: {
     build: {

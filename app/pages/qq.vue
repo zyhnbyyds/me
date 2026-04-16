@@ -2,6 +2,8 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
+import type { PreviewItem } from '../types/preview'
+import type { Pic, QQContentItem } from '../../shared/types/qq'
 
 dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
@@ -25,12 +27,13 @@ const page = ref({
   size: 20,
 })
 const [loading, load] = useToggle()
-const activePreview = ref('')
-const modalVisible = ref(false)
+const activeVideoSrc = ref('')
 const modalVideoVisible = ref(false)
 const route = useRoute()
 
-console.log(1);
+type QQMediaPic = Pic & {
+  is_video?: number | null
+}
 
 async function getQQContentList(loadMore: boolean = false) {
   load(true)
@@ -65,8 +68,46 @@ function calculateImageSize(height: number, width: number) {
   }
 }
 
+function getMediaPics(item: QQContentItem): QQMediaPic[] {
+  return (item.pic ?? []) as QQMediaPic[]
+}
+
+function isVideoPic(pic: QQMediaPic) {
+  return Number(pic.is_video ?? 0) === 1
+}
+
+function getImageSrc(tid: string, index: number) {
+  return `/qq/images/image_${tid}_${index}.jpg`
+}
+
+function getVideoSrc(tid: string, index: number) {
+  return `/qq/videos/video_${tid}_${index}.mp4`
+}
+
+function getPreviewItems(item: QQContentItem): PreviewItem[] {
+  return getMediaPics(item).flatMap((pic, index) => {
+    if (isVideoPic(pic)) return []
+
+    return [
+      {
+        src: getImageSrc(item.tid, index),
+        provider: 'ipx',
+        alt: `${item.name} 的第 ${index + 1} 张图片`,
+      },
+    ]
+  })
+}
+
+function getPreviewIndex(item: QQContentItem, currentIndex: number) {
+  return (
+    getMediaPics(item)
+      .slice(0, currentIndex + 1)
+      .filter((pic) => !isVideoPic(pic)).length - 1
+  )
+}
+
 function handlePlay(src: string) {
-  activePreview.value = src
+  activeVideoSrc.value = src
   modalVideoVisible.value = true
 }
 
@@ -141,49 +182,30 @@ watch(
 
             <div v-if="item.pic" mt-3 flex flex-wrap gap-2>
               <div
-                v-for="(itm, idx) in item.pic"
+                v-for="(itm, idx) in getMediaPics(item)"
                 :key="idx"
                 :class="
-                  item.pic.length === 1
+                  getMediaPics(item).length === 1
                     ? calculateImageSize(itm.height, itm.width)
                     : 'h-50 w-50'
                 "
                 inline-block
                 overflow-hidden
               >
-                <!-- @vue-expect-error -->
                 <PreviewImg
-                  v-if="
-                    !(itm.is_video && itm.is_video === 1) &&
-                    item.pic.length === 1
-                  "
-                  :active="
-                    activePreview === `/qq/images/image_${item.tid}_${idx}.jpg`
-                  "
-                  :src="`/qq/images/image_${item.tid}_${idx}.jpg`"
+                  v-if="!isVideoPic(itm)"
+                  :src="getImageSrc(item.tid, idx)"
+                  :alt="`${item.name} 的第 ${getPreviewIndex(item, idx) + 1} 张图片`"
+                  :preview-items="getPreviewItems(item)"
+                  :preview-index="getPreviewIndex(item, idx)"
                   provider="ipx"
-                  @select="(src) => (activePreview = src)"
+                  @select="() => void 0"
                 />
-                <!-- @vue-expect-error -->
-                <CImg
-                  v-if="
-                    !(itm.is_video && itm.is_video === 1) && item.pic.length > 1
-                  "
-                  :quality="70"
-                  :url="`/qq/images/image_${item.tid}_${idx}.jpg`"
-                  @click="
-                    () => {
-                      activePreview = `/qq/images/image_${item.tid}_${idx}.jpg`
-                      modalVisible = true
-                    }
-                  "
-                />
-                <!-- @vue-expect-error -->
                 <QQMv
-                  v-if="itm.is_video && itm.is_video === 1"
-                  :poster="`/qq/images/image_${item.tid}_${idx}.jpg`"
+                  v-else
+                  :poster="getImageSrc(item.tid, idx)"
                   :video-id="`video_${item.tid}_${idx}`"
-                  :src="`/qq/videos/video_${item.tid}_${idx}.mp4`"
+                  :src="getVideoSrc(item.tid, idx)"
                   @play="handlePlay"
                 />
               </div>
@@ -199,30 +221,15 @@ watch(
       </li>
 
       <Modal
-        v-model="modalVisible"
-        :is-transition="true"
-        :close-on-click-overlay="true"
-      >
-        <div h-screen w-screen>
-          <CImg
-            :quality="70"
-            c-class="object-contain"
-            :url="activePreview"
-            @click="modalVisible = false"
-          />
-        </div>
-      </Modal>
-
-      <Modal
         v-model="modalVideoVisible"
         :close-on-click-overlay="true"
         is-transition
       >
         <CVideo
           :video-id="
-            activePreview.replace('/qq/videos/', '').replace('.mp4', '')
+            activeVideoSrc.replace('/qq/videos/', '').replace('.mp4', '')
           "
-          :src="activePreview"
+          :src="activeVideoSrc"
         />
       </Modal>
       <li>
