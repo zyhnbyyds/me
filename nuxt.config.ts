@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
   ],
 
-  ssr: true,
+  ssr: false,
 
   app: {
     head: {
