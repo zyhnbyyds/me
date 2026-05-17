@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="wrapperRef" relative :class="loading ? 'loading-mask' : ''">
+  <div ref="wrapperRef" relative hw-full :class="loading ? 'loading-mask' : ''">
     <NuxtImg
       :src="src"
       :alt="alt || src"
@@ -79,6 +79,7 @@ onBeforeUnmount(() => {
       preload
       rounded-md
       w-full
+      h-full
       cursor-pointer
       transition-all
       duration-250

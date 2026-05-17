@@ -330,7 +330,7 @@ function hdStopPreview() {
     <div id="previewImg" class="preview-img" />
     <div v-if="previewInfo.floating.value" class="fixed inset-0 z-9998">
       <div
-        class="absolute inset-0 overflow-hidden bg-black/78 backdrop-blur-sm transition-opacity ease-out"
+        class="absolute inset-0 overflow-hidden bg-black/60 backdrop-blur-sm transition-opacity ease-out"
         :style="{
           transitionDuration: `${previewInfo.duration}ms`,
           opacity: previewInfo.visible.value ? 1 : 0,
@@ -369,6 +369,7 @@ function hdStopPreview() {
             ? 'opacity-100'
             : 'pointer-events-none opacity-0'
         "
+        @click="hdStopPreview"
       >
         <button
           type="button"
