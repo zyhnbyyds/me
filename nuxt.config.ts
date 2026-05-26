@@ -33,6 +33,10 @@ export default defineNuxtConfig({
         { name: 'author', content: '张宇解,zyhnbyyds,张宇行' },
         { name: 'robots', content: 'index, follow' },
         { name: 'googlebot', content: 'index, follow' },
+        {
+          name: 'google-site-verification',
+          content: 'Q3zsDh3Bzu3EZ_N6QlLDs5iHhUNdIFBJzxAgv_YohEM',
+        },
         { name: 'theme-color', content: '#ffffff' },
       ],
       link: [
