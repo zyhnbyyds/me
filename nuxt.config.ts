@@ -55,6 +55,12 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       exclude: ['@nuxtjs/mdc'],
+      include: [
+        'dayjs',
+        'dayjs/locale/zh-cn',
+        'dayjs/plugin/relativeTime',
+        'qface',
+      ],
     },
     build: {},
   },
