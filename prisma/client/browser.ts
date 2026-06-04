@@ -32,6 +32,11 @@ export type blog_like = Prisma.blog_likeModel
  */
 export type blog_view = Prisma.blog_viewModel
 /**
+ * Model essay
+ *
+ */
+export type essay = Prisma.essayModel
+/**
  * Model qq_content
  *
  */

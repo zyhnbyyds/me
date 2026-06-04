@@ -1,5 +1,12 @@
 import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
+// 修复 Windows 上 Prisma 预渲染时的 fileURLToPath 错误。
+// 预渲染入口将 _importMeta_.url 设为 "file:///_entry.js"（缺少盘符），
+// 利用 || 运算符特性，提前设置含盘符的值即可保留。
+;(globalThis as Record<string, unknown>)._importMeta_ = {
+  url: `file:///${process.cwd().replace(/\\/g, '/')}/_entry.js`,
+}
+
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
@@ -52,9 +59,12 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-17',
 
+  future: {
+    compatibilityVersion: 5,
+  },
+
   vite: {
     optimizeDeps: {
-      exclude: ['@nuxtjs/mdc'],
       include: [
         'dayjs',
         'dayjs/locale/zh-cn',
@@ -77,9 +87,16 @@ export default defineNuxtConfig({
     experimental: {
       tasks: true,
     },
+    externals: {
+      external: ['@prisma/client', '@prisma/adapter-mariadb'],
+    },
+    prerender: {
+      crawlLinks: false,
+      routes: [],
+    },
     storage: {
       me: {
-        driver: 'redis',
+        driver: import.meta.env.REDIS_HOST ? 'redis' : 'memory',
         port: import.meta.env.REDIS_PORT,
         host: import.meta.env.REDIS_HOST,
         password: import.meta.env.REDIS_PASSWORD,
@@ -139,6 +156,7 @@ export default defineNuxtConfig({
       database: import.meta.env.DATABASE_NAME,
       port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
     },
+    essayPassword: import.meta.env.ESSAY_PASSWORD || '',
     public: {
       showUploadBtnGithubUserId: import.meta.env
         .GALLERY_SHOW_UPLOAD_BTN_USER_ID,

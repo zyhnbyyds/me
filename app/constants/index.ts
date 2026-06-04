@@ -42,6 +42,13 @@ export const menuList: MenuBarItem[] = [
     path: '/qq',
     key: 'qq',
   },
+  {
+    title: '随笔',
+    icon: 'material-symbols:book-2-outline',
+    aIcon: 'material-symbols:book-2',
+    path: '/essay',
+    key: 'essay',
+  },
 ]
 
 export const appIcon = '/favicon.ico'

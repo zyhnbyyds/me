@@ -93,12 +93,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.7.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion: PrismaVersion = {
-  client: '7.7.0',
-  engine: '75cbdc1eb7150937890ad5465d861175c6624711',
+  client: '7.8.0',
+  engine: '3c6e192761c0362d496ed980de936e2f3cebcd3a',
 }
 
 /**
@@ -415,6 +415,7 @@ export const ModelName = {
   blog_comment: 'blog_comment',
   blog_like: 'blog_like',
   blog_view: 'blog_view',
+  essay: 'essay',
   qq_content: 'qq_content',
 } as const
 
@@ -437,7 +438,12 @@ export type TypeMap<
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: 'blog_comment' | 'blog_like' | 'blog_view' | 'qq_content'
+    modelProps:
+      | 'blog_comment'
+      | 'blog_like'
+      | 'blog_view'
+      | 'essay'
+      | 'qq_content'
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -645,6 +651,74 @@ export type TypeMap<
         }
       }
     }
+    essay: {
+      payload: Prisma.$essayPayload<ExtArgs>
+      fields: Prisma.essayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.essayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.essayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        findFirst: {
+          args: Prisma.essayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.essayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        findMany: {
+          args: Prisma.essayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>[]
+        }
+        create: {
+          args: Prisma.essayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        createMany: {
+          args: Prisma.essayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.essayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        update: {
+          args: Prisma.essayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        deleteMany: {
+          args: Prisma.essayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.essayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.essayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$essayPayload>
+        }
+        aggregate: {
+          args: Prisma.EssayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEssay>
+        }
+        groupBy: {
+          args: Prisma.essayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EssayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.essayCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.EssayCountAggregateOutputType>
+            | number
+        }
+      }
+    }
     qq_content: {
       payload: Prisma.$qq_contentPayload<ExtArgs>
       fields: Prisma.qq_contentFieldRefs
@@ -789,6 +863,17 @@ export const Blog_viewScalarFieldEnum = {
 export type Blog_viewScalarFieldEnum =
   (typeof Blog_viewScalarFieldEnum)[keyof typeof Blog_viewScalarFieldEnum]
 
+export const EssayScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  images: 'images',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+} as const
+
+export type EssayScalarFieldEnum =
+  (typeof EssayScalarFieldEnum)[keyof typeof EssayScalarFieldEnum]
+
 export const Qq_contentScalarFieldEnum = {
   tid: 'tid',
   uin: 'uin',
@@ -902,6 +987,14 @@ export const blog_viewOrderByRelevanceFieldEnum = {
 
 export type blog_viewOrderByRelevanceFieldEnum =
   (typeof blog_viewOrderByRelevanceFieldEnum)[keyof typeof blog_viewOrderByRelevanceFieldEnum]
+
+export const essayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  content: 'content',
+} as const
+
+export type essayOrderByRelevanceFieldEnum =
+  (typeof essayOrderByRelevanceFieldEnum)[keyof typeof essayOrderByRelevanceFieldEnum]
 
 export const qq_contentOrderByRelevanceFieldEnum = {
   tid: 'tid',
@@ -1093,11 +1186,27 @@ export type PrismaClientOptions = (
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
+  /**
+   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
+   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
+   * performance for applications that execute a large number of unique queries, while a smaller
+   * cache size can reduce memory usage.
+   *
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   queryPlanCacheMaxSize: 100,
+   * })
+   * ```
+   */
+  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   blog_comment?: Prisma.blog_commentOmit
   blog_like?: Prisma.blog_likeOmit
   blog_view?: Prisma.blog_viewOmit
+  essay?: Prisma.essayOmit
   qq_content?: Prisma.qq_contentOmit
 }
 

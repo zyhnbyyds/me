@@ -50,6 +50,16 @@ model blog_view {
   @@index([created_at], map: "idx_blog_view_created_at")
 }
 
+model essay {
+  id         String   @id @db.VarChar(64)
+  content    String?  @db.Text
+  images     Json?
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([created_at], map: "idx_essay_created_at")
+}
+
 model qq_content {
   tid              String   @id @db.VarChar(64)
   uin              BigInt?

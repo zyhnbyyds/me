@@ -57,6 +57,7 @@ export const ModelName = {
   blog_comment: 'blog_comment',
   blog_like: 'blog_like',
   blog_view: 'blog_view',
+  essay: 'essay',
   qq_content: 'qq_content',
 } as const
 
@@ -112,6 +113,17 @@ export const Blog_viewScalarFieldEnum = {
 
 export type Blog_viewScalarFieldEnum =
   (typeof Blog_viewScalarFieldEnum)[keyof typeof Blog_viewScalarFieldEnum]
+
+export const EssayScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  images: 'images',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+} as const
+
+export type EssayScalarFieldEnum =
+  (typeof EssayScalarFieldEnum)[keyof typeof EssayScalarFieldEnum]
 
 export const Qq_contentScalarFieldEnum = {
   tid: 'tid',
@@ -226,6 +238,14 @@ export const blog_viewOrderByRelevanceFieldEnum = {
 
 export type blog_viewOrderByRelevanceFieldEnum =
   (typeof blog_viewOrderByRelevanceFieldEnum)[keyof typeof blog_viewOrderByRelevanceFieldEnum]
+
+export const essayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  content: 'content',
+} as const
+
+export type essayOrderByRelevanceFieldEnum =
+  (typeof essayOrderByRelevanceFieldEnum)[keyof typeof essayOrderByRelevanceFieldEnum]
 
 export const qq_contentOrderByRelevanceFieldEnum = {
   tid: 'tid',
