@@ -54,6 +54,21 @@ async function getQQContentList(loadMore: boolean = false) {
   } else {
     qQContentList.value = data
   }
+  if (route.query.tid) {
+    nextTick(() => {
+      const targetIndex = qQContentList.value.findIndex(
+        (item) => item.tid === route.query.tid,
+      )
+      if (targetIndex !== -1) {
+        const targetElement = scrollRef.value?.children[
+          targetIndex
+        ] as HTMLElement
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }
+    })
+  }
   load(false)
 }
 
