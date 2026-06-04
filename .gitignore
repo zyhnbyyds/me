@@ -6,7 +6,7 @@ dist
 .env
 .idea/
 
-.data/content/contents.sqlite
+.data/
 
 /app/generated/prisma
 .agents

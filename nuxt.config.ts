@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
 // 修复 Windows 上 Prisma 预渲染时的 fileURLToPath 错误。
@@ -157,6 +158,8 @@ export default defineNuxtConfig({
       port: parseInt(import.meta.env.DATABASE_PORT || '3306'),
     },
     essayPassword: import.meta.env.ESSAY_PASSWORD || '',
+    uploadDir:
+      import.meta.env.UPLOAD_DIR || resolve(process.cwd(), '.data', 'uploads'),
     public: {
       showUploadBtnGithubUserId: import.meta.env
         .GALLERY_SHOW_UPLOAD_BTN_USER_ID,

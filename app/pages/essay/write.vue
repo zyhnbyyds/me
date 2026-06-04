@@ -41,6 +41,11 @@ const publishing = ref(false)
 const publishError = ref('')
 const publishSuccess = ref(false)
 
+// 文件上传
+const uploadRef = ref<HTMLInputElement>()
+const uploading = ref(false)
+const uploadProgress = ref('')
+
 function addImageInput() {
   imageInputs.value.push('')
 }
@@ -49,10 +54,66 @@ function removeImageInput(index: number) {
   imageInputs.value.splice(index, 1)
 }
 
+async function uploadFiles(files: FileList) {
+  uploading.value = true
+  uploadProgress.value = ''
+
+  const fileArray = Array.from(files)
+  for (let i = 0; i < fileArray.length; i++) {
+    const file = fileArray[i]
+    if (!file) continue
+    uploadProgress.value = `上传中 (${i + 1}/${fileArray.length})...`
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('password', password.value)
+
+      const res = await $fetch<Result<{ urls: string[] }>>(
+        '/api/essay/upload',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+
+      if (res.data?.urls?.[0]) {
+        // 填入第一个空的图片输入框，或追加
+        const emptyIdx = imageInputs.value.findIndex((url) => !url.trim())
+        if (emptyIdx !== -1) {
+          imageInputs.value[emptyIdx] = res.data.urls[0]
+        } else {
+          imageInputs.value.push(res.data.urls[0])
+        }
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : '上传失败'
+      uploadProgress.value = `上传失败: ${msg}`
+      await new Promise((r) => setTimeout(r, 2000))
+    }
+  }
+
+  uploadProgress.value = ''
+  uploading.value = false
+}
+
+function triggerUpload() {
+  uploadRef.value?.click()
+}
+
+function handleFileChange(e: Event) {
+  const input = e.target as HTMLInputElement
+  if (input.files && input.files.length > 0) {
+    uploadFiles(input.files)
+    input.value = ''
+  }
+}
+
 const canPublish = computed(
   () =>
     (content.value.trim() || imageInputs.value.some((url) => url.trim())) &&
-    !publishing.value,
+    !publishing.value &&
+    !uploading.value,
 )
 
 async function handlePublish() {
@@ -145,20 +206,47 @@ async function handlePublish() {
         />
       </div>
 
-      <!-- 图片链接 -->
+      <!-- 图片 -->
       <div class="mb-5">
         <label
           class="mb-2 flex items-center gap-2 text-3.5 font-medium text-gray-500"
         >
-          图片链接
+          图片
+          <button
+            class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-3 text-blue transition-colors hover:bg-blue/10"
+            :disabled="uploading"
+            @click="triggerUpload"
+          >
+            <Icon
+              :name="
+                uploading
+                  ? 'material-symbols:hourglass'
+                  : 'material-symbols:upload'
+              "
+              text-4
+            />
+            上传
+          </button>
           <button
             class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-3 text-blue transition-colors hover:bg-blue/10"
             @click="addImageInput"
           >
-            <Icon name="material-symbols:add" text-4 />
-            添加
+            <Icon name="material-symbols:add-link" text-4 />
+            链接
           </button>
+          <span v-if="uploadProgress" class="text-3 text-blue">{{
+            uploadProgress
+          }}</span>
         </label>
+
+        <input
+          ref="uploadRef"
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          multiple
+          class="hidden"
+          @change="handleFileChange"
+        />
 
         <div class="space-y-2">
           <div
