@@ -202,7 +202,7 @@ async function handlePublish() {
           v-model="content"
           placeholder="记录一些随想..."
           rows="6"
-          class="w-full resize-none rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-blue"
+          class="w-full resize-none rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-blue focus:ring-1 focus:ring-blue"
         />
       </div>
 

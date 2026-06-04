@@ -6,16 +6,13 @@ import { prisma } from '~~/server/lib/prisma'
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event)
 
+  const body = await readBody<{ password?: string } & CreateEssayBody>(event)
+  const { password, content, images } = body
+
   // 验证密码
-  const { password } = await readBody<{ password?: string } & CreateEssayBody>(
-    event,
-  )
   if (!config.essayPassword || password !== config.essayPassword) {
     throw createError({ statusCode: 403, statusMessage: '密码错误' })
   }
-
-  const body = await readBody<CreateEssayBody>(event)
-  const { content, images } = body
 
   if (!content && (!images || images.length === 0)) {
     throw createError({ statusCode: 400, statusMessage: '内容不能为空' })

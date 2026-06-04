@@ -93,14 +93,13 @@ onMounted(() => {
           v-if="item.images && item.images.length > 0"
           class="mt-3 space-y-2"
         >
-          <CImg
+          <img
             v-for="(img, idx) in item.images"
             :key="idx"
-            :url="img"
-            rounded-lg
-            w-full
-            cursor-pointer
-            class="object-cover"
+            :src="img"
+            loading="lazy"
+            alt=""
+            class="w-full cursor-pointer max-h-50 rounded-lg object-cover"
             @click="openPreview(img)"
           />
         </div>
@@ -123,16 +122,6 @@ onMounted(() => {
     </div>
 
     <!-- 加载中 -->
-    <div v-if="loading" class="flex-center py-6">
-      <Loading :loading="loading" />
-    </div>
-
-    <!-- 图片预览 -->
-    <PreviewImg
-      v-if="previewVisible"
-      :model-value="previewVisible"
-      :src="previewSrc"
-      @update:model-value="previewVisible = $event"
-    />
+    <Loading :loading="loading" />
   </div>
 </template>
