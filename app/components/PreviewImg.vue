@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import type { ImageProviders } from '@nuxt/image'
 import { computed, inject, onBeforeUnmount, ref } from 'vue'
 import { previewContextKey } from '../types/preview'
-import type { PreviewContext, PreviewItem } from '../types/preview'
+import type {
+  PreviewContext,
+  PreviewImageProvider,
+  PreviewItem,
+} from '../types/preview'
 
 const {
   src,
@@ -14,7 +17,7 @@ const {
 } = defineProps<{
   src: string
   active?: boolean
-  provider?: keyof ImageProviders
+  provider?: PreviewImageProvider
   alt?: string
   previewItems?: PreviewItem[]
   previewIndex?: number

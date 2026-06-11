@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
 import type { EssayItem } from '../../../shared/types/essay'
+import type { PreviewItem } from '../../types/preview'
 
 dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
@@ -20,13 +21,12 @@ const total = ref(0)
 const loading = ref(false)
 const hasMore = computed(() => essayList.value.length < total.value)
 
-// 图片预览
-const previewVisible = ref(false)
-const previewSrc = ref('')
-
-function openPreview(src: string) {
-  previewSrc.value = src
-  previewVisible.value = true
+function getEssayPreviewItems(images: string[]): PreviewItem[] {
+  return images.map((src, index) => ({
+    src,
+    alt: `随笔图片 ${index + 1}`,
+    provider: 'myserver',
+  }))
 }
 
 async function fetchEssays(loadMore = false) {
@@ -93,15 +93,20 @@ onMounted(() => {
           v-if="item.images && item.images.length > 0"
           class="mt-3 space-y-2"
         >
-          <img
+          <div
             v-for="(img, idx) in item.images"
             :key="idx"
-            :src="img"
-            loading="lazy"
-            alt=""
-            class="w-full cursor-pointer max-h-50 rounded-lg object-cover"
-            @click="openPreview(img)"
-          />
+            class="h-50 w-full overflow-hidden rounded-lg"
+          >
+            <PreviewImg
+              :src="img"
+              :alt="`随笔图片 ${idx + 1}`"
+              :preview-items="getEssayPreviewItems(item.images)"
+              :preview-index="idx"
+              provider="myserver"
+              @select="() => void 0"
+            />
+          </div>
         </div>
 
         <!-- 时间 -->

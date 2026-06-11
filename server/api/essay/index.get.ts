@@ -1,4 +1,4 @@
-import type { EssayItem } from '~~/shared/types/essay'
+import type { EssayItem, EssayMedia } from '~~/shared/types/essay'
 import { prisma } from '~~/server/lib/prisma'
 
 export default defineEventHandler(async (event) => {
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     const list: EssayItem[] = rows.map((row) => ({
       id: row.id,
       content: row.content,
-      images: row.images as string[] | null,
+      images: row.images as EssayMedia[] | null,
       createdAt: row.created_at.toISOString(),
       updatedAt: row.updated_at.toISOString(),
     }))

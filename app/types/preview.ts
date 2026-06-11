@@ -1,11 +1,15 @@
 import type { CSSProperties } from 'vue'
-import type { ImageProviders } from '@nuxt/image'
+import type { ConfiguredImageProviders, ImageProviders } from '@nuxt/image'
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
+
+export type PreviewImageProvider =
+  | keyof ImageProviders
+  | keyof ConfiguredImageProviders
 
 export interface PreviewItem {
   src: string
   alt?: string
-  provider?: keyof ImageProviders
+  provider?: PreviewImageProvider
 }
 
 export interface PreviewContext {

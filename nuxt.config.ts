@@ -80,6 +80,17 @@ export default defineNuxtConfig({
     serverBundle: 'local',
   },
 
+  image: {
+    providers: {
+      myserver: {
+        provider: '~/providers/myserver',
+        options: {
+          baseURL: '/api/essay/file',
+        },
+      },
+    },
+  },
+
   hooks: {
     'content:file:afterParse': transformContentFileAfterParse,
   },
