@@ -13,6 +13,7 @@
     "curlikekey",
     "editmask",
     "flac",
+    "FTYP",
     "fwdnum",
     "hugeicons",
     "idname",
@@ -33,7 +34,8 @@
     "termtype",
     "unilikekey",
     "videototal",
-    "wbid"
+    "wbid",
+    "xmpmeta"
   ],
   "eslint.enable": false,
   "editor.formatOnSave": true,

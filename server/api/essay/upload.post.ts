@@ -2,7 +2,7 @@ import { writeFile, mkdir } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { ulid } from 'ulid'
 import type { EssayMedia } from '~~/shared/types/essay'
-import { findMotionPhotoVideo } from '~~/server/utils/motionPhoto.js'
+import { findMotionPhotoVideo } from '~~/server/utils/motionPhoto'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 const MAX_SIZE = 50 * 1024 * 1024 // 50MB
