@@ -8,6 +8,7 @@ const MIME: Record<string, string> = {
   '.png': 'image/png',
   '.gif': 'image/gif',
   '.webp': 'image/webp',
+  '.mp4': 'video/mp4',
 }
 
 export default defineEventHandler(async (event) => {

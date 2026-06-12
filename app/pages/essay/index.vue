@@ -2,7 +2,7 @@
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
-import type { EssayItem } from '../../../shared/types/essay'
+import type { EssayItem, EssayMedia } from '../../../shared/types/essay'
 import type { PreviewItem } from '../../types/preview'
 
 dayjs.locale('zh-cn')
@@ -21,11 +21,29 @@ const total = ref(0)
 const loading = ref(false)
 const hasMore = computed(() => essayList.value.length < total.value)
 
-function getEssayPreviewItems(images: string[]): PreviewItem[] {
-  return images.map((src, index) => ({
-    src,
+// ─── Live Photo 视频预览 ──────────────────────────────────
+const playingLiveId = ref('')
+
+function getMediaImage(m: EssayMedia): string {
+  if (typeof m === 'string') return m
+  return m.image
+}
+
+function isLive(m: EssayMedia): boolean {
+  return typeof m === 'object' && m.type === 'live'
+}
+
+function getLiveVideo(m: EssayMedia): string {
+  if (typeof m === 'object' && 'video' in m) return m.video
+  return ''
+}
+
+function buildPreviewItems(images: EssayMedia[] | null): PreviewItem[] {
+  if (!images) return []
+  return images.map((m, index) => ({
+    src: getMediaImage(m),
     alt: `随笔图片 ${index + 1}`,
-    provider: 'myserver',
+    provider: 'myserver' as const,
   }))
 }
 
@@ -88,25 +106,61 @@ onMounted(() => {
           {{ item.content }}
         </p>
 
-        <!-- 图片 -->
+        <!-- 图片 / Live -->
         <div
           v-if="item.images && item.images.length > 0"
           class="mt-3 space-y-2"
         >
-          <div
-            v-for="(img, idx) in item.images"
-            :key="idx"
-            class="h-50 w-full overflow-hidden rounded-lg"
-          >
-            <PreviewImg
-              :src="img"
-              :alt="`随笔图片 ${idx + 1}`"
-              :preview-items="getEssayPreviewItems(item.images)"
-              :preview-index="idx"
-              provider="myserver"
-              @select="() => void 0"
-            />
-          </div>
+          <template v-for="(m, idx) in item.images" :key="idx">
+            <!-- Live Photo：点击封面后切换为视频预览 -->
+            <div
+              v-if="isLive(m)"
+              class="relative h-50 w-full cursor-pointer overflow-hidden rounded-lg"
+              @click="
+                playingLiveId === getMediaImage(m)
+                  ? (playingLiveId = '')
+                  : (playingLiveId = getMediaImage(m))
+              "
+            >
+              <img
+                :src="getMediaImage(m)"
+                alt=""
+                class="h-full w-full object-cover transition-opacity duration-200"
+                :class="
+                  playingLiveId === getMediaImage(m)
+                    ? 'opacity-0'
+                    : 'opacity-100'
+                "
+              />
+              <video
+                v-show="playingLiveId === getMediaImage(m)"
+                :src="getLiveVideo(m)"
+                muted
+                autoplay
+                loop
+                playsinline
+                class="absolute inset-0 h-full w-full object-cover"
+              />
+              <div
+                class="flex items-center gap-1 absolute left-2 top-2 rounded-full bg-black/40 px-2 py-0.5 text-2.5 text-white backdrop-blur-sm"
+              >
+                <Icon name="material-symbols:live-tv" text-3 />
+                LIVE
+              </div>
+            </div>
+
+            <!-- 普通图片 -->
+            <div v-else class="h-50 w-full overflow-hidden rounded-lg">
+              <PreviewImg
+                :src="getMediaImage(m)"
+                :alt="`随笔图片 ${idx + 1}`"
+                :preview-items="buildPreviewItems(item.images)"
+                :preview-index="idx"
+                provider="myserver"
+                @select="() => void 0"
+              />
+            </div>
+          </template>
         </div>
 
         <!-- 时间 -->

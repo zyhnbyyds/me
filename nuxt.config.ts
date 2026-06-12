@@ -55,6 +55,10 @@ export default defineNuxtConfig({
     },
   },
 
+  devServer: {
+    host: '0.0.0.0',
+  },
+
   build: {
     analyze: true,
   },
@@ -63,6 +67,7 @@ export default defineNuxtConfig({
   future: {
     compatibilityVersion: 5,
   },
+  server: {},
 
   vite: {
     optimizeDeps: {

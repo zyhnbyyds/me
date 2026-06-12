@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { EssayMedia } from '~~/shared/types/essay'
+
 definePageMeta({
   title: '写随笔',
   description: '记录一些随想',
@@ -36,22 +38,28 @@ async function handleVerify() {
 
 // ─── 编写随笔 ─────────────────────────────────────────────
 const content = ref('')
-const imageInputs = ref<string[]>([''])
+const mediaList = ref<EssayMedia[]>([])
 const publishing = ref(false)
 const publishError = ref('')
 const publishSuccess = ref(false)
+
+// 手动输入的图片 URL（兼容旧方式）
+const manualUrl = ref('')
 
 // 文件上传
 const uploadRef = ref<HTMLInputElement>()
 const uploading = ref(false)
 const uploadProgress = ref('')
 
-function addImageInput() {
-  imageInputs.value.push('')
+function addManualUrl() {
+  const url = manualUrl.value.trim()
+  if (!url) return
+  mediaList.value.push({ type: 'image', image: url })
+  manualUrl.value = ''
 }
 
-function removeImageInput(index: number) {
-  imageInputs.value.splice(index, 1)
+function removeMedia(index: number) {
+  mediaList.value.splice(index, 1)
 }
 
 async function uploadFiles(files: FileList) {
@@ -69,22 +77,13 @@ async function uploadFiles(files: FileList) {
       formData.append('file', file)
       formData.append('password', password.value)
 
-      const res = await $fetch<Result<{ urls: string[] }>>(
+      const res = await $fetch<Result<{ urls: string[]; media: EssayMedia[] }>>(
         '/api/essay/upload',
-        {
-          method: 'POST',
-          body: formData,
-        },
+        { method: 'POST', body: formData },
       )
 
-      if (res.data?.urls?.[0]) {
-        // 填入第一个空的图片输入框，或追加
-        const emptyIdx = imageInputs.value.findIndex((url) => !url.trim())
-        if (emptyIdx !== -1) {
-          imageInputs.value[emptyIdx] = res.data.urls[0]
-        } else {
-          imageInputs.value.push(res.data.urls[0])
-        }
+      if (res.data?.media?.length) {
+        mediaList.value.push(...res.data.media)
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : '上传失败'
@@ -111,10 +110,19 @@ function handleFileChange(e: Event) {
 
 const canPublish = computed(
   () =>
-    (content.value.trim() || imageInputs.value.some((url) => url.trim())) &&
+    (content.value.trim() || mediaList.value.length > 0) &&
     !publishing.value &&
     !uploading.value,
 )
+
+function mediaToImages(media: EssayMedia[]): EssayMedia[] {
+  return media.map((m) => {
+    if (typeof m === 'string') {
+      return { type: 'image' as const, image: m }
+    }
+    return m
+  })
+}
 
 async function handlePublish() {
   if (!canPublish.value) return
@@ -122,7 +130,7 @@ async function handlePublish() {
   publishError.value = ''
   publishSuccess.value = false
 
-  const images = imageInputs.value.map((url) => url.trim()).filter(Boolean)
+  const images = mediaToImages(mediaList.value)
 
   try {
     await $fetch('/api/essay', {
@@ -136,7 +144,7 @@ async function handlePublish() {
 
     publishSuccess.value = true
     content.value = ''
-    imageInputs.value = ['']
+    mediaList.value = []
 
     setTimeout(() => {
       publishSuccess.value = false
@@ -147,6 +155,16 @@ async function handlePublish() {
   } finally {
     publishing.value = false
   }
+}
+
+// 获取 media 的封面图 URL
+function getMediaImage(m: EssayMedia): string {
+  if (typeof m === 'string') return m
+  return m.image
+}
+
+function isLive(m: EssayMedia): boolean {
+  return typeof m === 'object' && m.type === 'live'
 }
 </script>
 
@@ -227,13 +245,6 @@ async function handlePublish() {
             />
             上传
           </button>
-          <button
-            class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-3 text-blue transition-colors hover:bg-blue/10"
-            @click="addImageInput"
-          >
-            <Icon name="material-symbols:add-link" text-4 />
-            链接
-          </button>
           <span v-if="uploadProgress" class="text-3 text-blue">{{
             uploadProgress
           }}</span>
@@ -242,28 +253,35 @@ async function handlePublish() {
         <input
           ref="uploadRef"
           type="file"
-          accept="image/jpeg,image/png,image/gif,image/webp"
+          accept="image/jpeg,image/png,image/gif,image/webp,video/*"
           multiple
           class="hidden"
           @change="handleFileChange"
         />
 
-        <div class="space-y-2">
+        <!-- 已上传的 media 预览 -->
+        <div v-if="mediaList.length > 0" class="space-y-2">
           <div
-            v-for="(_, idx) in imageInputs"
+            v-for="(m, idx) in mediaList"
             :key="idx"
-            class="flex items-center gap-2"
+            class="relative overflow-hidden rounded-lg border border-common"
           >
-            <input
-              v-model="imageInputs[idx]"
-              type="url"
-              placeholder="https://..."
-              class="flex-1 rounded-lg border border-common bg-transparent px-4 py-2 text-3.5 outline-none transition-colors focus:border-blue"
+            <img
+              :src="getMediaImage(m)"
+              alt=""
+              class="h-40 w-full object-cover"
             />
+            <!-- Live 标记 -->
+            <div
+              v-if="isLive(m)"
+              class="flex items-center gap-1 absolute left-2 top-2 rounded-full bg-black/50 px-2 py-0.5 text-2.5 text-white backdrop-blur-sm"
+            >
+              <Icon name="material-symbols:live-tv" text-3 />
+              LIVE
+            </div>
             <button
-              v-if="imageInputs.length > 1"
-              class="flex-shrink-0 rounded-lg p-2 text-red-400 transition-colors hover:bg-red/10"
-              @click="removeImageInput(idx)"
+              class="absolute right-2 top-2 rounded-full bg-black/50 p-1 text-white backdrop-blur-sm"
+              @click="removeMedia(idx)"
             >
               <Icon name="material-symbols:close" text-4 />
             </button>
