@@ -14,7 +14,7 @@ export default defineConfig({
     ['flex-center', 'flex items-center justify-center'],
     [
       'bg-hover-common-trans',
-      'transition-all hover:bg-[rgba(15,20,25,0.1)] rounded-full hover:dark:bg-[rgba(231,234,235,0.1)]',
+      'transition-all hover:bg-[rgba(15,20,25,0.05)] rounded-full hover:dark:bg-[rgba(231,234,235,0.1)]',
     ],
     ['text-common', 'text-[rgb(15,20,25)] dark:text-[rgb(231,234,235)]'],
     ['flex-col-center', 'flex items-center'],

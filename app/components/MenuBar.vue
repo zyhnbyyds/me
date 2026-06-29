@@ -1,13 +1,15 @@
 <script lang="ts" setup>
 export interface MenuBarItem {
   title: string
-  /** 未激活 */
+  /** 未激活图标 — Iconify 名称 或 SVG 图标 key */
   icon: string
-  /** 激活 */
+  /** 激活图标 — Iconify 名称 或 SVG 图标 key */
   aIcon: string
   path: string
   isLink?: boolean
   key: string
+  /** 为 true 时使用自定义 SVG 图标（AppIcon），否则使用 Iconify */
+  isSvg?: boolean
 }
 
 interface Props {
@@ -50,8 +52,18 @@ function handleMenuChange(path: string) {
         :class="item.path === active ? 'font-bold' : ''"
       >
         <div class="text-7 font-bold flex-center h-8 w-8">
-          <Icon v-show="item.path === active" :name="item.aIcon" />
-          <Icon v-show="item.path !== active" :name="item.icon" />
+          <!-- 自定义 SVG 图标 -->
+          <AppIcon
+            v-if="item.isSvg"
+            :name="item.icon"
+            :active="item.path === active"
+            size="26"
+          />
+          <!-- Iconify 回退 -->
+          <template v-else>
+            <Icon v-show="item.path === active" :name="item.aIcon" />
+            <Icon v-show="item.path !== active" :name="item.icon" />
+          </template>
         </div>
         <span
           :class="{ hidden: isFold }"
