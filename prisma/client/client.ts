@@ -71,3 +71,13 @@ export type essay = Prisma.essayModel
  *
  */
 export type qq_content = Prisma.qq_contentModel
+/**
+ * Model music_playlist
+ *
+ */
+export type music_playlist = Prisma.music_playlistModel
+/**
+ * Model music_song
+ *
+ */
+export type music_song = Prisma.music_songModel

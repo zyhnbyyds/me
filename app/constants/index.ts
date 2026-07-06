@@ -54,6 +54,14 @@ export const menuList: MenuBarItem[] = [
     key: 'essay',
     isSvg: true,
   },
+  {
+    title: '音乐',
+    icon: 'music',
+    aIcon: 'music',
+    path: '/music',
+    key: 'music',
+    isSvg: true,
+  },
 ]
 
 export const appIcon = '/favicon.ico'

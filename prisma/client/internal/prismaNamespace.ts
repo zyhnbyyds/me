@@ -417,6 +417,8 @@ export const ModelName = {
   blog_view: 'blog_view',
   essay: 'essay',
   qq_content: 'qq_content',
+  music_playlist: 'music_playlist',
+  music_song: 'music_song',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -444,6 +446,8 @@ export type TypeMap<
       | 'blog_view'
       | 'essay'
       | 'qq_content'
+      | 'music_playlist'
+      | 'music_song'
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -787,6 +791,142 @@ export type TypeMap<
         }
       }
     }
+    music_playlist: {
+      payload: Prisma.$music_playlistPayload<ExtArgs>
+      fields: Prisma.music_playlistFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.music_playlistFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.music_playlistFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        findFirst: {
+          args: Prisma.music_playlistFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.music_playlistFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        findMany: {
+          args: Prisma.music_playlistFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>[]
+        }
+        create: {
+          args: Prisma.music_playlistCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        createMany: {
+          args: Prisma.music_playlistCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.music_playlistDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        update: {
+          args: Prisma.music_playlistUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        deleteMany: {
+          args: Prisma.music_playlistDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.music_playlistUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.music_playlistUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_playlistPayload>
+        }
+        aggregate: {
+          args: Prisma.Music_playlistAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMusic_playlist>
+        }
+        groupBy: {
+          args: Prisma.music_playlistGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Music_playlistGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.music_playlistCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.Music_playlistCountAggregateOutputType>
+            | number
+        }
+      }
+    }
+    music_song: {
+      payload: Prisma.$music_songPayload<ExtArgs>
+      fields: Prisma.music_songFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.music_songFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.music_songFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        findFirst: {
+          args: Prisma.music_songFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.music_songFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        findMany: {
+          args: Prisma.music_songFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>[]
+        }
+        create: {
+          args: Prisma.music_songCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        createMany: {
+          args: Prisma.music_songCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.music_songDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        update: {
+          args: Prisma.music_songUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        deleteMany: {
+          args: Prisma.music_songDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.music_songUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.music_songUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$music_songPayload>
+        }
+        aggregate: {
+          args: Prisma.Music_songAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMusic_song>
+        }
+        groupBy: {
+          args: Prisma.music_songGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Music_songGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.music_songCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.Music_songCountAggregateOutputType>
+            | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -917,6 +1057,35 @@ export const Qq_contentScalarFieldEnum = {
 export type Qq_contentScalarFieldEnum =
   (typeof Qq_contentScalarFieldEnum)[keyof typeof Qq_contentScalarFieldEnum]
 
+export const Music_playlistScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  cover: 'cover',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+} as const
+
+export type Music_playlistScalarFieldEnum =
+  (typeof Music_playlistScalarFieldEnum)[keyof typeof Music_playlistScalarFieldEnum]
+
+export const Music_songScalarFieldEnum = {
+  id: 'id',
+  playlist_id: 'playlist_id',
+  title: 'title',
+  artist: 'artist',
+  album: 'album',
+  cover: 'cover',
+  source_name: 'source_name',
+  source_url: 'source_url',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+} as const
+
+export type Music_songScalarFieldEnum =
+  (typeof Music_songScalarFieldEnum)[keyof typeof Music_songScalarFieldEnum]
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -1016,6 +1185,30 @@ export const qq_contentOrderByRelevanceFieldEnum = {
 
 export type qq_contentOrderByRelevanceFieldEnum =
   (typeof qq_contentOrderByRelevanceFieldEnum)[keyof typeof qq_contentOrderByRelevanceFieldEnum]
+
+export const music_playlistOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  cover: 'cover',
+} as const
+
+export type music_playlistOrderByRelevanceFieldEnum =
+  (typeof music_playlistOrderByRelevanceFieldEnum)[keyof typeof music_playlistOrderByRelevanceFieldEnum]
+
+export const music_songOrderByRelevanceFieldEnum = {
+  id: 'id',
+  playlist_id: 'playlist_id',
+  title: 'title',
+  artist: 'artist',
+  album: 'album',
+  cover: 'cover',
+  source_name: 'source_name',
+  source_url: 'source_url',
+} as const
+
+export type music_songOrderByRelevanceFieldEnum =
+  (typeof music_songOrderByRelevanceFieldEnum)[keyof typeof music_songOrderByRelevanceFieldEnum]
 
 /**
  * Field references
@@ -1208,6 +1401,8 @@ export type GlobalOmitConfig = {
   blog_view?: Prisma.blog_viewOmit
   essay?: Prisma.essayOmit
   qq_content?: Prisma.qq_contentOmit
+  music_playlist?: Prisma.music_playlistOmit
+  music_song?: Prisma.music_songOmit
 }
 
 /* Types for Logging */

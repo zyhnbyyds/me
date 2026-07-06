@@ -63,6 +63,16 @@ const icons: Record<string, SvgIconDef> = {
       'M16 3.13a4 4 0 0 1 0 7.75',
     ],
   },
+
+  // ──── 音乐（音符 + 唱片） ────
+  music: {
+    viewBox: '0 0 24 24',
+    paths: [
+      'M9 18V5l12-2v13',
+      'M6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+      'M18 19a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',
+    ],
+  },
 }
 
 export default icons

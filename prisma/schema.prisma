@@ -99,3 +99,35 @@ model qq_content {
   wbid             BigInt?
   createtime       String?  @db.VarChar(20)
 }
+
+model music_playlist {
+  id          String   @id @db.VarChar(64)
+  title       String   @db.VarChar(128)
+  description String?  @db.Text
+  cover       String?  @db.VarChar(512)
+  sort_order  Int      @default(0)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt @db.Timestamp(0)
+
+  songs music_song[]
+
+  @@index([sort_order], map: "idx_music_playlist_sort")
+}
+
+model music_song {
+  id          String   @id @db.VarChar(64)
+  playlist_id String   @db.VarChar(64)
+  title       String   @db.VarChar(256)
+  artist      String?  @db.VarChar(128)
+  album       String?  @db.VarChar(256)
+  cover       String?  @db.VarChar(512)
+  source_name String?  @db.VarChar(64)
+  source_url  String?  @db.VarChar(512)
+  sort_order  Int      @default(0)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+
+  playlist music_playlist @relation(fields: [playlist_id], references: [id], onDelete: Cascade)
+
+  @@index([playlist_id], map: "idx_music_song_playlist")
+  @@index([sort_order], map: "idx_music_song_sort")
+}

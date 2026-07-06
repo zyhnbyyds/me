@@ -59,6 +59,8 @@ export const ModelName = {
   blog_view: 'blog_view',
   essay: 'essay',
   qq_content: 'qq_content',
+  music_playlist: 'music_playlist',
+  music_song: 'music_song',
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -168,6 +170,35 @@ export const Qq_contentScalarFieldEnum = {
 export type Qq_contentScalarFieldEnum =
   (typeof Qq_contentScalarFieldEnum)[keyof typeof Qq_contentScalarFieldEnum]
 
+export const Music_playlistScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  cover: 'cover',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+  updated_at: 'updated_at',
+} as const
+
+export type Music_playlistScalarFieldEnum =
+  (typeof Music_playlistScalarFieldEnum)[keyof typeof Music_playlistScalarFieldEnum]
+
+export const Music_songScalarFieldEnum = {
+  id: 'id',
+  playlist_id: 'playlist_id',
+  title: 'title',
+  artist: 'artist',
+  album: 'album',
+  cover: 'cover',
+  source_name: 'source_name',
+  source_url: 'source_url',
+  sort_order: 'sort_order',
+  created_at: 'created_at',
+} as const
+
+export type Music_songScalarFieldEnum =
+  (typeof Music_songScalarFieldEnum)[keyof typeof Music_songScalarFieldEnum]
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc',
@@ -267,3 +298,27 @@ export const qq_contentOrderByRelevanceFieldEnum = {
 
 export type qq_contentOrderByRelevanceFieldEnum =
   (typeof qq_contentOrderByRelevanceFieldEnum)[keyof typeof qq_contentOrderByRelevanceFieldEnum]
+
+export const music_playlistOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  cover: 'cover',
+} as const
+
+export type music_playlistOrderByRelevanceFieldEnum =
+  (typeof music_playlistOrderByRelevanceFieldEnum)[keyof typeof music_playlistOrderByRelevanceFieldEnum]
+
+export const music_songOrderByRelevanceFieldEnum = {
+  id: 'id',
+  playlist_id: 'playlist_id',
+  title: 'title',
+  artist: 'artist',
+  album: 'album',
+  cover: 'cover',
+  source_name: 'source_name',
+  source_url: 'source_url',
+} as const
+
+export type music_songOrderByRelevanceFieldEnum =
+  (typeof music_songOrderByRelevanceFieldEnum)[keyof typeof music_songOrderByRelevanceFieldEnum]
