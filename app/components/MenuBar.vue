@@ -15,8 +15,10 @@ export interface MenuBarItem {
 interface Props {
   list: MenuBarItem[]
   isFold?: boolean
+  /** 横排模式 */
+  horizontal?: boolean
 }
-const { isFold = false } = defineProps<Props>()
+const { isFold = false, horizontal = false } = defineProps<Props>()
 const route = useRoute()
 
 const { y } = inject<{
@@ -38,7 +40,12 @@ function handleMenuChange(path: string) {
 
 <template>
   <ul
-    class="left-1/2 z-10 <md:px-3 <md:py-1 <md:rounded-full <md:bg-white/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-dark/60 <md:-translate-x-1/2"
+    class="z-10"
+    :class="
+      horizontal
+        ? 'flex items-center gap-1'
+        : 'left-1/2 <md:px-3 <md:py-1 <md:rounded-full <md:bg-white/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-dark/60 <md:-translate-x-1/2'
+    "
   >
     <li
       v-for="item in list"
@@ -48,8 +55,11 @@ function handleMenuChange(path: string) {
     >
       <div
         :to="item.path"
-        class="mb-3 p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center <md:mb-0"
-        :class="item.path === active ? 'font-bold' : ''"
+        class="p-2 bg-hover-common-trans inline-flex w-a cursor-pointer items-center"
+        :class="[
+          item.path === active ? 'font-bold' : '',
+          horizontal ? 'rounded-lg' : 'mb-3 <md:mb-0',
+        ]"
       >
         <div class="text-7 font-bold flex-center h-8 w-8">
           <!-- 自定义 SVG 图标 -->
@@ -73,11 +83,8 @@ function handleMenuChange(path: string) {
         </span>
       </div>
     </li>
-    <li class="flex-center w-12 md:hidden">
-      <Transition name="slide-fade">
-        <DarkToggle v-if="y <= 60" />
-        <BackTop v-else v-model="y" show />
-      </Transition>
+    <li v-if="!horizontal" class="flex-center w-12 md:hidden">
+      <BackTop v-model="y" show />
     </li>
   </ul>
 </template>

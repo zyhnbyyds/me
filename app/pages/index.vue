@@ -362,9 +362,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div
-    class="h-full flex w-80% <md:w-full relative overflow-hidden bg-gray-50 dark:bg-dark-950"
-  >
+  <div class="h-full flex relative overflow-hidden bg-gray-50 dark:bg-dark-950">
     <!-- 左侧主内容 -->
     <div class="flex-1 flex flex-col h-full min-w-0">
       <div

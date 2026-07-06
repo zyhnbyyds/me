@@ -12,7 +12,7 @@ function openQrcode(link: SocialLink) {
 }
 
 // ─── 复制提示 ─────────────────────────────────────────────
-const { copy, isSupported } = useClipboard()
+const { copy } = useClipboard()
 const toastMsg = ref('')
 const toastVisible = ref(false)
 let toastTimer: ReturnType<typeof setTimeout> | null = null
@@ -21,9 +21,8 @@ async function handleCopy(link: SocialLink) {
   if (!link.copyText) return
   try {
     await copy(link.copyText)
-    toastMsg.value = '已复制到剪贴板'
+    toastMsg.value = '邮箱已复制'
   } catch {
-    // fallback：手动复制
     toastMsg.value = link.copyText
   }
   showToast()
@@ -54,19 +53,24 @@ function handleClick(link: SocialLink) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-3">
+  <div class="flex flex-col items-center gap-4">
     <div
       v-for="link in socialLinks"
       :key="link.name"
-      class="social-icon flex-center h-8 w-8 cursor-pointer rounded-full transition-all duration-200 hover:bg-light-500 hover:dark:bg-dark-500"
+      class="flex-center h-10 w-10 cursor-pointer text-common rounded-full transition-all duration-200 hover:bg-common"
       @click="handleClick(link)"
     >
-      <Icon :name="link.icon" class="text-4.5 transition-colors duration-200" />
+      <Icon :name="link.icon" class="text-5.5" />
     </div>
   </div>
 
   <!-- 二维码弹窗 -->
-  <Modal v-model="qrcodeVisible" title="扫码添加" close-on-click-overlay>
+  <Modal
+    v-model="qrcodeVisible"
+    show-mask
+    title="扫码添加"
+    close-on-click-overlay
+  >
     <div v-if="qrcodeTarget" class="flex flex-col items-center gap-4 p-4">
       <div class="overflow-hidden rounded-xl border border-common">
         <img
@@ -85,7 +89,7 @@ function handleClick(link: SocialLink) {
     <Transition name="toast">
       <div
         v-if="toastVisible"
-        class="fixed bottom-6 left-1/2 z-999 -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-3.5 text-white shadow-lg dark:bg-gray-200 dark:text-gray-800"
+        class="pointer-events-none fixed bottom-6 left-1/2 z-999 -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-3.5 text-white shadow-lg dark:bg-gray-200 dark:text-gray-800"
       >
         {{ toastMsg }}
       </div>
@@ -94,19 +98,7 @@ function handleClick(link: SocialLink) {
 </template>
 
 <style scoped>
-.social-icon {
-  color: rgb(107, 114, 128);
-}
-.social-icon:hover {
-  color: rgb(15, 20, 25);
-}
-:global(.dark) .social-icon {
-  color: rgb(156, 163, 175);
-}
-:global(.dark) .social-icon:hover {
-  color: rgb(231, 234, 235);
-}
-
+/* Vue Transition 必需 */
 .toast-enter-active,
 .toast-leave-active {
   transition: all 0.3s ease;

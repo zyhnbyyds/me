@@ -4,11 +4,15 @@ import { menuList } from '~/constants'
 
 <template>
   <div class="text-common flex hw-full overflow-hidden">
+    <!-- 左侧边栏 -->
     <header
       class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto <md:z-999"
     >
       <div flex-1 />
-      <div class="px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0">
+      <div
+        class="flex flex-col px-3 w-50 transition-all <md:p-0 <lg:w-19 <md:w-0"
+      >
+        <!-- 头像 -->
         <div class="rounded-full flex-center inline-flex h-14 w-14 <md:hidden">
           <ClientOnly>
             <NuxtImg
@@ -22,21 +26,26 @@ import { menuList } from '~/constants'
           </ClientOnly>
         </div>
 
-        <div class="pt-4px h-[calc(100%-52px)] flex flex-col">
+        <!-- 导航菜单 -->
+        <div class="pt-4px flex-1">
           <MenuBar :list="menuList" />
+        </div>
 
-          <!-- 社交联系方式 — 推至底部 -->
-          <div class="mt-auto mb-6">
-            <div class="mx-auto mb-4 w-6 border-t border-common" />
-            <Contact />
-          </div>
+        <!-- 底部：暗色切换 -->
+        <div class="flex flex-col items-center gap-4 pb-6">
+          <div class="mx-auto w-6 border-t border-common" />
+          <DarkToggle />
         </div>
       </div>
     </header>
 
-    <div class="flex h-full flex-1 relative z-10">
-      <div class="page-container relative w-full">
+    <!-- 内容区 -->
+    <div class="relative flex-1 flex overflow-hidden">
+      <div class="h-full w-80% <md:w-full">
         <slot />
+      </div>
+      <div class="flex h-full flex-1 p-5 pt14 pl10 <md:hidden">
+        <Contact />
       </div>
     </div>
   </div>
