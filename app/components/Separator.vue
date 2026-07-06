@@ -15,10 +15,9 @@ withDefaults(
   <div flex="~ row" class="items-center justify-center">
     <div
       border-t
-      border-gray-200
+      border-c-border
       border-dashed
       flex-1
-      dark:border-dark-500
       :style="{ borderTopWidth: `${height}px` }"
     />
     <slot name="content">
@@ -26,10 +25,9 @@ withDefaults(
     </slot>
     <div
       border-t
-      border-gray-200
+      border-c-border
       border-dashed
       flex-1
-      dark:border-dark-500
       :style="{ borderTopWidth: `${height}px` }"
     />
   </div>

@@ -12,9 +12,9 @@ provide('scroll', {
 </script>
 
 <template>
-  <div class="text-common flex hw-screen overflow-hidden">
+  <div class="flex hw-screen overflow-hidden">
     <!-- 左侧折叠边栏 -->
-    <header class="border-r-0.5px border-common flex h-full w-auto">
+    <header class="border-r-0.5px border-c-border flex h-full w-auto">
       <div class="flex flex-col px-3 w-19 transition-all overflow-hidden">
         <!-- 头像 -->
         <div
@@ -37,7 +37,7 @@ provide('scroll', {
 
         <!-- 底部 -->
         <div class="flex flex-col items-center gap-4 pb-6">
-          <div class="mx-auto w-6 border-t border-common" />
+          <div class="mx-auto w-6 border-t border-c-border" />
           <DarkToggle />
         </div>
       </div>

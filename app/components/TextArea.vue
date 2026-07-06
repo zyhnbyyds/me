@@ -19,11 +19,11 @@ const { focused } = useFocus(textareaRef)
     border-2
     border-transparent
     rounded-md
-    bg-light-300
+    bg-c-surface
     w-full
     resize-none
     focus:border-2
-    focus:bg-light-100
+    focus:bg-c-hover
   />
 </template>
 

@@ -3,10 +3,10 @@ import { menuList } from '~/constants'
 </script>
 
 <template>
-  <div class="text-common flex hw-full overflow-hidden">
+  <div class="flex hw-full overflow-hidden">
     <!-- 左侧边栏 -->
     <header
-      class="border-r-0.5px border-common flex h-full w-20% <lg:w-auto <md:z-999"
+      class="border-r-0.5px border-c-border flex h-full w-20% <lg:w-auto <md:z-999"
     >
       <div flex-1 />
       <div
@@ -30,17 +30,11 @@ import { menuList } from '~/constants'
         <div class="pt-4px flex-1">
           <MenuBar :list="menuList" />
         </div>
-
-        <!-- 底部：暗色切换 -->
-        <div class="flex flex-col items-center gap-4 pb-6">
-          <div class="mx-auto w-6 border-t border-common" />
-          <DarkToggle />
-        </div>
       </div>
     </header>
 
     <!-- 内容区 -->
-    <div class="relative flex-1 flex overflow-hidden">
+    <div class="relative flex flex-1 overflow-hidden">
       <div class="h-full w-80% <md:w-full">
         <slot />
       </div>

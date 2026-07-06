@@ -93,9 +93,9 @@ function hdSendComment() {
 <template>
   <div
     ref="commentRef"
-    class="text-3.5 relative outline-none border-2 border-transparent rounded-md bg-light-500 w-full transition-all duration-300 focus:border-2 focus:border-blue-300 dark:bg-dark-500 hover:bg-dark-300 hover:bg-op8 dark:hover:bg-op100"
+    class="text-3.5 relative outline-none border-2 border-transparent rounded-md bg-c-hover w-full transition-all duration-300 focus:border-2 focus:border-c-accent dark:bg-c-surface hover:bg-c-hover hover:bg-op8 dark:hover:bg-op100"
     :class="[
-      focused ? 'border-blue-300! dark:border-dark-300! bg-transparent!' : '',
+      focused ? 'border-c-accent! dark:border-dark-300! bg-transparent!' : '',
     ]"
     @click="
       () => {
@@ -108,7 +108,7 @@ function hdSendComment() {
       ref="textareaRef"
       v-model="textarea"
       :placeholder="placeholder ?? '发表评论'"
-      :class="[focused ? 'h-30' : 'h-15 text-[#536471]']"
+      :class="[focused ? 'h-30' : 'h-15 text-[var(--c-text-alt)]']"
       class="max-h-50 transition-all duration-300"
       w-full
       resize-none
@@ -147,7 +147,7 @@ function hdSendComment() {
         </span>
         <div
           :loading="loading"
-          :class="focused ? 'dark:text-gray-1' : ''"
+          :class="focused ? 'dark:text-c-text' : ''"
           text-3.3
           px-3
           py-1
@@ -157,8 +157,8 @@ function hdSendComment() {
           transition-colors
           hover:border-common
           hover:bg-gray200
-          hover:dark:text-gray-200
-          dark:hover:bg-dark-100
+          hover:dark:text-c-text-alt
+          dark:hover:bg-c-hover
           @click.stop="hdSendComment"
         >
           发送

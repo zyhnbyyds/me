@@ -22,7 +22,7 @@ function hdImgUrl(name: string) {
     <Transition name="fade-scale">
       <div
         v-if="pickerVisible"
-        class="bg-light/40 top-100% backdrop-blur-md dark:bg-dark/40"
+        class="bg-c-surface/40 top-100% backdrop-blur-md dark:bg-c-bg/40"
         mt5
         p-2
         rounded-md
@@ -39,7 +39,7 @@ function hdImgUrl(name: string) {
             transition-all
             hover:bg-light700
             hover:backdrop-blur-md
-            dark:hover:bg-dark-900
+            dark:hover:bg-c-hover
             class="flex-center inline-flex h-10 w-10"
             @click="emits('select', hdImgUrl(item))"
           >

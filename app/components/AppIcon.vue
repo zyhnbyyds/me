@@ -68,8 +68,8 @@ const fillOpacity = computed(() => (props.active ? 0.12 : 0))
   vertical-align: middle;
 }
 .app-icon--fallback {
-  background: #e5e7eb;
-  color: #9ca3af;
+  background: var(--c-border);
+  color: var(--c-text-weak);
   font-size: 0.75em;
 }
 </style>

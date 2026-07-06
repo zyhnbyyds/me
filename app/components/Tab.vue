@@ -39,7 +39,7 @@ const active = defineModel<string>()
   bottom: 0;
   height: 4px;
   border-radius: 2px;
-  background-color: rgb(29, 155, 240);
+  background-color: var(--c-accent);
 }
 
 .tab-item-active::after {

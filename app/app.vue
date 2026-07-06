@@ -3,8 +3,8 @@ const isDark = useDark()
 </script>
 
 <template>
-  <div hw-full dark:bg-black>
-    <NuxtLoadingIndicator :height="3" :color="isDark ? '#818cf8' : '#6366f1'" />
+  <div hw-full>
+    <NuxtLoadingIndicator :height="3" :color="isDark ? '#2dd4bf' : '#0d9488'" />
     <PreviewContainer :duration="400">
       <NuxtLayout>
         <NuxtPage />

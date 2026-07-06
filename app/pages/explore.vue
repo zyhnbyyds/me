@@ -56,7 +56,7 @@ function goToItem(item: SearchResItem) {
         h-10
         w-full
         dark:text-white
-        dark:bg-dark-500
+        dark:bg-c-surface
         class="outline-1 outline-light-900 outline-solid transition-colors focus:outline-2 dark:outline-dark-500 focus:outline-blue"
         placeholder="搜索"
       />
@@ -67,7 +67,7 @@ function goToItem(item: SearchResItem) {
 
     <!-- 结果列表：直接展示在页面下方 -->
     <div
-      class="mt-4 h-[calc(100vh-100px)] rounded-lg w-full overflow-hidden backdrop-blur-lg dark:bg-dark-500/60"
+      class="mt-4 h-[calc(100vh-100px)] rounded-lg w-full overflow-hidden backdrop-blur-lg dark:bg-c-surface/60"
     >
       <ul v-show="searchList.length > 0" class="h-full overflow-y-auto">
         <li
@@ -89,8 +89,8 @@ function goToItem(item: SearchResItem) {
           text-ellipsis
           overflow-hidden
           hover:text-black
-          hover:bg-light-200
-          dark:hover:bg-dark-300
+          hover:bg-c-hover
+          dark:hover:bg-c-hover
           @click="goToItem(item)"
         >
           {{ item.keyword }}

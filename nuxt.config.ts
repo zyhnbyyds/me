@@ -44,7 +44,7 @@ export default defineNuxtConfig({
           name: 'google-site-verification',
           content: 'Q3zsDh3Bzu3EZ_N6QlLDs5iHhUNdIFBJzxAgv_YohEM',
         },
-        { name: 'theme-color', content: '#ffffff' },
+        { name: 'theme-color', content: '#fafbfc' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },

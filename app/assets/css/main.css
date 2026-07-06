@@ -1,6 +1,36 @@
 @import './transition.css';
 @import './common.css';
 
+/* ═══════════════════════════════════════════════════════
+   极简色彩系统 — 青灰 Teal 系
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  --c-bg: #fafbfc;
+  --c-surface: #ffffff;
+  --c-hover: rgba(13, 148, 136, 0.06);
+  --c-border: #e8eaed;
+  --c-text: #1a1d23;
+  --c-text-alt: #5a5f6b;
+  --c-text-weak: #9399a5;
+  --c-accent: #0d9488;
+  --c-accent-hover: #0f766e;
+  --c-shadow: rgba(0, 0, 0, 0.06);
+}
+
+.dark {
+  --c-bg: #0f1117;
+  --c-surface: #16181d;
+  --c-hover: rgba(45, 212, 191, 0.08);
+  --c-border: #23262d;
+  --c-text: #e4e5e9;
+  --c-text-alt: #9a9eaa;
+  --c-text-weak: #656a76;
+  --c-accent: #2dd4bf;
+  --c-accent-hover: #5eead4;
+  --c-shadow: rgba(0, 0, 0, 0.3);
+}
+
 html,
 body,
 #__nuxt {
@@ -9,20 +39,17 @@ body,
   font-family:
     ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', 'Noto Color Emoji';
+  background: var(--c-bg);
+  color: var(--c-text);
 }
 
 .page-container > div {
-  border-right: 0.5px solid rgb(233 236 239);
-}
-
-/* dark */
-.dark .page-container > div {
-  border-right: 0.5px solid rgb(31 31 31);
+  border-right: 0.5px solid var(--c-border);
 }
 
 .scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgb(200 200 200) transparent;
+  scrollbar-color: var(--c-text-weak) transparent;
 }
 
 /* 全局页面进入动效 */
@@ -54,9 +81,4 @@ img {
 a,
 button {
   -webkit-tap-highlight-color: transparent;
-}
-
-/* 滚动条 dark mode */
-.dark .scrollbar {
-  scrollbar-color: rgb(60 60 70) transparent;
 }

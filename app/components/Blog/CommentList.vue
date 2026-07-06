@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import type { BlogCollectionItem } from '@nuxt/content'
 import type Comment from './Comment.vue'
 import dayjs from 'dayjs'
@@ -176,7 +176,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
         transition-all
         relative
         hover:bg-light200
-        hover:dark:bg-dark-700
+        hover:dark:bg-c-surface
       >
         <img rounded-full h-5 w-5 :src="comment.fromUser.avatar_url" />
         <div ml-2 w-full>
@@ -189,14 +189,14 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
                   : `回复 ${comment.toUser && comment.toUser.name} `
               }}</span
             >
-            <span class="text-[#536471] text-op-80">
+            <span class="text-[var(--c-text-alt)] text-op-80">
               <span v-if="comment.depth === 1"
                 >@{{ comment.fromUser.login }}</span
               >
               <span> · </span>
               <span text-3>{{ formatDate(comment.timestamp) }}</span>
             </span>
-            <span text-3 text-gray-400 flex-col-center inline-flex float-end>
+            <span text-3 text-c-text-weak flex-col-center inline-flex float-end>
               <Icon name="material-symbols:location-on-outline" mr-2px />
               <span>
                 {{ comment.fromUser.location }}
@@ -218,10 +218,10 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
             <span
               :class="
                 comment.isClickReply
-                  ? 'text-blue-5'
-                  : 'text-[#536471] dark:text-light5'
+                  ? 'text-c-accent'
+                  : 'text-[var(--c-text-alt)] dark:text-light5'
               "
-              hover:dark:bg-dark-2
+              hover:dark:bg-c-bg-2
               mr-2
               px-1.2
               py-0.7
@@ -232,7 +232,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
               cursor-pointer
               select-none
               transition-all
-              hover:bg-light-500
+              hover:bg-c-hover
               @click="hdClickReply(comment, true)"
             >
               <Icon name="carbon:add-comment" text-4 text-op-80 mr1 />
@@ -242,7 +242,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
             <span
               v-if="isSuperAdmin"
               text-3
-              class="text-red-500 cursor-pointer select-none rounded-md px-1.2 py-0.7 hover:bg-red-50 dark:hover:bg-red-900/20"
+              class="text-c-accent cursor-pointer select-none rounded-md px-1.2 py-0.7 hover:bg-c-hover dark:hover:bg-c-hover"
               @click="hdDeleteComment(comment)"
             >
               删除

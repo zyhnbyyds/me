@@ -165,14 +165,14 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
 // 事件颜色映射
 const eventColors: Record<string, { bg: string; text: string; dot: string }> = {
   blog: {
-    bg: 'bg-blue-500/15 dark:bg-blue-400/20 hover:bg-blue-500/25',
-    text: 'text-blue-700 dark:text-blue-300',
-    dot: 'bg-blue-500',
+    bg: 'bg-c-hover dark:bg-c-hover hover:bg-c-accent/25',
+    text: 'text-c-accent dark:text-c-accent',
+    dot: 'bg-c-accent',
   },
   qq: {
-    bg: 'bg-emerald-500/15 dark:bg-emerald-400/20 hover:bg-emerald-500/25',
+    bg: 'bg-c-hover0/15 dark:bg-emerald-400/20 hover:bg-c-hover0/25',
     text: 'text-emerald-700 dark:text-emerald-300',
-    dot: 'bg-emerald-500',
+    dot: 'bg-c-hover0',
   },
 }
 
@@ -211,7 +211,7 @@ const totalEvents = computed(() =>
         <div
           v-for="w in weekLabels"
           :key="w"
-          class="py-2 text-center text-12px font-semibold text-gray-400 dark:text-gray-500 tracking-wide select-none"
+          class="py-2 text-center text-12px font-semibold text-c-text-weak dark:text-c-text-alt tracking-wide select-none"
         >
           {{ w }}
         </div>
@@ -219,7 +219,7 @@ const totalEvents = computed(() =>
 
       <!-- 日期网格 -->
       <div
-        class="grid grid-cols-7 flex-1 min-h-0 gap-px bg-gray-200 dark:bg-dark-400 rounded-xl overflow-hidden"
+        class="grid grid-cols-7 flex-1 min-h-0 gap-px bg-c-border dark:bg-c-border rounded-xl overflow-hidden"
         :class="days.length > 35 ? 'grid-rows-6' : 'grid-rows-5'"
       >
         <div
@@ -286,7 +286,7 @@ const totalEvents = computed(() =>
             </TransitionGroup>
             <div
               v-if="item.events.length > 3"
-              class="text-10px <md:text-9px text-gray-400 dark:text-gray-500 px-1 cursor-pointer hover:text-gray-600"
+              class="text-10px <md:text-9px text-c-text-weak dark:text-c-text-alt px-1 cursor-pointer hover:text-c-text-alt"
               @click.stop="openDayEvents(item.date, item.events)"
             >
               +{{ item.events.length - 3 }} 更多
@@ -308,7 +308,7 @@ const totalEvents = computed(() =>
             <div class="text-16px font-bold">
               {{ dayjs(selectedDate).format('M月D日') }}
             </div>
-            <div class="text-12px text-gray-400 mt-0.5">
+            <div class="text-12px text-c-text-weak mt-0.5">
               共 {{ selectedDateEvents.length }} 条记录
             </div>
           </div>
@@ -401,25 +401,25 @@ const totalEvents = computed(() =>
             <span
               v-for="tag in selectedEvent.tags"
               :key="tag"
-              class="rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2.5 py-0.5 text-11px"
+              class="rounded-full bg-c-hover dark:bg-c-hover text-c-accent dark:text-c-accent px-2.5 py-0.5 text-11px"
             >
               {{ tag }}
             </span>
           </div>
           <p
             v-if="selectedEvent.description"
-            class="text-14px text-gray-600 dark:text-gray-300 leading-relaxed mb-4"
+            class="text-14px text-c-text-alt dark:text-c-text-weak leading-relaxed mb-4"
           >
             {{ selectedEvent.description }}
           </p>
           <NuxtImg
             v-if="selectedEvent.image"
             :src="`/blog/${selectedEvent.image}`"
-            class="rounded-lg w-full max-h-40 object-cover mb-4 border border-gray-100 dark:border-dark-500"
+            class="rounded-lg w-full max-h-40 object-cover mb-4 border border-c-border dark:border-dark-500"
           />
           <button
             type="button"
-            class="cal-action-btn bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-500"
+            class="cal-action-btn bg-c-accent hover:bg-c-accent-hover dark:bg-c-accent-hover dark:hover:bg-c-accent"
             @click="goToDetail(selectedEvent)"
           >
             <Icon name="carbon:document" class="mr-1.5" />
@@ -430,13 +430,13 @@ const totalEvents = computed(() =>
         <!-- QQ 事件详情 -->
         <template v-else>
           <p
-            class="text-14px text-gray-700 dark:text-gray-200 leading-relaxed mb-4 whitespace-pre-wrap"
+            class="text-14px text-c-text dark:text-c-text-alt leading-relaxed mb-4 whitespace-pre-wrap"
           >
             {{ selectedEvent.content || '暂无内容' }}
           </p>
           <button
             type="button"
-            class="cal-action-btn bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            class="cal-action-btn bg-c-hover0 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-c-hover0"
             @click="goToDetail(selectedEvent)"
           >
             <Icon name="carbon:user-avatar" class="mr-1.5" />
@@ -454,13 +454,13 @@ const totalEvents = computed(() =>
   @apply flex flex-col p-2 <md:p-1 overflow-hidden cursor-pointer transition-colors duration-150 select-none;
 }
 .cal-day-today {
-  @apply bg-blue-50 dark:bg-blue-950/40;
+  @apply bg-c-hover dark:bg-c-hover;
 }
 .cal-day-other {
-  @apply bg-gray-50 dark:bg-dark-600 cursor-default;
+  @apply bg-c-bg dark:bg-c-bg cursor-default;
 }
 .cal-day-current {
-  @apply bg-white dark:bg-dark-500 hover:bg-gray-50 dark:hover:bg-dark-400;
+  @apply bg-c-surface dark:bg-c-surface hover:bg-c-bg dark:hover:bg-c-hover;
 }
 
 /* 日期数字 */
@@ -468,7 +468,7 @@ const totalEvents = computed(() =>
   @apply text-13px <md:text-11px font-medium leading-none;
 }
 .cal-day-num-today {
-  @apply inline-flex items-center justify-center w-6 h-6 <md:w-5 <md:h-5 rounded-full bg-blue-500 text-white text-12px <md:text-11px;
+  @apply inline-flex items-center justify-center w-6 h-6 <md:w-5 <md:h-5 rounded-full bg-c-accent text-white text-12px <md:text-11px;
 }
 
 /* 事件药丸 */
@@ -484,28 +484,28 @@ const totalEvents = computed(() =>
 
 /* 今天按钮 */
 .cal-btn-today {
-  @apply px-3 py-1.5 rounded-lg text-13px font-medium border border-gray-300 dark:border-dark-300 hover:bg-gray-100 dark:hover:bg-dark-300 transition-colors select-none;
+  @apply px-3 py-1.5 rounded-lg text-13px font-medium border border-c-border dark:border-dark-300 hover:bg-c-bg dark:hover:bg-c-hover transition-colors select-none;
 }
 
 /* 导航按钮 */
 .cal-nav-btn {
-  @apply p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-dark-300 transition-colors cursor-pointer;
+  @apply p-1.5 rounded-lg hover:bg-c-bg dark:hover:bg-c-hover transition-colors cursor-pointer;
 }
 
 /* 弹窗卡片 */
 .cal-modal-card {
-  @apply bg-white dark:bg-dark-800 rounded-2xl shadow-2xl p-5 <md:p-4;
-  @apply border border-gray-100 dark:border-dark-600;
+  @apply bg-c-surface dark:bg-c-bg rounded-2xl shadow-2xl p-5 <md:p-4;
+  @apply border border-c-border dark:border-dark-600;
 }
 
 /* 弹窗头 */
 .cal-modal-header {
-  @apply flex items-start justify-between gap-3 mb-4 pb-3 border-b border-gray-100 dark:border-dark-600;
+  @apply flex items-start justify-between gap-3 mb-4 pb-3 border-b border-c-border dark:border-dark-600;
 }
 
 /* 关闭按钮 */
 .cal-close-btn {
-  @apply shrink-0 w-8 h-8 flex-center rounded-full hover:bg-gray-100 dark:hover:bg-dark-600 transition-colors cursor-pointer;
+  @apply shrink-0 w-8 h-8 flex-center rounded-full hover:bg-c-bg dark:hover:bg-c-hover transition-colors cursor-pointer;
 }
 
 /* 日期事件列表项 */

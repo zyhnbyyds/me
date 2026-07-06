@@ -76,7 +76,7 @@ function createParticles() {
     transparent: true,
     depthWrite: false,
     blending: THREE.AdditiveBlending,
-    color: isDark.value ? 0x8899ff : 0x4466dd,
+    color: isDark.value ? 0x2dd4bf : 0x0d9488,
     opacity: isDark.value ? 0.5 : 0.35,
   })
 
@@ -87,7 +87,7 @@ function createParticles() {
 function updateParticleColor() {
   if (!particles) return
   const mat = particles.material as THREE.PointsMaterial
-  mat.color.setHex(isDark.value ? 0x8899ff : 0x4466dd)
+  mat.color.setHex(isDark.value ? 0x2dd4bf : 0x0d9488)
   mat.opacity = isDark.value ? 0.5 : 0.35
   mat.needsUpdate = true
 }

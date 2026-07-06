@@ -96,7 +96,7 @@ onMounted(() => {
       <div
         v-for="item in essayList"
         :key="item.id"
-        class="mb-4 break-inside-avoid overflow-hidden rounded-xl border border-common bg-white/60 p-4 backdrop-blur-sm transition-shadow hover:shadow-lg dark:bg-dark-500/60"
+        class="mb-4 break-inside-avoid overflow-hidden rounded-xl border border-common bg-c-surface/60 p-4 backdrop-blur-sm transition-shadow hover:shadow-lg dark:bg-c-surface/60"
       >
         <!-- 文字内容 -->
         <p
@@ -164,14 +164,14 @@ onMounted(() => {
         </div>
 
         <!-- 时间 -->
-        <div class="mt-3 text-3 text-gray-400">
+        <div class="mt-3 text-3 text-c-text-weak">
           {{ dayjs(item.createdAt).fromNow() }}
         </div>
       </div>
     </div>
 
     <!-- 空状态 -->
-    <div v-else-if="!loading" class="flex-center py-20 text-gray-400">
+    <div v-else-if="!loading" class="flex-center py-20 text-c-text-weak">
       还没有随笔～
     </div>
 

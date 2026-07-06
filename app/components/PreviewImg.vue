@@ -105,7 +105,12 @@ onBeforeUnmount(() => {
   height: 100%;
   width: 100%;
   display: inline-block;
-  background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 37%, #e0e0e0 63%);
+  background: linear-gradient(
+    90deg,
+    var(--c-border) 25%,
+    var(--c-bg) 37%,
+    var(--c-border) 63%
+  );
   background-size: 200% 100%;
   border-radius: 5px;
   animation: skeleton-loading 1s infinite linear;
@@ -113,7 +118,12 @@ onBeforeUnmount(() => {
 }
 
 .dark .loading-mask::after {
-  background: linear-gradient(90deg, #2c2c2c 25%, #3c3c3c 37%, #2c2c2c 63%);
+  background: linear-gradient(
+    90deg,
+    var(--c-surface) 25%,
+    var(--c-border) 37%,
+    var(--c-surface) 63%
+  );
   background-size: 200% 100%;
 }
 

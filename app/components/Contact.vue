@@ -57,7 +57,7 @@ function handleClick(link: SocialLink) {
     <div
       v-for="link in socialLinks"
       :key="link.name"
-      class="flex-center h-10 w-10 cursor-pointer text-common rounded-full transition-all duration-200 hover:bg-common"
+      class="flex-center h-10 w-10 cursor-pointer text-c-text-alt hover:text-c-text rounded-full transition-all duration-200 hover:bg-c-hover"
       @click="handleClick(link)"
     >
       <Icon :name="link.icon" class="text-5.5" />
@@ -80,7 +80,7 @@ function handleClick(link: SocialLink) {
         />
       </div>
       <p class="text-4 font-medium">{{ qrcodeTarget.name }}</p>
-      <p class="text-3 text-gray-400">打开 {{ qrcodeTarget.name }} 扫一扫</p>
+      <p class="text-3 text-c-text-weak">打开 {{ qrcodeTarget.name }} 扫一扫</p>
     </div>
   </Modal>
 
@@ -89,7 +89,7 @@ function handleClick(link: SocialLink) {
     <Transition name="toast">
       <div
         v-if="toastVisible"
-        class="pointer-events-none fixed bottom-6 left-1/2 z-999 -translate-x-1/2 rounded-lg bg-gray-800 px-4 py-2 text-3.5 text-white shadow-lg dark:bg-gray-200 dark:text-gray-800"
+        class="pointer-events-none fixed bottom-6 left-1/2 z-999 -translate-x-1/2 rounded-lg bg-c-text px-4 py-2 text-3.5 text-c-surface shadow-lg"
       >
         {{ toastMsg }}
       </div>

@@ -176,11 +176,11 @@ function isLive(m: EssayMedia): boolean {
       class="flex-center fixed inset-0 z-1000 bg-black/40 backdrop-blur-sm"
     >
       <div
-        class="w-90 rounded-2xl bg-white p-6 shadow-2xl dark:bg-dark-600"
+        class="w-90 rounded-2xl bg-c-surface p-6 shadow-2xl dark:bg-c-bg"
         @click.stop
       >
         <h2 class="mb-4 text-center text-5 font-bold">验证身份</h2>
-        <p class="mb-4 text-center text-3.5 text-gray-400">
+        <p class="mb-4 text-center text-3.5 text-c-text-weak">
           请输入随笔密码以继续
         </p>
 
@@ -188,11 +188,11 @@ function isLive(m: EssayMedia): boolean {
           v-model="password"
           type="password"
           placeholder="请输入密码"
-          class="mb-3 w-full rounded-lg border border-common bg-transparent px-4 py-2.5 text-3.5 outline-none transition-colors focus:border-blue"
+          class="mb-3 w-full rounded-lg border border-common bg-transparent px-4 py-2.5 text-3.5 outline-none transition-colors focus:border-c-accent"
           @keydown.enter="handleVerify"
         />
 
-        <p v-if="verifyError" class="mb-3 text-3 text-red-500">
+        <p v-if="verifyError" class="mb-3 text-3 text-c-accent">
           {{ verifyError }}
         </p>
 
@@ -213,25 +213,25 @@ function isLive(m: EssayMedia): boolean {
 
       <!-- 文字内容 -->
       <div class="mb-5">
-        <label class="mb-2 block text-3.5 font-medium text-gray-500"
+        <label class="mb-2 block text-3.5 font-medium text-c-text-alt"
           >文字内容</label
         >
         <textarea
           v-model="content"
           placeholder="记录一些随想..."
           rows="6"
-          class="w-full resize-none rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-blue focus:ring-1 focus:ring-blue"
+          class="w-full resize-none rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-c-accent focus:ring-1 focus:ring-c-accent"
         />
       </div>
 
       <!-- 图片 -->
       <div class="mb-5">
         <label
-          class="mb-2 flex items-center gap-2 text-3.5 font-medium text-gray-500"
+          class="mb-2 flex items-center gap-2 text-3.5 font-medium text-c-text-alt"
         >
           图片
           <button
-            class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-3 text-blue transition-colors hover:bg-blue/10"
+            class="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-3 text-blue transition-colors hover:bg-c-hover"
             :disabled="uploading"
             @click="triggerUpload"
           >
@@ -290,7 +290,7 @@ function isLive(m: EssayMedia): boolean {
       </div>
 
       <!-- 错误/成功提示 -->
-      <p v-if="publishError" class="mb-4 text-3 text-red-500">
+      <p v-if="publishError" class="mb-4 text-3 text-c-accent">
         {{ publishError }}
       </p>
       <p v-if="publishSuccess" class="mb-4 text-3 text-green-500">发布成功！</p>

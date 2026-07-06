@@ -226,10 +226,10 @@ async function hdCommentDeleted(_deletedCount: number) {
               px-2
               py-1
               rounded-md
-              bg-light-700
+              bg-c-border
               flex-col-center
               cursor-pointer
-              dark:bg-dark-300
+              dark:bg-c-hover
               @click="openInPopup('/auth/github')"
             >
               <Icon name="skill-icons:github-dark" mr-1 />
@@ -301,8 +301,8 @@ async function hdCommentDeleted(_deletedCount: number) {
             :style="{ paddingLeft: `${item.level * 12 + 8}px` }"
             :class="
               activeHeadingId === item.id
-                ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 opacity-100 font-medium'
-                : 'border-transparent opacity-55 hover:opacity-90 hover:bg-gray-100 dark:hover:bg-dark-300'
+                ? 'border-c-accent text-c-accent dark:text-c-accent bg-c-hover dark:bg-c-hover opacity-100 font-medium'
+                : 'border-transparent opacity-55 hover:opacity-90 hover:bg-c-bg dark:hover:bg-c-hover'
             "
             @click="jumpToHeading(item.id)"
           >

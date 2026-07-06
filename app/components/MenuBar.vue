@@ -44,7 +44,7 @@ function handleMenuChange(path: string) {
     :class="
       horizontal
         ? 'flex items-center gap-1'
-        : 'left-1/2 <md:px-3 <md:py-1 <md:rounded-full <md:bg-white/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-dark/60 <md:-translate-x-1/2'
+        : 'left-1/2 <md:px-3 <md:py-1 <md:rounded-full <md:bg-c-surface/60 <md:flex <md:shadow-lg <md:bottom-2 <md:absolute <md:backdrop-blur-lg <md:dark:bg-c-bg/60 <md:-translate-x-1/2'
     "
   >
     <li

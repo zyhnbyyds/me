@@ -20,10 +20,10 @@ defineEmits<{
   <div h-full w-full select-none relative>
     <NuxtImg :src="props.poster" class="h-full w-full inset-0 object-cover" />
     <div
-      class="transition-all left-50% top-50% hover:bg-dark-300 hover:bg-opacity-20 -translate-x-50% -translate-y-50%"
+      class="transition-all left-50% top-50% hover:bg-c-hover hover:bg-opacity-20 -translate-x-50% -translate-y-50%"
       p-6
       border-2
-      border-gray-100
+      border-c-border
       rounded-full
       flex
       cursor-pointer
@@ -32,7 +32,7 @@ defineEmits<{
       absolute
       @click="$emit('play', props.src, props.videoId)"
     >
-      <Icon name="carbon:play-filled-alt" text-5 text-gray-100 absolute />
+      <Icon name="carbon:play-filled-alt" text-5 text-c-text absolute />
     </div>
   </div>
 </template>

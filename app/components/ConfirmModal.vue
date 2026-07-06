@@ -74,7 +74,7 @@ function onCancel() {
 }
 
 .modal-container {
-  background: #fff;
+  background: var(--c-surface);
   border-radius: 8px;
   padding: 24px 20px;
   min-width: 280px;
@@ -107,12 +107,12 @@ function onCancel() {
 }
 
 .confirm {
-  background: #e53e3e;
-  color: #fff;
+  background: var(--c-accent);
+  color: var(--c-surface);
 }
 
 .cancel {
-  background: #f1f1f1;
-  color: #333;
+  background: var(--c-border);
+  color: var(--c-text);
 }
 </style>

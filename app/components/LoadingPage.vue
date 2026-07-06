@@ -14,7 +14,7 @@ const loading = defineModel<boolean>({
   <Transition name="fade">
     <div
       v-if="loading"
-      class="bg-light-800 bg-op40 flex-center flex-col h-screen w-screen left-0 top-0 fixed z-9999 backdrop-blur-md"
+      class="bg-c-bg bg-op40 flex-center flex-col h-screen w-screen left-0 top-0 fixed z-9999 backdrop-blur-md"
     >
       <div class="loader" :class="{ 'auto-loading': isAutoLoading }">
         <div
@@ -35,7 +35,7 @@ const loading = defineModel<boolean>({
   width: 120px;
   height: 22px;
   border-radius: 20px;
-  color: #514b82;
+  color: var(--c-accent);
   border: 2px solid;
   position: relative;
   overflow: hidden;
@@ -60,7 +60,7 @@ const loading = defineModel<boolean>({
 }
 
 .loading-text {
-  background: linear-gradient(45deg, #34b3d5, #4853d3);
+  background: linear-gradient(45deg, var(--c-accent), var(--c-accent-hover));
   -webkit-background-clip: text;
   background-clip: text;
   font-weight: bold;

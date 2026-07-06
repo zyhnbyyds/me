@@ -1,4 +1,4 @@
-﻿<script lang="ts" setup>
+<script lang="ts" setup>
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/zh-cn'
@@ -362,7 +362,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="h-full flex relative overflow-hidden bg-gray-50 dark:bg-dark-950">
+  <div class="h-full flex relative overflow-hidden bg-c-bg dark:bg-c-bg">
     <!-- 左侧主内容 -->
     <div class="flex-1 flex flex-col h-full min-w-0">
       <div
@@ -375,13 +375,13 @@ onBeforeUnmount(() => {
       >
         <Icon
           name="carbon:search"
-          class="absolute left-2.5 top-1/2 -translate-y-1/2 text-3.5 text-gray-400"
+          class="absolute left-2.5 top-1/2 -translate-y-1/2 text-3.5 text-c-text-weak"
         />
         <input
           v-model="searchInput"
           type="text"
           placeholder="搜索..."
-          class="w-full pl-8 pr-3 py-2 rounded-lg bg-gray-100 dark:bg-dark-700 border border-gray-300 dark:border-dark-500 text-13px text-gray-700 dark:text-gray-200 outline-none transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/20 placeholder-gray-400"
+          class="w-full pl-8 pr-3 py-2 rounded-lg bg-c-bg dark:bg-c-surface border border-c-border dark:border-dark-500 text-13px text-c-text dark:text-c-text-alt outline-none transition-all focus:border-c-accent focus:ring-1 focus:ring-c-accent/20 placeholder-gray-400"
           @input="handleSearch"
         />
       </div>
@@ -394,7 +394,7 @@ onBeforeUnmount(() => {
         <div class="px-4 <sm:px-2.5 py-4 <sm:py-0.5 max-w-full">
           <div
             v-if="feedItems.length === 0"
-            class="flex flex-col items-center justify-center py-20 text-gray-400"
+            class="flex flex-col items-center justify-center py-20 text-c-text-weak"
           >
             <Icon name="carbon:document-blank" class="text-12 mb-3" />
             <span class="text-sm">暂无内容</span>
@@ -420,7 +420,7 @@ onBeforeUnmount(() => {
               }"
             >
               <div
-                class="group relative h-full flex flex-col bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-dark-600 shadow-sm hover:shadow-lg overflow-hidden cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1"
+                class="group relative h-full flex flex-col bg-c-surface dark:bg-c-bg rounded-xl border border-c-border dark:border-dark-600 shadow-sm hover:shadow-lg overflow-hidden cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1"
                 @click="goToDetail(item)"
               >
                 <!-- 类型标识 -->
@@ -428,8 +428,8 @@ onBeforeUnmount(() => {
                   class="absolute top-1.5 left-2 z-10 px-2 py-0.5 rounded-full text-10px font-medium"
                   :class="
                     item.type === 'blog'
-                      ? 'bg-blue-500/80 text-white'
-                      : 'bg-emerald-500/80 text-white'
+                      ? 'bg-c-accent/80 text-white'
+                      : 'bg-c-hover0/80 text-white'
                   "
                 >
                   {{ item.type === 'blog' ? '博客' : '动态' }}
@@ -437,7 +437,7 @@ onBeforeUnmount(() => {
 
                 <div
                   v-if="item.media"
-                  class="w-full relative aspect-video overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-dark-700 dark:to-dark-600"
+                  class="w-full relative aspect-video overflow-hidden bg-gradient-to-br from-c-bg to-c-border dark:from-dark-700 dark:to-dark-600"
                 >
                   <NuxtImg
                     v-if="item.media.type === 'image'"
@@ -474,7 +474,7 @@ onBeforeUnmount(() => {
                 <div class="p-4 <sm:p-3 flex flex-col flex-1 gap-3 min-h-0">
                   <h2
                     v-if="item.type === 'blog'"
-                    class="text-base font-bold text-gray-800 dark:text-gray-100 leading-tight line-clamp-2 transition-colors"
+                    class="text-base font-bold text-c-text dark:text-c-text leading-tight line-clamp-2 transition-colors"
                   >
                     {{ item.title }}
                   </h2>
@@ -482,13 +482,13 @@ onBeforeUnmount(() => {
                   <QQContentRender
                     v-if="item.type === 'qq'"
                     :content="item.description || item.title || ''"
-                    custom-class="text-14px text-gray-700 dark:text-gray-200 line-clamp-4 leading-relaxed"
+                    custom-class="text-14px text-c-text dark:text-c-text-alt line-clamp-4 leading-relaxed"
                     emoji-size="small"
                   />
 
                   <p
                     v-if="item.type === 'blog' && item.description"
-                    class="text-13px text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed"
+                    class="text-13px text-c-text-alt dark:text-c-text-weak line-clamp-2 leading-relaxed"
                   >
                     {{ item.description }}
                   </p>
@@ -500,14 +500,14 @@ onBeforeUnmount(() => {
                     <span
                       v-for="tag in item.tags"
                       :key="tag"
-                      class="inline-flex items-center px-2 py-0.5 rounded-md text-11px font-medium bg-gray-100 dark:bg-dark-600 text-gray-600 dark:text-gray-300"
+                      class="inline-flex items-center px-2 py-0.5 rounded-md text-11px font-medium bg-c-bg dark:bg-c-bg text-c-text-alt dark:text-c-text-weak"
                     >
                       # {{ tag }}
                     </span>
                   </div>
 
                   <div
-                    class="flex items-center justify-between mt-auto pt-3 border-t border-gray-100 dark:border-dark-600 text-12px text-gray-500 dark:text-gray-400"
+                    class="flex items-center justify-between mt-auto pt-3 border-t border-c-border dark:border-dark-600 text-12px text-c-text-alt dark:text-c-text-weak"
                   >
                     <span class="text-11px">{{
                       dayjs(item.date).format('YYYY-MM-DD')

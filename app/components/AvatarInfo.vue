@@ -10,7 +10,7 @@ import { me } from '~/constants'
       </div>
       <div class="flex flex-col">
         <span class="text-sm font-semibold">{{ me.name }}</span>
-        <span class="text-xs text-gray-500">
+        <span class="text-xs text-c-text-alt">
           {{ `@${me.name}` }}
         </span>
       </div>

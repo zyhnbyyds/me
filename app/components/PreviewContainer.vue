@@ -341,7 +341,7 @@ function hdStopPreview() {
       <div class="absolute inset-0">
         <div
           v-if="previewInfo.currentItem.value && previewInfo.previewStyle.value"
-          class="absolute left-0 top-0 overflow-hidden border border-white/10 bg-black/15 shadow-[0_24px_64px_rgba(0,0,0,0.38)] transition-[transform,width,height,border-radius] ease-[cubic-bezier(0.22,1,0.36,1)]"
+          class="absolute left-0 top-0 overflow-hidden border border-white/10 bg-black/15 shadow-[0_24px_64px_var(--c-shadow)] transition-[transform,width,height,border-radius] ease-[cubic-bezier(0.22,1,0.36,1)]"
           :style="previewInfo.previewStyle.value"
           @click.stop
         >

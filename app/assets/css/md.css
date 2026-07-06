@@ -15,38 +15,31 @@
 .markdown-body,
 [data-theme='light'] {
   color-scheme: light;
-
-  /* 纯白简洁配色 */
-  --bgColor-default: #ffffff;
-  --bgColor-muted: #f8f8f8;
-  --bgColor-neutral-muted: #f0f0f088;
-
-  /* 灰黑色系文字 */
-  --fgColor-default: #2c2c2c;
-  --fgColor-muted: #666666;
-  --fgColor-accent: #d0504f;
-
-  /* 边框色 */
-  --borderColor-default: #e0e0e0;
-  --borderColor-muted: #eeeeee;
-  --borderColor-accent: #d0504f;
-
-  --focus-outlineColor: #d0504f;
+  --bgColor-default: var(--c-surface);
+  --bgColor-muted: var(--c-bg);
+  --bgColor-neutral-muted: var(--c-hover);
+  --fgColor-default: var(--c-text);
+  --fgColor-muted: var(--c-text-alt);
+  --fgColor-accent: var(--c-accent);
+  --borderColor-default: var(--c-border);
+  --borderColor-muted: var(--c-border);
+  --borderColor-accent: var(--c-accent);
+  --focus-outlineColor: var(--c-accent);
 }
 
 .dark .markdown-body,
 [data-theme='dark'] {
   color-scheme: dark;
-  --bgColor-default: rgb(26, 26, 26, 0.6);
-  --bgColor-muted: #262626;
-  --bgColor-neutral-muted: #33333388;
-  --fgColor-default: #e8e8e8;
-  --fgColor-muted: #a0a0a0;
-  --fgColor-accent: #e85d5d;
-  --borderColor-default: #404040;
-  --borderColor-muted: #333333;
-  --borderColor-accent: #e85d5d;
-  --focus-outlineColor: #e85d5d;
+  --bgColor-default: var(--c-surface);
+  --bgColor-muted: var(--c-bg);
+  --bgColor-neutral-muted: var(--c-hover);
+  --fgColor-default: var(--c-text);
+  --fgColor-muted: var(--c-text-alt);
+  --fgColor-accent: var(--c-accent);
+  --borderColor-default: var(--c-border);
+  --borderColor-muted: var(--c-border);
+  --borderColor-accent: var(--c-accent);
+  --focus-outlineColor: var(--c-accent);
 }
 
 .markdown-body {
@@ -268,15 +261,15 @@
 }
 
 .markdown-body .markdown-alert.markdown-alert-note {
-  border-left-color: #4493f8;
+  border-left-color: var(--c-accent);
 }
 
 .markdown-body .markdown-alert.markdown-alert-warning {
-  border-left-color: #d4a944;
+  border-left-color: var(--c-text-alt);
 }
 
 .markdown-body .markdown-alert.markdown-alert-tip {
-  border-left-color: #3fb950;
+  border-left-color: var(--c-accent);
 }
 
 .markdown-body .markdown-alert.markdown-alert-caution {
@@ -294,8 +287,8 @@
 
 /* 选中文本 */
 .markdown-body ::selection {
-  background: var(--fgColor-accent);
-  color: #ffffff;
+  background: var(--c-accent);
+  color: var(--c-surface);
 }
 
 /* 滚动条 */
@@ -354,7 +347,7 @@
 }
 
 .markdown-body mark {
-  background-color: #fff8c5;
+  background-color: var(--c-hover);
   color: var(--fgColor-default);
 }
 
