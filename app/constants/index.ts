@@ -11,6 +11,58 @@ export const me = {
   github: 'https://github.com/zyhnbyyds',
 }
 
+export interface SocialLink {
+  name: string
+  icon: string
+  /** 交互类型：link=跳转链接, qrcode=二维码弹窗, copy=复制到剪贴板 */
+  action: 'link' | 'qrcode' | 'copy'
+  /** link 类型：跳转 URL */
+  url?: string
+  /** qrcode 类型：二维码图片路径 */
+  qrcode?: string
+  /** copy 类型：复制的内容 */
+  copyText?: string
+}
+
+export const socialLinks: SocialLink[] = [
+  {
+    name: 'GitHub',
+    icon: 'ri:github-fill',
+    action: 'link',
+    url: 'https://github.com/zyhnbyyds',
+  },
+  {
+    name: 'QQ',
+    icon: 'ri:qq-fill',
+    action: 'qrcode',
+    qrcode: '/social/qq-qrcode.png',
+  },
+  {
+    name: '微信',
+    icon: 'ri:wechat-fill',
+    action: 'qrcode',
+    qrcode: '/social/wechat-qrcode.png',
+  },
+  {
+    name: '推特',
+    icon: 'ri:twitter-x-fill',
+    action: 'link',
+    url: 'https://x.com/',
+  },
+  {
+    name: '抖音',
+    icon: 'ri:tiktok-fill',
+    action: 'link',
+    url: 'https://www.douyin.com/',
+  },
+  {
+    name: '邮箱',
+    icon: 'ri:mail-fill',
+    action: 'copy',
+    copyText: '19939926438@163.com',
+  },
+]
+
 export const appVersion = '1.0.0'
 
 export const menuList: MenuBarItem[] = [

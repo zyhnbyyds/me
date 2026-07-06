@@ -22,8 +22,14 @@ import { menuList } from '~/constants'
           </ClientOnly>
         </div>
 
-        <div class="pt-4px h-[calc(100%-52px)]">
+        <div class="pt-4px h-[calc(100%-52px)] flex flex-col">
           <MenuBar :list="menuList" />
+
+          <!-- 社交联系方式 — 推至底部 -->
+          <div class="mt-auto mb-6">
+            <div class="mx-auto mb-4 w-6 border-t border-common" />
+            <Contact />
+          </div>
         </div>
       </div>
     </header>
