@@ -24,7 +24,6 @@ export default defineNuxtConfig({
   ],
 
   ssr: false,
-
   app: {
     head: {
       charset: 'utf-8',
@@ -52,11 +51,25 @@ export default defineNuxtConfig({
         { rel: 'me', href: 'mailto:19939926438@163.com' },
         { rel: 'author', href: 'https://github.com/zyhnbyyds' },
       ],
-    },
-  },
 
-  devServer: {
-    host: '0.0.0.0',
+      script: [
+        {
+          async: true,
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-1PZWPSK87Y',
+        },
+        {
+          src: '/scripts/google-mon.js',
+        },
+
+        {
+          src: '/scripts/ali-mon.js',
+        },
+        {
+          src: 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js',
+          crossorigin: 'anonymous',
+        },
+      ],
+    },
   },
 
   build: {
