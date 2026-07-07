@@ -1,42 +1,35 @@
 /**
  * 健康检查接口，供负载均衡 / 容器编排 / 监控 探测使用
  * GET /api/health
- * 检查 Redis 与数据库连通性
+ *
+ * 安全考虑：不对外暴露具体是 Redis 还是 DB 出问题，
+ * 仅返回整体状态。详细诊断信息写入服务端日志。
  */
 import { prisma } from '~~/server/lib/prisma'
 
 export default defineEventHandler(async (event) => {
-  const timestamp = new Date().toISOString()
-  const checks: { redis: 'ok' | 'error'; db: 'ok' | 'error' } = {
-    redis: 'error',
-    db: 'error',
-  }
+  let healthy = true
 
-  // Redis 状态检查（使用项目配置的 useStorage('me')）
+  // Redis / 存储 状态检查
   try {
     const storage = useStorage('me')
     await storage.getItem('health:ping')
-    checks.redis = 'ok'
   } catch {
-    checks.redis = 'error'
+    healthy = false
+    console.warn('[health] storage check failed')
   }
 
   // 数据库（Prisma）状态检查
   try {
     await prisma.$queryRaw`SELECT 1`
-    checks.db = 'ok'
   } catch {
-    checks.db = 'error'
+    healthy = false
+    console.warn('[health] database check failed')
   }
 
-  const ok = checks.redis === 'ok' && checks.db === 'ok'
-
-  setResponseStatus(event, ok ? 200 : 503)
+  setResponseStatus(event, healthy ? 200 : 503)
 
   return {
-    status: ok ? 'ok' : 'degraded',
-    timestamp,
-    redis: checks.redis,
-    db: checks.db,
+    status: healthy ? 'ok' : 'degraded',
   }
 })

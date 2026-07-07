@@ -76,14 +76,19 @@ export interface ReplyCommentItem extends CommentItem {
   replyList: ReplyCommentItem[]
 }
 
-export type PostCommentBody = Pick<
-  CommentItem,
-  'fromUserId' | 'toUserId' | 'parentId' | 'depth'
-> & {
+export type PostCommentBody = {
   id: string
   comment: EmojiInfo[]
-  /** 回复时传入，被回复者的用户信息快照 */
+  /** 父评论 ID，顶级评论为 '0' */
+  parentId?: string
+  /** 评论深度 */
+  depth?: number
+  /** 回复时传入，被回复者的用户信息快照（纯展示用，不做身份校验） */
   toUser?: GithubUser | null
+  /** @deprecated 不再使用，服务端强制使用 session 中的 user.id */
+  fromUserId?: number
+  /** @deprecated 仅做展示用途，不再直接写入 DB */
+  toUserId?: number
 }
 
 export interface ContentMeta {

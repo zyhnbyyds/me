@@ -75,7 +75,7 @@ async function uploadFiles(files: FileList) {
     try {
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('password', password.value)
+      // 鉴权已通过 cookie 中的 essay_token 完成，不再传输密码明文
 
       const res = await $fetch<Result<{ urls: string[]; media: EssayMedia[] }>>(
         '/api/essay/upload',
@@ -136,7 +136,6 @@ async function handlePublish() {
     await $fetch('/api/essay', {
       method: 'POST',
       body: {
-        password: password.value,
         content: content.value.trim() || undefined,
         images: images.length > 0 ? images : undefined,
       },

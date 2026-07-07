@@ -3,11 +3,20 @@ import { resolve } from 'node:path'
 import { ulid } from 'ulid'
 import type { EssayMedia } from '~~/shared/types/essay'
 import { findMotionPhotoVideo } from '~~/server/utils/motionPhoto'
+import { requireEssayAuth } from '~~/server/utils/essay-auth'
+import {
+  detectFileType,
+  ALLOWED_EXTENSIONS,
+  ALLOWED_MIME_DISPLAY,
+} from '~~/server/utils/file-type'
+import { stripExif } from '~~/server/utils/exif'
 
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 const MAX_SIZE = 50 * 1024 * 1024 // 50MB
 
 export default defineEventHandler(async (event) => {
+  // 使用 essay token 鉴权，不再每次传输密码明文
+  requireEssayAuth(event)
+
   const config = useRuntimeConfig(event)
 
   const formData = await readMultipartFormData(event)
@@ -15,25 +24,16 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: '没有上传文件' })
   }
 
-  // 提取密码和文件
-  let password = ''
-  const files: Array<{ filename: string; data: Buffer; type: string }> = []
+  // 提取文件（忽略旧版 password 字段，鉴权已通过 cookie token 完成）
+  const files: Array<{ filename: string; data: Buffer }> = []
 
   for (const part of formData) {
-    if (part.name === 'password') {
-      password = part.data.toString()
-    } else if (part.name === 'file' && part.filename) {
+    if (part.name === 'file' && part.filename) {
       files.push({
         filename: part.filename,
         data: part.data,
-        type: part.type || '',
       })
     }
-  }
-
-  // 验证密码
-  if (!config.essayPassword || password !== config.essayPassword) {
-    throw createError({ statusCode: 403, statusMessage: '密码错误' })
   }
 
   if (files.length === 0) {
@@ -44,33 +44,49 @@ export default defineEventHandler(async (event) => {
   const media: EssayMedia[] = []
 
   for (const file of files) {
-    // 校验类型
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    // ─── 安全校验 1：基于文件头 Magic Number 检测真实类型 ───
+    const detected = detectFileType(file.data)
+    if (!detected) {
       throw createError({
         statusCode: 400,
-        statusMessage: `不支持的文件类型: ${file.type}`,
+        statusMessage: `无法识别的文件类型，仅支持 ${ALLOWED_MIME_DISPLAY}`,
       })
     }
 
-    // 校验大小
+    // ─── 安全校验 2：后缀白名单（与检测出的真实类型对应）───
+    if (!ALLOWED_EXTENSIONS.has(detected.ext)) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `不支持的文件类型: ${detected.mime}`,
+      })
+    }
+
+    // ─── 安全校验 3：文件大小 ──────────────────────────────
     if (file.data.length > MAX_SIZE) {
       throw createError({
         statusCode: 400,
-        statusMessage: '文件大小超过 10MB',
+        statusMessage: `文件大小超过 ${MAX_SIZE / 1024 / 1024}MB`,
       })
     }
 
-    // 生成唯一文件名
-    const ext = file.filename.split('.').pop() || 'jpg'
-    const newName = `${ulid()}.${ext}`
+    // ─── 安全处理：JPEG 剥离 EXIF 元数据 ──────────────────
+    let fileData = file.data
+    if (detected.ext === '.jpg' || detected.ext === '.jpeg') {
+      fileData = stripExif(file.data)
+    }
+
+    // ─── 生成安全文件名（使用检测出的真实后缀，不用用户提供的文件名）───
+    const newName = `${ulid()}${detected.ext}`
     const dir = config.uploadDir as string
 
     await mkdir(dir, { recursive: true })
-    await writeFile(resolve(dir, newName), file.data)
+    await writeFile(resolve(dir, newName), fileData)
 
     const imageUrl = `/api/essay/file/${newName}`
     const motionVideo =
-      file.type === 'image/jpeg' ? findMotionPhotoVideo(file.data) : null
+      detected.ext === '.jpg' || detected.ext === '.jpeg'
+        ? findMotionPhotoVideo(fileData)
+        : null
 
     if (motionVideo) {
       const videoName = `${ulid()}.mp4`

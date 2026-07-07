@@ -52,23 +52,26 @@ export default defineNuxtConfig({
         { rel: 'author', href: 'https://github.com/zyhnbyyds' },
       ],
 
-      script: [
-        {
-          async: true,
-          src: 'https://www.googletagmanager.com/gtag/js?id=G-1PZWPSK87Y',
-        },
-        {
-          src: '/scripts/google-mon.js',
-        },
+      script:
+        import.meta.env.NODE_ENV === 'production'
+          ? [
+              {
+                async: true,
+                src: 'https://www.googletagmanager.com/gtag/js?id=G-1PZWPSK87Y',
+              },
+              {
+                src: '/scripts/google-mon.js',
+              },
 
-        {
-          src: '/scripts/ali-mon.js',
-        },
-        {
-          src: 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js',
-          crossorigin: 'anonymous',
-        },
-      ],
+              {
+                src: '/scripts/ali-mon.js',
+              },
+              {
+                src: 'https://sdk.rum.aliyuncs.com/v2/browser-sdk.js',
+                crossorigin: 'anonymous',
+              },
+            ]
+          : [],
     },
   },
 
@@ -177,7 +180,9 @@ export default defineNuxtConfig({
       github: {
         clientId: import.meta.env.GITHUB_CLIENT_ID,
         clientSecret: import.meta.env.GITHUB_CLIENT_SECRET,
-        redirectURL: 'http://localhost:3100/auth/github',
+        redirectURL:
+          import.meta.env.GITHUB_REDIRECT_URL ||
+          'http://localhost:3100/auth/github',
       },
     },
     database: {
@@ -190,10 +195,13 @@ export default defineNuxtConfig({
     essayPassword: import.meta.env.ESSAY_PASSWORD || '',
     uploadDir:
       import.meta.env.UPLOAD_DIR || resolve(process.cwd(), '.data', 'uploads'),
+    // 管理员 ID 仅服务端可见，不在 public 中暴露
+    superAdminGithubUserId: import.meta.env.SUPER_ADMIN_GITHUB_USER_ID || '',
+    showUploadBtnGithubUserId:
+      import.meta.env.GALLERY_SHOW_UPLOAD_BTN_USER_ID || '',
     public: {
-      showUploadBtnGithubUserId: import.meta.env
-        .GALLERY_SHOW_UPLOAD_BTN_USER_ID,
-      superAdminGithubUserId: import.meta.env.SUPER_ADMIN_GITHUB_USER_ID,
+      // 客户端仅暴露一个布尔标记，不暴露具体管理员 ID
+      isAdmin: false,
     },
   },
 })

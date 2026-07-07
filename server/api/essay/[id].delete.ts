@@ -1,12 +1,9 @@
 import { prisma } from '~~/server/lib/prisma'
+import { requireEssayAuth } from '~~/server/utils/essay-auth'
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event)
-
-  const { password } = await readBody<{ password?: string }>(event)
-  if (!config.essayPassword || password !== config.essayPassword) {
-    throw createError({ statusCode: 403, statusMessage: '密码错误' })
-  }
+  // 使用 essay token 鉴权，不再每次传输密码明文
+  requireEssayAuth(event)
 
   const id = getRouterParam(event, 'id')
   if (!id) {

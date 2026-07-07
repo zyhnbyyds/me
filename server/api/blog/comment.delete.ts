@@ -1,7 +1,11 @@
 import { assertSuperAdmin, normalizeBlogId } from '~~/server/utils/blog'
 import { prisma } from '~~/server/lib/prisma'
+import { assertSameOrigin } from '~~/server/utils/csrf'
 
 export default defineEventHandler(async (event) => {
+  // CSRF 纵深防护：校验 Origin/Referer
+  assertSameOrigin(event)
+
   const body = await readBody<{
     id?: string
     path?: string
@@ -19,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
   const { user } = await requireUserSession(event)
   const config = useRuntimeConfig(event)
-  assertSuperAdmin(user.id, config.public.superAdminGithubUserId)
+  assertSuperAdmin(user.id, config.superAdminGithubUserId)
 
   const rows = await prisma.blog_comment.findMany({
     where: { file_id: fileId },

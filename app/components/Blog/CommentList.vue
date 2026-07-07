@@ -8,7 +8,7 @@ import ConfirmModal from '../ConfirmModal.vue'
 
 const props = defineProps<{
   blog?: BlogCollectionItem | null
-  superAdminUserId?: number
+  isAdmin?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -26,10 +26,7 @@ const pendingDeleteComment = ref<ReplyCommentItem | null>(null)
 
 const { loggedIn, user } = useUserSession()
 
-const isSuperAdmin = computed(() => {
-  if (!user.value?.id || !props.superAdminUserId) return false
-  return user.value.id === props.superAdminUserId
-})
+const isSuperAdmin = computed(() => props.isAdmin ?? false)
 
 function formatDate(timestamp: number) {
   dayjs.extend(relativeTime)
@@ -262,7 +259,7 @@ async function hdClickSend(val: EmojiInfo[], comment: ReplyCommentItem) {
             <BlogCommentList
               v-model:comments="comment.replyList"
               :blog="blog"
-              :super-admin-user-id="superAdminUserId"
+              :is-admin="isAdmin"
               @deleted="emit('deleted', $event)"
             />
           </div>

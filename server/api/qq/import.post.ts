@@ -2,9 +2,13 @@ import type { Pic, QQContentComment } from '~~/shared/types/qq'
 import list from '~~/server/data/data.json'
 import { Result } from '~~/server/utils/result'
 import { prisma } from '~~/server/lib/prisma'
-import {} from '../../../prisma/client/commonInputTypes'
+import { assertSuperAdmin } from '~~/server/utils/blog'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
+  const { user } = await requireUserSession(event)
+  const config = useRuntimeConfig(event)
+  assertSuperAdmin(user.id, config.superAdminGithubUserId)
+
   try {
     const result = await Promise.all(
       list.map(async (item) => {

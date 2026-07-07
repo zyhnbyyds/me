@@ -65,9 +65,13 @@ const { data: ops, refresh: refreshOps } = useAsyncData<BlogOps>(
 
 const { loggedIn, user, clear, openInPopup } = useUserSession()
 
-const superAdminUserId = computed(() =>
-  Number(config.public.superAdminGithubUserId || '0'),
+// 管理员状态由服务端 API 判定，不在客户端暴露具体管理员 GitHub ID
+const { data: adminStatus } = useAsyncData(
+  'auth:admin',
+  () => $fetch<{ isAdmin: boolean }>('/api/auth/admin'),
+  { default: () => ({ isAdmin: false }) },
 )
+const isAdmin = computed(() => adminStatus.value?.isAdmin ?? false)
 
 interface TocLink {
   id: string
@@ -270,7 +274,7 @@ async function hdCommentDeleted(_deletedCount: number) {
           v-model:loading="loading"
           v-model:comments="comments"
           :blog="page"
-          :super-admin-user-id="superAdminUserId"
+          :is-admin="isAdmin"
           @deleted="hdCommentDeleted"
         />
       </div>
