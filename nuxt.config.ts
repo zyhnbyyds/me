@@ -116,6 +116,7 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       tasks: true,
+      openAPI: true,
     },
     externals: {
       external: ['@prisma/client', '@prisma/adapter-mariadb'],
