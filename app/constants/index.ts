@@ -22,6 +22,7 @@ export interface SocialLink {
   qrcode?: string
   /** copy 类型：复制的内容 */
   copyText?: string
+  copySuccessMsg?: string
 }
 
 export const socialLinks: SocialLink[] = [
@@ -34,32 +35,35 @@ export const socialLinks: SocialLink[] = [
   {
     name: 'QQ',
     icon: 'ri:qq-fill',
-    action: 'qrcode',
-    qrcode: '/social/qq-qrcode.png',
+    action: 'copy',
+    copyText: '1873329653',
+    copySuccessMsg: 'QQ号已复制',
   },
   {
     name: '微信',
     icon: 'ri:wechat-fill',
     action: 'qrcode',
-    qrcode: '/social/wechat-qrcode.png',
+    qrcode: '/social/wechat-qrcode.jpg',
   },
   {
     name: '推特',
     icon: 'ri:twitter-x-fill',
     action: 'link',
-    url: 'https://x.com/',
+    url: 'https://x.com/YuJie__Zhang',
   },
   {
     name: '抖音',
     icon: 'ri:tiktok-fill',
-    action: 'link',
-    url: 'https://www.douyin.com/',
+    action: 'copy',
+    copyText: '42036308947',
+    copySuccessMsg: '抖音号已复制',
   },
   {
     name: '邮箱',
     icon: 'ri:mail-fill',
     action: 'copy',
     copyText: '19939926438@163.com',
+    copySuccessMsg: '邮箱已复制',
   },
 ]
 

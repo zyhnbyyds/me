@@ -21,7 +21,7 @@ async function handleCopy(link: SocialLink) {
   if (!link.copyText) return
   try {
     await copy(link.copyText)
-    toastMsg.value = '邮箱已复制'
+    toastMsg.value = link.copySuccessMsg || '已复制'
   } catch {
     toastMsg.value = link.copyText
   }
@@ -71,16 +71,12 @@ function handleClick(link: SocialLink) {
     title="扫码添加"
     close-on-click-overlay
   >
-    <div v-if="qrcodeTarget" class="flex flex-col items-center gap-4 p-4">
-      <div class="overflow-hidden rounded-xl border border-common">
-        <img
-          :src="qrcodeTarget.qrcode"
-          :alt="qrcodeTarget.name"
-          class="h-50 w-50 object-contain"
-        />
-      </div>
-      <p class="text-4 font-medium">{{ qrcodeTarget.name }}</p>
-      <p class="text-3 text-c-text-weak">打开 {{ qrcodeTarget.name }} 扫一扫</p>
+    <div v-if="qrcodeTarget">
+      <img
+        :src="qrcodeTarget.qrcode"
+        :alt="qrcodeTarget.name"
+        class="h-[calc(100%-200px)] w-auto"
+      />
     </div>
   </Modal>
 
