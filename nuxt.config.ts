@@ -92,6 +92,7 @@ export default defineNuxtConfig({
         'dayjs/locale/zh-cn',
         'dayjs/plugin/relativeTime',
         'qface',
+        'video.js',
       ],
     },
     build: {},

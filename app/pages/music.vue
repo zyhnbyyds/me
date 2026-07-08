@@ -57,9 +57,6 @@ onMounted(() => {
       <!-- 头部 -->
       <div class="mb-6 flex items-center gap-4">
         <h1 class="text-6 font-bold">我喜欢的音乐</h1>
-        <span class="mt-1 text-3.5 text-c-text-alt/70 dark:text-c-text-weak/70">
-          {{ songs.length }} 首
-        </span>
       </div>
 
       <!-- 歌曲列表 -->
