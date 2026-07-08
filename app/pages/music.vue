@@ -13,7 +13,7 @@ const songs = ref<MusicSong[]>([])
 const page = ref(1)
 const hasMore = ref(true)
 const loading = ref(false)
-const containerRef = ref<HTMLElement | null>(null)
+const containerRef = ref<HTMLElement>()
 
 async function fetchSongs(pageNum: number) {
   if (loading.value) return
