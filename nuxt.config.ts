@@ -25,8 +25,7 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    // TODO: 替换为实际生产域名
-    url: 'https://your-domain.com',
+    url: 'https://zyujie.com',
     name: '张宇解的博客',
     description: '张宇解的博客，一个现代化的博客网站，分享技术文章和见解',
     defaultLocale: 'zh-CN',
@@ -218,24 +217,7 @@ export default defineNuxtConfig({
   },
 
   // ── Nuxt SEO: robots.txt 配置 ──────────────────────────
-  robots: {
-    // 默认允许所有抓取；如需屏蔽特定 AI 训练类爬虫，取消下方注释：
-    // disallow: [
-    //   { userAgent: 'GPTBot', path: '/' },
-    //   { userAgent: 'Claude-Web', path: '/' },
-    //   { userAgent: 'ClaudeBot', path: '/' },
-    //   { userAgent: 'anthropic-ai', path: '/' },
-    //   { userAgent: 'Google-Extended', path: '/' },
-    //   { userAgent: 'CCBot', path: '/' },
-    //   { userAgent: 'PerplexityBot', path: '/' },
-    //   { userAgent: 'OmniBot', path: '/' },
-    //   { userAgent: 'Bytespider', path: '/' },
-    //   { userAgent: 'cohere-ai', path: '/' },
-    //   { userAgent: 'Diffbot', path: '/' },
-    //   { userAgent: 'FacebookBot', path: '/' },
-    //   { userAgent: 'ImagesiftBot', path: '/' },
-    // ],
-  },
+  robots: {},
 
   runtimeConfig: {
     oauth: {
