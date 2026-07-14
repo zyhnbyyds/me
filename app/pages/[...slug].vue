@@ -103,10 +103,23 @@ const tocItems = computed<TocNavItem[]>(() => {
 })
 
 useSeoMeta({
-  title: page.value?.title,
-  description: page.value?.description,
-  ogImage: page.value?.image,
+  title: () => page.value?.title,
+  description: () => page.value?.description,
+  ogTitle: () => page.value?.title,
+  ogDescription: () => page.value?.description,
+  ogImage: () => page.value?.image,
+  articlePublishedTime: () => page.value?.publishAt,
+  articleModifiedTime: () => page.value?.updateAt,
 })
+
+useSchemaOrg([
+  defineArticle({
+    headline: () => page.value?.title ?? '',
+    description: () => page.value?.description ?? '',
+    datePublished: () => page.value?.publishAt,
+    dateModified: () => page.value?.updateAt,
+  }),
+])
 
 const { y, restoreScrollPosition } = useRouteScrollRestore(blobPageRef)
 

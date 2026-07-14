@@ -72,5 +72,8 @@
     "vue": "3.5.39",
     "vue-boom": "0.2.7",
     "vue-tsc": "3.3.6"
+  },
+  "dependencies": {
+    "@nuxtjs/seo": "^5.3.2"
   }
 }

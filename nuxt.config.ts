@@ -21,7 +21,53 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     'nuxt-typed-router',
     '@formkit/auto-animate/nuxt',
+    '@nuxtjs/seo',
   ],
+
+  site: {
+    // TODO: 替换为实际生产域名
+    url: 'https://your-domain.com',
+    name: '张宇解的博客',
+    description: '张宇解的博客，一个现代化的博客网站，分享技术文章和见解',
+    defaultLocale: 'zh-CN',
+  },
+
+  // 因为 ssr: false，禁用 OG Image 动态生成（如需启用请先开启 SSR）
+  ogImage: {
+    enabled: false,
+  },
+
+  // ── Sitemap 配置：手动提供博客文章 URL ──────────────
+  sitemap: {
+    urls: async () => {
+      // ssr: false 时无法使用 @nuxt/content 的 serverQueryCollection，
+      // 改为直接读取 content 目录下的 .md 文件来获取文章路径
+      const { readdir } = await import('node:fs/promises')
+      const { resolve, relative, join } = await import('node:path')
+
+      const contentDir = resolve(process.cwd(), 'content')
+      const urls: { loc: string }[] = []
+
+      async function scanDir(dir: string) {
+        const entries = await readdir(dir, { withFileTypes: true })
+        for (const entry of entries) {
+          const fullPath = join(dir, entry.name)
+          if (entry.isDirectory()) {
+            await scanDir(fullPath)
+          } else if (entry.name.endsWith('.md')) {
+            // 去掉 content/ 前缀和 .md 后缀得到路径
+            const relPath = relative(contentDir, fullPath)
+              .replace(/\\/g, '/')
+              .replace(/\.md$/, '')
+            urls.push({ loc: `/${relPath}` })
+          }
+        }
+      }
+
+      await scanDir(contentDir)
+      return urls
+    },
+  },
 
   ssr: false,
   app: {
@@ -32,14 +78,9 @@ export default defineNuxtConfig({
         lang: 'zh-CN',
       },
       meta: [
-        {
-          name: 'description',
-          content: '张宇解的博客,一个现代化的博客网站,分享技术文章和见解',
-        },
+        // description、robots、googlebot 由 @nuxtjs/seo 自动管理，不再在此手动声明
         { name: 'keywords', content: '张宇解,博客,前端开发,技术文章,见解' },
         { name: 'author', content: '张宇解,zyhnbyyds,张宇行' },
-        { name: 'robots', content: 'index, follow' },
-        { name: 'googlebot', content: 'index, follow' },
         {
           name: 'google-site-verification',
           content: 'Q3zsDh3Bzu3EZ_N6QlLDs5iHhUNdIFBJzxAgv_YohEM',
@@ -174,6 +215,26 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: false,
+  },
+
+  // ── Nuxt SEO: robots.txt 配置 ──────────────────────────
+  robots: {
+    // 默认允许所有抓取；如需屏蔽特定 AI 训练类爬虫，取消下方注释：
+    // disallow: [
+    //   { userAgent: 'GPTBot', path: '/' },
+    //   { userAgent: 'Claude-Web', path: '/' },
+    //   { userAgent: 'ClaudeBot', path: '/' },
+    //   { userAgent: 'anthropic-ai', path: '/' },
+    //   { userAgent: 'Google-Extended', path: '/' },
+    //   { userAgent: 'CCBot', path: '/' },
+    //   { userAgent: 'PerplexityBot', path: '/' },
+    //   { userAgent: 'OmniBot', path: '/' },
+    //   { userAgent: 'Bytespider', path: '/' },
+    //   { userAgent: 'cohere-ai', path: '/' },
+    //   { userAgent: 'Diffbot', path: '/' },
+    //   { userAgent: 'FacebookBot', path: '/' },
+    //   { userAgent: 'ImagesiftBot', path: '/' },
+    // ],
   },
 
   runtimeConfig: {

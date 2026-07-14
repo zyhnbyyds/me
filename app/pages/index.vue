@@ -12,6 +12,11 @@ definePageMeta({
   keepalive: true,
 })
 
+useSeoMeta({
+  title: '张宇解的博客',
+  description: '张宇解的博客，分享技术文章、QQ空间动态与个人见解',
+})
+
 const { push } = useRouter()
 const pageSize = 20
 
