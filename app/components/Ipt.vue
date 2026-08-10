@@ -143,7 +143,7 @@ function insertTextAtCursor(text: string) {
 </template>
 
 <style scoped>
-:v-deep(.chat-ipt .emoji-sm) {
+::v-deep(.chat-ipt .emoji-sm) {
   height: 20px !important;
   width: 20px !important;
 }

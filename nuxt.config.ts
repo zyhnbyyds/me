@@ -1,13 +1,6 @@
 import { resolve } from 'node:path'
 import { transformContentFileAfterParse } from './app/transformers/contentFileAfterParse'
 
-// 修复 Windows 上 Prisma 预渲染时的 fileURLToPath 错误。
-// 预渲染入口将 _importMeta_.url 设为 "file:///_entry.js"（缺少盘符），
-// 利用 || 运算符特性，提前设置含盘符的值即可保留。
-;(globalThis as Record<string, unknown>)._importMeta_ = {
-  url: `file:///${process.cwd().replace(/\\/g, '/')}/_entry.js`,
-}
-
 export default defineNuxtConfig({
   modules: [
     '@vueuse/nuxt',
