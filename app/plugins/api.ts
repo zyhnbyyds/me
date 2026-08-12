@@ -1,4 +1,4 @@
-export default defineNuxtPlugin((_nuxtApp) => {
+export default defineNuxtPlugin(() => {
   const { session } = useUserSession()
 
   const api = $fetch.create({
