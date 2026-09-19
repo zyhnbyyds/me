@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { EssayMedia } from '~~/shared/types/essay'
+import type { EssayMarkdownBody, EssayMedia } from '~~/shared/types/essay'
 
 definePageMeta({
   title: '写随笔',
@@ -42,6 +42,53 @@ const mediaList = ref<EssayMedia[]>([])
 const publishing = ref(false)
 const publishError = ref('')
 const publishSuccess = ref(false)
+
+// ─── Markdown 预览 ────────────────────────────────────────
+/** 编辑 / 预览 两种模式 */
+const viewMode = ref<'edit' | 'preview'>('edit')
+const viewTabs = [
+  { label: '编辑', value: 'edit', icon: 'material-symbols:edit-outline' },
+  {
+    label: '预览',
+    value: 'preview',
+    icon: 'material-symbols:visibility-outline',
+  },
+] as const
+const previewBody = ref<EssayMarkdownBody | null>(null)
+const parsing = ref(false)
+
+/** 交由服务端解析（与列表页共用同一套解析逻辑），保证预览与最终展示一致 */
+let previewSeq = 0
+
+async function refreshPreview() {
+  const source = content.value.trim()
+  if (!source) {
+    previewBody.value = null
+    return
+  }
+
+  const seq = ++previewSeq
+  parsing.value = true
+
+  try {
+    const res = await $fetch<Result<EssayMarkdownBody | null>>(
+      '/api/essay/preview',
+      { method: 'POST', body: { content: source } },
+    )
+    // 丢弃过期响应，避免快速输入时旧结果覆盖新结果
+    if (seq === previewSeq) previewBody.value = res.data ?? null
+  } catch {
+    if (seq === previewSeq) previewBody.value = null
+  } finally {
+    if (seq === previewSeq) parsing.value = false
+  }
+}
+
+const refreshPreviewDebounced = useDebounceFn(refreshPreview, 450)
+
+watch([viewMode, content], () => {
+  if (viewMode.value === 'preview') refreshPreviewDebounced()
+})
 
 // 手动输入的图片 URL（兼容旧方式）
 const manualUrl = ref('')
@@ -191,7 +238,11 @@ function isLive(m: EssayMedia): boolean {
           @keydown.enter="handleVerify"
         />
 
-        <p v-if="verifyError" class="mb-3 text-3 text-c-accent">
+        <p
+          v-if="verifyError"
+          class="mb-3 flex items-center gap-1.5 text-3 text-c-accent"
+        >
+          <Icon name="material-symbols:error-outline" text-4 />
           {{ verifyError }}
         </p>
 
@@ -212,15 +263,56 @@ function isLive(m: EssayMedia): boolean {
 
       <!-- 文字内容 -->
       <div class="mb-5">
-        <label class="mb-2 block text-3.5 font-medium text-c-text-alt"
-          >文字内容</label
-        >
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <label class="text-3.5 font-medium text-c-text-alt">文字内容</label>
+
+          <div class="flex items-center gap-2">
+            <span class="hidden text-2.5 text-c-text-weak sm:inline">
+              支持 Markdown 语法
+            </span>
+
+            <!-- 编辑 / 预览 切换 -->
+            <div class="flex rounded-full border border-common p-0.5">
+              <button
+                v-for="tab in viewTabs"
+                :key="tab.value"
+                type="button"
+                class="flex cursor-pointer items-center gap-1 rounded-full px-2.5 py-1 text-2.5 transition-colors"
+                :class="
+                  viewMode === tab.value
+                    ? 'bg-c-hover text-c-accent'
+                    : 'text-c-text-weak hover:text-c-text-alt'
+                "
+                @click="viewMode = tab.value"
+              >
+                <Icon :name="tab.icon" text-3.5 />
+                {{ tab.label }}
+              </button>
+            </div>
+          </div>
+        </div>
+
         <textarea
+          v-if="viewMode === 'edit'"
           v-model="content"
-          placeholder="记录一些随想..."
-          rows="6"
-          class="w-full resize-none rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-c-accent focus:ring-1 focus:ring-c-accent"
+          placeholder="记录一些随想，支持 Markdown 语法..."
+          rows="8"
+          class="w-full resize-y rounded-xl border border-common bg-transparent px-4 py-3 text-3.5 leading-relaxed outline-none transition-colors focus:border-c-accent focus:ring-1 focus:ring-c-accent"
         />
+
+        <!-- Markdown 预览 -->
+        <div
+          v-else
+          class="min-h-40 rounded-xl border border-dashed border-common bg-c-bg/40 px-4 py-3"
+        >
+          <EssayMarkdown
+            v-if="previewBody"
+            :body="previewBody"
+            :clamp="false"
+          />
+          <p v-else-if="parsing" class="text-3 text-c-text-weak">渲染中…</p>
+          <p v-else class="text-3 text-c-text-weak">还没有内容～</p>
+        </div>
       </div>
 
       <!-- 图片 -->
@@ -288,11 +380,21 @@ function isLive(m: EssayMedia): boolean {
         </div>
       </div>
 
-      <!-- 错误/成功提示 -->
-      <p v-if="publishError" class="mb-4 text-3 text-c-accent">
+      <!-- 发布结果提示 -->
+      <div
+        v-if="publishError"
+        class="mb-4 flex items-center gap-2 rounded-xl border border-c-accent/30 bg-c-accent/8 px-3 py-2 text-3 text-c-accent"
+      >
+        <Icon name="material-symbols:error-outline" text-4 />
         {{ publishError }}
-      </p>
-      <p v-if="publishSuccess" class="mb-4 text-3 text-green-500">发布成功！</p>
+      </div>
+      <div
+        v-if="publishSuccess"
+        class="mb-4 flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/10 px-3 py-2 text-3 text-green-600 dark:text-green-400"
+      >
+        <Icon name="material-symbols:check-circle-outline" text-4 />
+        发布成功，已经展示在随笔列表里了
+      </div>
 
       <!-- 发布按钮 -->
       <Btn

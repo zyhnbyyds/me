@@ -1,4 +1,8 @@
-import type { EssayItem, EssayMedia } from '~~/shared/types/essay'
+import type {
+  EssayItem,
+  EssayMedia,
+} from '~~/shared/types/essay'
+import { parseEssayBody } from '~~/server/utils/essay'
 import { prisma } from '~~/server/lib/prisma'
 
 export default defineEventHandler(async (event) => {
@@ -16,13 +20,16 @@ export default defineEventHandler(async (event) => {
       prisma.essay.count(),
     ])
 
-    const list: EssayItem[] = rows.map((row) => ({
-      id: row.id,
-      content: row.content,
-      images: row.images as EssayMedia[] | null,
-      createdAt: row.created_at.toISOString(),
-      updatedAt: row.updated_at.toISOString(),
-    }))
+    const list: EssayItem[] = await Promise.all(
+      rows.map(async (row) => ({
+        id: row.id,
+        content: row.content,
+        body: await parseEssayBody(row.content),
+        images: row.images as EssayMedia[] | null,
+        createdAt: row.created_at.toISOString(),
+        updatedAt: row.updated_at.toISOString(),
+      })),
+    )
 
     return Result.success({ list, total, page, size })
   } catch (error) {

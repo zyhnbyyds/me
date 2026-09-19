@@ -59,8 +59,8 @@ const RATE_LIMIT_ROUTES: Array<{
     config: { windowMs: 60 * 1000, max: 30 },
   },
   {
-    // 随笔发布/上传/删除
-    pattern: /^\/api\/essay\/(?!verify|file)/,
+    // 随笔发布/上传/删除（预览预览仅做 Markdown 解析，不计入写入限制）
+    pattern: /^\/api\/essay\/(?!verify|file|preview)/,
     methods: ['POST', 'DELETE'],
     config: { windowMs: 60 * 1000, max: 20 },
   },
