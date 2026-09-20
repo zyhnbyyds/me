@@ -2,6 +2,7 @@ import type { BlogCollectionItem } from '@nuxt/content'
 import dayjs from 'dayjs'
 import { queryCollection } from '@nuxt/content/server'
 import { prisma } from '~~/server/lib/prisma'
+import { essaySummary, essayToPlainText } from '~~/server/utils/essay'
 
 interface QQCalendarRow {
   tid: string
@@ -16,7 +17,7 @@ interface QQCalendarRow {
 
 export interface CalendarEvent {
   id: string
-  source: 'blog' | 'qq'
+  source: 'blog' | 'qq' | 'essay'
   date: string
   timestamp: number
   title?: string
@@ -24,6 +25,7 @@ export interface CalendarEvent {
   content?: string
   path?: string
   image?: string
+  images?: unknown
   tags?: string[]
   name?: string
   tid?: string
@@ -60,7 +62,7 @@ export default defineEventHandler(async (event) => {
   const startTs = startDate.unix()
   const endTs = endDate.unix()
 
-  const [blogItems, qqResult] = await Promise.all([
+  const [blogItems, qqResult, essayRows] = await Promise.all([
     queryCollection(event, 'blog')
       .where('publishAt', 'BETWEEN', [startStr, endStr])
       .all() as Promise<BlogCollectionItem[]>,
@@ -80,6 +82,10 @@ export default defineEventHandler(async (event) => {
         ),
       ) as QQCalendarRow[]
     })(),
+    prisma.essay.findMany({
+      where: { created_at: { gte: startDate.toDate(), lte: endDate.toDate() } },
+      orderBy: { created_at: 'asc' },
+    }),
   ])
 
   const events: CalendarEvent[] = []
@@ -115,6 +121,20 @@ export default defineEventHandler(async (event) => {
       pic: row.pic,
       video: row.video,
       commentlist: row.commentlist,
+    })
+  }
+
+  for (const row of essayRows) {
+    const createdAt = row.created_at
+    events.push({
+      id: `essay-${row.id}`,
+      source: 'essay',
+      date: dayjs(createdAt).format('YYYY-M-D'),
+      timestamp: createdAt.getTime(),
+      title: essaySummary(row.content, 40) || '图片随笔',
+      content: essayToPlainText(row.content),
+      path: `/essay?id=${row.id}`,
+      images: row.images,
     })
   }
 

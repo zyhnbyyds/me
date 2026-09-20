@@ -4,6 +4,7 @@ interface TimelineDay {
   date: string
   blogCount: number
   qqCount: number
+  essayCount: number
   total: number
 }
 
@@ -27,7 +28,10 @@ function normalizeBigInt<T>(value: T): T {
 
 export default defineEventHandler(async (event) => {
   // 收集所有日期
-  const dateMap = new Map<string, { blog: number; qq: number }>()
+  const dateMap = new Map<string, { blog: number; qq: number; essay: number }>()
+
+  const toDateKey = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 
   // 1. 博客文章日期
   try {
@@ -36,8 +40,8 @@ export default defineEventHandler(async (event) => {
       const dateStr = post.updateAt ?? post.publishAt
       if (!dateStr) continue
       const d = new Date(dateStr)
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-      const entry = dateMap.get(key) ?? { blog: 0, qq: 0 }
+      const key = toDateKey(d)
+      const entry = dateMap.get(key) ?? { blog: 0, qq: 0, essay: 0 }
       entry.blog++
       dateMap.set(key, entry)
     }
@@ -57,8 +61,8 @@ export default defineEventHandler(async (event) => {
     for (const row of normalized) {
       if (!row.created_time) continue
       const d = new Date(row.created_time * 1000)
-      const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-      const entry = dateMap.get(key) ?? { blog: 0, qq: 0 }
+      const key = toDateKey(d)
+      const entry = dateMap.get(key) ?? { blog: 0, qq: 0, essay: 0 }
       entry.qq++
       dateMap.set(key, entry)
     }
@@ -66,9 +70,24 @@ export default defineEventHandler(async (event) => {
     // 忽略错误
   }
 
-  // 3. 按年 > 月 > 日 组织
-  const yearMap = new Map<number, Map<string, TimelineDay[]>>()
+  // 3. 随笔日期
+  try {
+    const essayRows = await prisma.essay.findMany({
+      select: { created_at: true },
+      orderBy: { created_at: 'desc' },
+    })
+    for (const row of essayRows) {
+      const key = toDateKey(row.created_at)
+      const entry = dateMap.get(key) ?? { blog: 0, qq: 0, essay: 0 }
+      entry.essay++
+      dateMap.set(key, entry)
+    }
+  } catch {
+    // 忽略错误
+  }
 
+  // 4. 按年 > 月 > 日 组织
+  const yearMap = new Map<number, Map<string, TimelineDay[]>>()
   for (const [dateStr, counts] of dateMap) {
     const [yearStr, monthStr] = dateStr.split('-')
     const year = Number(yearStr)
@@ -81,7 +100,8 @@ export default defineEventHandler(async (event) => {
       date: dateStr,
       blogCount: counts.blog,
       qqCount: counts.qq,
-      total: counts.blog + counts.qq,
+      essayCount: counts.essay,
+      total: counts.blog + counts.qq + counts.essay,
     })
   }
 

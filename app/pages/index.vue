@@ -24,11 +24,13 @@ interface FeedMedia {
   type: 'image' | 'video'
   src: string
   poster?: string
+  /** 随笔图片由接口直出，需要走自定义图片 provider */
+  provider?: 'myserver'
 }
 
 interface FeedItem {
   id: string
-  type: 'blog' | 'qq'
+  type: 'blog' | 'qq' | 'essay'
   title: string
   description: string
   content?: string
@@ -38,6 +40,7 @@ interface FeedItem {
   path: string
   readingTime?: number
   qqData?: Record<string, unknown>
+  essayData?: { id: string; images: unknown }
   media?: FeedMedia
 }
 
@@ -181,10 +184,47 @@ function enrichFeedItem(item: FeedItem): FeedItem {
     }
   }
 
+  if (item.type === 'essay') {
+    return {
+      ...item,
+      media: getEssayPrimaryMedia(item),
+    }
+  }
+
   return {
     ...item,
     media: getQQPrimaryMedia(item),
   }
+}
+
+/** 随笔取首张图作为封面（图片地址直接来自随笔接口） */
+function getEssayPrimaryMedia(item: FeedItem): FeedMedia | undefined {
+  const images = item.essayData?.images
+  if (!Array.isArray(images) || images.length === 0) return undefined
+
+  const first = images[0]
+  const src =
+    typeof first === 'string'
+      ? first
+      : isRecord(first) && typeof first.image === 'string'
+        ? first.image
+        : undefined
+
+  if (!src) return undefined
+  return { type: 'image', src, provider: 'myserver' }
+}
+
+/** 信息流的类型文案与配色 */
+const TYPE_LABELS: Record<FeedItem['type'], string> = {
+  blog: '博客',
+  qq: '动态',
+  essay: '随笔',
+}
+
+const TYPE_BADGE_CLASSES: Record<FeedItem['type'], string> = {
+  blog: 'bg-c-accent/80 text-white',
+  qq: 'bg-emerald-500/80 text-white',
+  essay: 'bg-amber-500/80 text-white',
 }
 
 function resetLayoutFrame() {
@@ -428,18 +468,6 @@ onBeforeUnmount(() => {
                 class="group relative h-full flex flex-col bg-c-surface dark:bg-c-bg rounded-xl border border-c-border dark:border-dark-600 shadow-sm hover:shadow-lg overflow-hidden cursor-pointer transition-all duration-300 ease-out hover:-translate-y-1"
                 @click="goToDetail(item)"
               >
-                <!-- 类型标识 -->
-                <div
-                  class="absolute top-1.5 left-2 z-10 px-2 py-0.5 rounded-full text-10px font-medium"
-                  :class="
-                    item.type === 'blog'
-                      ? 'bg-c-accent/80 text-white'
-                      : 'bg-c-hover0/80 text-white'
-                  "
-                >
-                  {{ item.type === 'blog' ? '博客' : '动态' }}
-                </div>
-
                 <div
                   v-if="item.media"
                   class="w-full relative aspect-video overflow-hidden bg-gradient-to-br from-c-bg to-c-border dark:from-dark-700 dark:to-dark-600"
@@ -450,6 +478,7 @@ onBeforeUnmount(() => {
                     quality="60"
                     class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     :src="item.media.src"
+                    :provider="item.media.provider as any"
                     :alt="item.title"
                     style="will-change: transform"
                   />
@@ -491,6 +520,14 @@ onBeforeUnmount(() => {
                     emoji-size="small"
                   />
 
+                  <!-- 随笔：展示去除 Markdown 标记后的纯文本摘要 -->
+                  <p
+                    v-if="item.type === 'essay'"
+                    class="text-14px text-c-text dark:text-c-text-alt line-clamp-4 leading-relaxed whitespace-pre-wrap"
+                  >
+                    {{ item.description || item.title }}
+                  </p>
+
                   <p
                     v-if="item.type === 'blog' && item.description"
                     class="text-13px text-c-text-alt dark:text-c-text-weak line-clamp-2 leading-relaxed"
@@ -517,14 +554,19 @@ onBeforeUnmount(() => {
                     <span class="text-11px">{{
                       dayjs(item.date).format('YYYY-MM-DD')
                     }}</span>
-                    <span v-if="item.type === 'blog'" class="text-11px"
-                      >{{ item.readingTime ?? 5 }} min</span
-                    >
-                    <span
-                      v-else
-                      class="text-11px font-medium text-emerald-500/70"
-                      >QQ空间</span
-                    >
+
+                    <div class="flex items-center gap-2">
+                      <span v-if="item.type === 'blog'" class="text-11px"
+                        >{{ item.readingTime ?? 5 }} min</span
+                      >
+                      <!-- 类型角标：放在右下角，不再遮挡内容 -->
+                      <span
+                        class="px-2 py-0.5 rounded-full text-10px font-medium"
+                        :class="TYPE_BADGE_CLASSES[item.type]"
+                      >
+                        {{ TYPE_LABELS[item.type] }}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

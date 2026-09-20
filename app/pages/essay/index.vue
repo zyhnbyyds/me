@@ -16,10 +16,30 @@ const loading = ref(false)
 const scrollRef = ref<HTMLElement>()
 const { y } = useRouteScrollRestore(scrollRef, { key: 'essay' })
 
+const route = useRoute()
+/** 由主页 / 日历跳转过来时高亮的随笔 id */
+const highlightId = ref('')
+
 const hasMore = computed(() => essayList.value.length < total.value)
 const isFirstLoading = computed(
   () => loading.value && essayList.value.length === 0,
 )
+
+/** 带 ?id=xxx 跳转过来时，滚动到对应随笔并短暂高亮 */
+async function focusFromQuery() {
+  const target = String(route.query.id ?? '').trim()
+  if (!target) return
+
+  await nextTick()
+  const el = document.getElementById(`essay-${target}`)
+  if (!el) return
+
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  highlightId.value = target
+  window.setTimeout(() => {
+    highlightId.value = ''
+  }, 2600)
+}
 
 async function fetchEssays(loadMore = false) {
   if (loading.value) return
@@ -42,6 +62,7 @@ async function fetchEssays(loadMore = false) {
     if (loadMore) page.value = Math.max(1, page.value - 1)
   } finally {
     loading.value = false
+    if (!loadMore) void focusFromQuery()
   }
 }
 
@@ -87,13 +108,25 @@ useInfiniteScroll(scrollRef, () => void loadMore(), {
       <EssaySkeleton v-if="isFirstLoading" />
 
       <!-- 时间线 -->
-      <div v-else-if="essayList.length > 0" class="essay-timeline">
+      <div v-else-if="essayList.length > 0" class="relative">
+        <!-- 竖向轴线 -->
+        <span
+          class="absolute bottom-6 left-[5px] top-4.5 w-px bg-c-border"
+          aria-hidden="true"
+        />
+
         <div
           v-for="item in essayList"
+          :id="`essay-${item.id}`"
           :key="item.id"
-          class="essay-timeline__item"
+          class="group relative rounded-xl pb-9 pl-8.5 transition-colors duration-700"
+          :class="highlightId === item.id ? 'bg-c-hover' : 'bg-transparent'"
         >
-          <span class="essay-timeline__dot" aria-hidden="true" />
+          <!-- 节点：空心圆，hover 时点亮 -->
+          <span
+            class="absolute left-[0.5px] top-[0.3rem] size-2.5 rounded-full border-1.5 border-c-text-weak/60 bg-c-bg transition-all duration-300 group-hover:border-c-accent group-hover:bg-c-accent group-hover:shadow-[0_0_0_4px_var(--c-hover)]"
+            aria-hidden="true"
+          />
           <EssayCard :item="item" />
         </div>
       </div>
@@ -145,50 +178,3 @@ useInfiniteScroll(scrollRef, () => void loadMore(), {
     <BackTop v-model="y" absolute right-6 bottom-6 class="<md:hidden" />
   </div>
 </template>
-
-<style scoped>
-/* ── 时间线 ─────────────────────────────────────────────── */
-.essay-timeline {
-  position: relative;
-}
-
-/* 竖向轴线 */
-.essay-timeline::before {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 1.1rem;
-  bottom: 1.5rem;
-  width: 1px;
-  background: var(--c-border);
-}
-
-/* 留出轴线与节点的空间（放在 item 上，节点定位才以轴线为基准） */
-.essay-timeline__item {
-  position: relative;
-  padding-left: 34px;
-  padding-bottom: 2.25rem;
-}
-
-/* 时间线节点：空心圆，hover 时点亮 */
-.essay-timeline__dot {
-  position: absolute;
-  left: 0.5px;
-  top: 0.3rem;
-  height: 10px;
-  width: 10px;
-  border-radius: 9999px;
-  border: 1.5px solid color-mix(in srgb, var(--c-text-weak) 60%, transparent);
-  background: var(--c-bg);
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.essay-timeline__item:hover .essay-timeline__dot {
-  border-color: var(--c-accent);
-  background: var(--c-accent);
-  box-shadow: 0 0 0 4px var(--c-hover);
-}
-</style>

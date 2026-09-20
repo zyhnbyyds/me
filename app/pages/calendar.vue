@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 interface CalendarEvent {
   id: string
-  source: 'blog' | 'qq'
+  source: 'blog' | 'qq' | 'essay'
   date: string
   timestamp: number
   title?: string
@@ -9,6 +9,7 @@ interface CalendarEvent {
   content?: string
   path?: string
   image?: string
+  images?: unknown
   tags?: string[]
   name?: string
   tid?: string
@@ -156,8 +157,40 @@ function goToDetail(ev: CalendarEvent) {
     navigateTo(ev.path)
   } else if (ev.source === 'qq' && ev.tid) {
     navigateTo(`/qq?tid=${ev.tid}`)
+  } else if (ev.source === 'essay' && ev.path) {
+    navigateTo(ev.path)
   }
   modalVisible.value = false
+}
+
+/** 事件的展示文案：博客用标题，随笔用摘要，QQ 用正文 */
+function getEventLabel(ev: CalendarEvent, qqLimit = 10) {
+  if (ev.source === 'blog') return ev.title ?? ''
+  if (ev.source === 'essay') return ev.title ?? '随笔'
+  return (ev.content ?? ev.name ?? '说说')?.slice(0, qqLimit)
+}
+
+/** 来源名称，用于弹窗里的来源标识 */
+function getSourceLabel(source: CalendarEvent['source']) {
+  if (source === 'blog') return '文章'
+  if (source === 'essay') return '随笔'
+  return 'QQ空间'
+}
+
+/** 随笔封面图（用于详情弹窗） */
+function getEssayImages(ev: CalendarEvent | null): string[] {
+  const images = ev?.images
+  if (!Array.isArray(images)) return []
+
+  return images
+    .map((m) =>
+      typeof m === 'string'
+        ? m
+        : m && typeof m === 'object' && 'image' in m
+          ? String((m as { image: unknown }).image)
+          : '',
+    )
+    .filter(Boolean)
 }
 
 const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
@@ -165,14 +198,19 @@ const weekLabels = ['一', '二', '三', '四', '五', '六', '日']
 // 事件颜色映射
 const eventColors: Record<string, { bg: string; text: string; dot: string }> = {
   blog: {
-    bg: 'bg-c-hover dark:bg-c-hover hover:bg-c-accent/25',
-    text: 'text-c-accent dark:text-c-accent',
+    bg: 'bg-c-accent/10 hover:bg-c-accent/20',
+    text: 'text-c-accent',
     dot: 'bg-c-accent',
   },
   qq: {
-    bg: 'bg-c-hover0/15 dark:bg-emerald-400/20 hover:bg-c-hover0/25',
+    bg: 'bg-emerald-500/10 hover:bg-emerald-500/20',
     text: 'text-emerald-700 dark:text-emerald-300',
-    dot: 'bg-c-hover0',
+    dot: 'bg-emerald-500',
+  },
+  essay: {
+    bg: 'bg-amber-500/10 hover:bg-amber-500/20',
+    text: 'text-amber-700 dark:text-amber-300',
+    dot: 'bg-amber-500',
   },
 }
 
@@ -276,11 +314,7 @@ const totalEvents = computed(() =>
                   :class="eventColors[ev.source]?.dot"
                 />
                 <span class="truncate <md:hidden">
-                  {{
-                    ev.source === 'blog'
-                      ? ev.title
-                      : (ev.content ?? ev.name ?? '说说')?.slice(0, 10)
-                  }}
+                  {{ getEventLabel(ev) }}
                 </span>
               </div>
             </TransitionGroup>
@@ -335,15 +369,11 @@ const totalEvents = computed(() =>
             />
             <div class="flex-1 min-w-0">
               <div class="text-13px font-medium truncate">
-                {{
-                  ev.source === 'blog'
-                    ? ev.title
-                    : (ev.content ?? ev.name ?? '说说')?.slice(0, 20)
-                }}
+                {{ getEventLabel(ev, 20) }}
               </div>
               <div class="text-11px opacity-60 mt-0.5">
                 {{ dayjs(ev.timestamp).format('HH:mm') }} ·
-                {{ ev.source === 'blog' ? '文章' : 'QQ' }}
+                {{ getSourceLabel(ev.source) }}
               </div>
             </div>
             <Icon
@@ -373,7 +403,7 @@ const totalEvents = computed(() =>
               :class="eventColors[selectedEvent.source]?.dot"
             />
             <span class="text-12px font-medium opacity-60">
-              {{ selectedEvent.source === 'blog' ? '文章' : 'QQ空间' }}
+              {{ getSourceLabel(selectedEvent.source) }}
             </span>
             <span class="text-12px opacity-50">·</span>
             <span class="text-12px opacity-50">
@@ -428,7 +458,7 @@ const totalEvents = computed(() =>
         </template>
 
         <!-- QQ 事件详情 -->
-        <template v-else>
+        <template v-else-if="selectedEvent.source === 'qq'">
           <p
             class="text-14px text-c-text dark:text-c-text-alt leading-relaxed mb-4 whitespace-pre-wrap"
           >
@@ -436,11 +466,51 @@ const totalEvents = computed(() =>
           </p>
           <button
             type="button"
-            class="cal-action-btn bg-c-hover0 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-c-hover0"
+            class="cal-action-btn bg-emerald-500 hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
             @click="goToDetail(selectedEvent)"
           >
             <Icon name="carbon:user-avatar" class="mr-1.5" />
             查看详情
+          </button>
+        </template>
+
+        <!-- 随笔事件详情 -->
+        <template v-else>
+          <h2 class="text-17px font-bold leading-snug mb-3">
+            {{ selectedEvent.title }}
+          </h2>
+          <p
+            v-if="selectedEvent.content"
+            class="text-14px text-c-text-alt dark:text-c-text-weak leading-relaxed mb-4 whitespace-pre-wrap"
+          >
+            {{ selectedEvent.content }}
+          </p>
+          <div
+            v-if="getEssayImages(selectedEvent).length"
+            class="grid grid-cols-2 gap-2 mb-4"
+          >
+            <NuxtImg
+              v-for="src in getEssayImages(selectedEvent).slice(0, 4)"
+              :key="src"
+              :src="src"
+              provider="myserver"
+              loading="lazy"
+              class="rounded-lg w-full h-24 object-cover"
+            />
+          </div>
+          <div
+            v-else-if="!selectedEvent.content"
+            class="text-14px text-c-text-weak mb-4"
+          >
+            这条随笔只有图片，去随笔页查看吧
+          </div>
+          <button
+            type="button"
+            class="cal-action-btn bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-500"
+            @click="goToDetail(selectedEvent)"
+          >
+            <Icon name="carbon:pen" class="mr-1.5" />
+            查看随笔
           </button>
         </template>
       </div>

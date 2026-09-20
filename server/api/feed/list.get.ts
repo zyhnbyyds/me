@@ -1,9 +1,10 @@
 import type { PageQuery } from '~~/shared/types/page'
 import { prisma } from '~~/server/lib/prisma'
+import { essaySummary, essayToPlainText } from '~~/server/utils/essay'
 
 interface FeedItem {
   id: string
-  type: 'blog' | 'qq'
+  type: 'blog' | 'qq' | 'essay'
   title: string
   description: string
   content?: string
@@ -13,6 +14,8 @@ interface FeedItem {
   path: string
   readingTime?: number
   qqData?: Record<string, unknown>
+  /** 随笔原始数据（图片等信息交给前端决定如何展示） */
+  essayData?: { id: string; images: unknown }
 }
 
 type QQContentRow = Record<string, unknown> & {
@@ -120,13 +123,35 @@ export default defineEventHandler(async (event) => {
     qqItems = []
   }
 
-  // 3. 合并并排序
-  let allItems = [...blogItems, ...qqItems]
+  // 3. 获取随笔（从数据库）
+  let essayItems: FeedItem[] = []
+  try {
+    const essayRows = await prisma.essay.findMany({
+      where: searchKeyword ? { content: { contains: searchKeyword } } : {},
+      orderBy: { created_at: 'desc' },
+    })
+    essayItems = essayRows.map((row) => ({
+      id: `essay-${row.id}`,
+      type: 'essay' as const,
+      title: essaySummary(row.content, 40) || '图片随笔',
+      description: essayToPlainText(row.content).slice(0, 200),
+      date: row.created_at.getTime(),
+      tags: [],
+      path: `/essay?id=${row.id}`,
+      readingTime: 1,
+      essayData: { id: row.id, images: row.images },
+    }))
+  } catch {
+    essayItems = []
+  }
 
-  // 关键字过滤（博客部分在内存过滤,QQ部分已在数据库过滤）
+  // 4. 合并并排序
+  let allItems = [...blogItems, ...qqItems, ...essayItems]
+
+  // 关键字过滤（博客部分在内存过滤，QQ / 随笔已在数据库过滤）
   if (searchKeyword) {
     allItems = allItems.filter((item) => {
-      if (item.type === 'qq') return true // 已在数据库过滤
+      if (item.type === 'qq' || item.type === 'essay') return true
       const kw = searchKeyword.toLowerCase()
       return (
         item.title.toLowerCase().includes(kw) ||
