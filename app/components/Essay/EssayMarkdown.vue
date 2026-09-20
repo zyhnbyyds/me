@@ -60,18 +60,24 @@ updateCollapsedPx()
 
 let observer: ResizeObserver | undefined
 
+function measureHeight() {
+  naturalHeight.value = innerRef.value?.offsetHeight ?? 0
+}
+
 /**
  * 用 ResizeObserver 观察内容本身，而不是外层容器：
  * 外层高度被 max-height 截断，观察它无法感知「内容变高」；
  * 观察内容则能覆盖异步渲染完成、图片加载、字体切换、窗口缩放等所有高度变化。
+ *
+ * 注册时先主动量一次：浏览器在后台标签页会节流 ResizeObserver 回调，
+ * 只依赖回调会让内容一直处于「未测量」状态，展开入口迟迟不出现。
  */
 function observeContent() {
   observer?.disconnect()
   if (!import.meta.client || !innerRef.value) return
 
-  observer = new ResizeObserver(() => {
-    naturalHeight.value = innerRef.value?.offsetHeight ?? 0
-  })
+  measureHeight()
+  observer = new ResizeObserver(measureHeight)
   observer.observe(innerRef.value)
 }
 
@@ -86,14 +92,32 @@ function toggle() {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   updateCollapsedPx()
   observeContent()
+
+  // ContentRenderer 是异步组件，挂载当帧内容还没渲染出来，
+  // 这里等本轮渲染结束再量一次，不必完全依赖 ResizeObserver 的回调时机
+  await nextTick()
+  measureHeight()
 })
 
 onBeforeUnmount(() => {
   observer?.disconnect()
 })
+
+/**
+ * 内容节点挂载 / 卸载时补测一次。
+ * MutationObserver 基于 DOM 变化通知，不像 ResizeObserver 那样在页面不可见时被节流，
+ * 因此「异步组件渲染完成」这类关键时点不会漏测。
+ */
+useMutationObserver(innerRef, measureHeight, {
+  childList: true,
+  subtree: true,
+})
+
+// 标签页切回可见时立刻重测：浏览器在页面不可见时会节流 ResizeObserver
+useEventListener(document, 'visibilitychange', measureHeight)
 
 // 窗口尺寸变化可能改变 rem 基准，重新计算折叠阈值
 useEventListener('resize', updateCollapsedPx)
@@ -106,65 +130,97 @@ watch(
     nextTick(observeContent)
   },
 )
+
+// ─── 过渡：统一用 UnoCSS 类表达，不必再各写一份 CSS ────────
+const EASE = 'ease-[cubic-bezier(0.22,1,0.36,1)]'
+
+const FOG_TRANSITION = {
+  enterActiveClass: `transition-all duration-450 ${EASE}`,
+  leaveActiveClass: `transition-all duration-450 ${EASE}`,
+  enterFromClass: 'opacity-0 translate-y-3',
+  leaveToClass: 'opacity-0 -translate-y-3.5 scale-103',
+}
+
+const TOGGLE_TRANSITION = {
+  enterActiveClass: 'transition-all duration-300 ease-out',
+  leaveActiveClass: 'transition-all duration-300 ease-out',
+  enterFromClass: 'opacity-0 scale-80',
+  leaveToClass: 'opacity-0 scale-80',
+}
+
+const ICON_TRANSITION = `transition-[rotate] duration-400 ${EASE}`
 </script>
 
 <template>
-  <div class="essay-md-wrap">
-    <div class="relative">
-      <div
-        ref="contentRef"
-        class="markdown-body essay-md overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-        :style="contentStyle"
-      >
-        <!-- flow-root 阻止外边距折叠，保证量到的高度包含末段外边距 -->
-        <div ref="innerRef" class="flow-root">
-          <ContentRenderer v-if="body" :value="body as any" />
-        </div>
+  <div class="relative">
+    <div
+      ref="contentRef"
+      class="markdown-body essay-md overflow-hidden transition-[max-height] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+      :style="contentStyle"
+    >
+      <!-- flow-root 阻止外边距折叠，保证量到的高度包含末段外边距 -->
+      <div ref="innerRef" class="flow-root">
+        <ContentRenderer v-if="body" :value="body as any" />
       </div>
-
-      <!-- 云雾遮罩：底部模糊 + 云团缓慢飘动 -->
-      <Transition name="essay-fog">
-        <div v-if="collapsed" class="essay-fog" aria-hidden="true">
-          <div class="essay-fog__mist" />
-          <div class="essay-fog__cloud" />
-        </div>
-      </Transition>
-
-      <!--
-        展开 / 收起：折叠时浮在云雾之上（不占布局、不被裁切），
-        展开后回到内容下方居中，跟随阅读进度自然出现
-      -->
-      <Transition name="essay-toggle">
-        <div
-          v-if="overflowing"
-          class="essay-toggle-slot"
-          :class="
-            collapsed ? 'essay-toggle-slot--float' : 'essay-toggle-slot--inline'
-          "
-        >
-          <button
-            type="button"
-            class="essay-toggle"
-            :title="expanded ? '收起全文' : '展开全文'"
-            :aria-expanded="expanded"
-            :aria-label="expanded ? '收起全文' : '展开全文'"
-            @click="toggle"
-          >
-            <Icon
-              name="material-symbols:keyboard-arrow-down-rounded"
-              text-5
-              class="essay-toggle__icon"
-              :class="expanded && 'rotate-180'"
-            />
-          </button>
-        </div>
-      </Transition>
     </div>
+
+    <!-- 云雾遮罩：底部模糊 + 云团缓慢飘动 -->
+    <Transition v-bind="FOG_TRANSITION">
+      <div
+        v-if="collapsed"
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-28 overflow-hidden"
+        aria-hidden="true"
+      >
+        <!-- 靠 mask 让模糊强度自下而上衰减，形成雾气散开的感觉 -->
+        <div
+          class="absolute inset-0 backdrop-blur-[6px] [mask-image:linear-gradient(to_top,#000_0%,rgba(0,0,0,0.55)_45%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_top,#000_0%,rgba(0,0,0,0.55)_45%,transparent_100%)]"
+        />
+        <!-- 云团：多层径向渐变叠加后缓慢漂移 -->
+        <div class="essay-fog-cloud" />
+      </div>
+    </Transition>
+
+    <!--
+      展开 / 收起：折叠时浮在云雾之上（不占布局、不被裁切），
+      展开后回到内容下方居中，跟随阅读进度自然出现
+    -->
+    <Transition v-bind="TOGGLE_TRANSITION">
+      <div
+        v-if="overflowing"
+        class="flex justify-center"
+        :class="
+          collapsed ? 'pointer-events-none absolute inset-x-0 bottom-2' : 'pt-2'
+        "
+      >
+        <button
+          type="button"
+          class="flex-center size-7.5 cursor-pointer rounded-full border border-c-border bg-c-surface text-c-text-weak transition-all duration-250 hover:border-c-accent/45 hover:bg-c-hover hover:text-c-accent"
+          :class="
+            collapsed &&
+            'pointer-events-auto shadow-[0_2px_10px_var(--c-shadow)]'
+          "
+          :title="expanded ? '收起全文' : '展开全文'"
+          :aria-expanded="expanded"
+          :aria-label="expanded ? '收起全文' : '展开全文'"
+          @click="toggle"
+        >
+          <Icon
+            name="material-symbols:keyboard-arrow-down-rounded"
+            text-5
+            :class="[ICON_TRANSITION, expanded && 'rotate-180']"
+          />
+        </button>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <style scoped>
-/* ── 内容排版：去掉页面级留白与底色，压缩行间距 ── */
+/*
+ * 这两类样式无法用 UnoCSS 表达，故保留 scoped CSS：
+ * 1. Markdown 元素由 ContentRenderer 渲染，拿不到 class，只能用 :deep 选择器；
+ * 2. 云团是多层径向渐变背景，写成 arbitrary value 会远超可读范围。
+ */
 .essay-md {
   margin: 0;
   padding: 0;
@@ -279,38 +335,8 @@ watch(
   font-size: 0.8125rem;
 }
 
-/* ══ 云雾遮罩 ══════════════════════════════════════════ */
-.essay-fog {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0;
-  height: 7rem;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* 底部模糊：靠 mask 让模糊强度自下而上衰减，形成雾气散开的感觉 */
-.essay-fog__mist {
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  -webkit-mask-image: linear-gradient(
-    to top,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 45%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to top,
-    #000 0%,
-    rgba(0, 0, 0, 0.55) 45%,
-    transparent 100%
-  );
-}
-
-/* 云团：几处径向渐变叠加，缓慢漂移，做出云雾翻涌的效果 */
-.essay-fog__cloud {
+/* 云团：几处径向渐变叠加，缓慢漂移做出云雾翻涌的感觉 */
+.essay-fog-cloud {
   position: absolute;
   inset: -20% -15% -35% -15%;
   background:
@@ -337,96 +363,8 @@ watch(
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .essay-fog__cloud {
+  .essay-fog-cloud {
     animation: none;
   }
-}
-
-/* 云雾进出场：进入时自下而上浮现，离开时向上飘散 */
-.essay-fog-enter-active {
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.essay-fog-leave-active {
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.essay-fog-enter-from {
-  opacity: 0;
-  transform: translateY(12px);
-}
-.essay-fog-leave-to {
-  opacity: 0;
-  transform: translateY(-14px) scale(1.03);
-}
-
-/* ══ 展开 / 收起按钮 ═══════════════════════════════════ */
-/* 折叠时：悬浮在云雾之上，不参与布局也不被 max-height 裁切 */
-.essay-toggle-slot--float {
-  position: absolute;
-  inset-inline: 0;
-  bottom: 0.5rem;
-  display: flex;
-  justify-content: center;
-  /* 容器铺满整行，放行内部按钮的点击 */
-  pointer-events: none;
-}
-
-.essay-toggle-slot--float .essay-toggle {
-  pointer-events: auto;
-  box-shadow: 0 2px 10px var(--c-shadow);
-}
-
-/* 展开时：回到内容下方居中 */
-.essay-toggle-slot--inline {
-  display: flex;
-  justify-content: center;
-  padding-top: 0.5rem;
-}
-
-.essay-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 1.9rem;
-  width: 1.9rem;
-  border-radius: 9999px;
-  border: 1px solid var(--c-border);
-  background: var(--c-surface);
-  color: var(--c-text-weak);
-  cursor: pointer;
-  transition:
-    color 0.25s ease,
-    border-color 0.25s ease,
-    background-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.essay-toggle:hover {
-  border-color: color-mix(in srgb, var(--c-accent) 45%, transparent);
-  background: var(--c-hover);
-  color: var(--c-accent);
-}
-
-/* rotate-180 生成的是独立的 rotate 属性（不是 transform），两者都要过渡 */
-.essay-toggle__icon {
-  transition:
-    rotate 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.essay-toggle-enter-active,
-.essay-toggle-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.essay-toggle-enter-from,
-.essay-toggle-leave-to {
-  opacity: 0;
-  transform: scale(0.8);
 }
 </style>
