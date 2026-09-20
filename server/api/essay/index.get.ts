@@ -1,7 +1,4 @@
-import type {
-  EssayItem,
-  EssayMedia,
-} from '~~/shared/types/essay'
+import type { EssayItem, EssayMedia } from '~~/shared/types/essay'
 import { parseEssayBody } from '~~/server/utils/essay'
 import { prisma } from '~~/server/lib/prisma'
 
