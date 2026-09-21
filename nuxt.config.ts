@@ -208,7 +208,7 @@ export default defineNuxtConfig({
         },
       },
     },
-    experimental: { sqliteConnector: 'better-sqlite3' },
+    experimental: { sqliteConnector: 'native' },
     renderer: {
       anchorLinks: {
         h1: false,
